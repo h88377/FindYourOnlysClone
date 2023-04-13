@@ -11,7 +11,7 @@ struct AdoptPetRequest: Equatable {
     let page: Int
 }
 
-struct Pet {
+struct Pet: Hashable {
     let id: Int
     let location: String
     let kind: String
@@ -35,16 +35,34 @@ struct Pet {
     let shelterName: String
 }
 
+extension StringProtocol {
+    subscript(_ range: PartialRangeThrough<Int>) -> SubSequence { prefix(range.upperBound.advanced(by: 1)) }
+}
+
 protocol PetLoader {
     typealias Result = Swift.Result<[Pet], Error>
     
     func load(with request: AdoptPetRequest, completion: @escaping (Result) -> Void)
 }
 
+class AdoptListPetCell: UICollectionViewCell {
+    let kindLabel = UILabel()
+    let genderLabel = UILabel()
+    let cityLabel = UILabel()
+}
+
 class AdoptListViewController: UICollectionViewController {
-    private var request = AdoptPetRequest(page: 0)
-    private var pets = [Pet]()
+    private lazy var dataSource: UICollectionViewDiffableDataSource<Int, Pet> = {
+        .init(collectionView: collectionView) { collectionView, indexPath, pet in
+            let cell = AdoptListPetCell()
+            cell.genderLabel.text = pet.gender == "M" ? "♂" : "♀"
+            cell.kindLabel.text = pet.kind
+            cell.cityLabel.text = String(pet.address[...2])
+            return cell
+        }
+    }()
     
+    private var request = AdoptPetRequest(page: 0)
     private var loader: PetLoader?
     
     convenience init(loader: PetLoader) {
@@ -57,14 +75,25 @@ class AdoptListViewController: UICollectionViewController {
         
         collectionView.refreshControl = UIRefreshControl()
         collectionView.refreshControl?.addTarget(self, action: #selector(loadPets), for: .valueChanged)
+        collectionView.dataSource = self.dataSource
         loadPets()
     }
     
     @objc private func loadPets() {
         collectionView.refreshControl?.beginRefreshing()
-        loader?.load(with: request) { [weak self] _ in
+        loader?.load(with: request) { [weak self] result in
+            if let pets = try? result.get() {
+                self?.set(pets)
+            }
             self?.collectionView?.refreshControl?.endRefreshing()
         }
+    }
+    
+    private func set(_ newItems: [Pet]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Pet>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(newItems, toSection: 0)
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 }
 
@@ -107,6 +136,30 @@ final class AdoptListViewControllerTests: XCTestCase {
         XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once loading completes with error")
     }
     
+    func test_loadPetsCompletions_rendersSuccessfullyLoadedPets() {
+        let pet0 = makePet(id: 0)
+        let pet1 = makePet(id: 0)
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        
+        loader.completesPetsLoading(at: 0)
+        XCTAssertEqual(sut.numberOfPets, 0)
+        
+        sut.simulateUserInitiatedPetsReload()
+        loader.completesPetsLoading(with: [pet0, pet1], at: 1)
+        
+        XCTAssertEqual(sut.numberOfPets, 2)
+        let cell0 = sut.itemAt(index: 0) as? AdoptListPetCell
+        XCTAssertEqual(cell0?.genderLabel.text, pet0.gender == "M" ? "♂" : "♀")
+        XCTAssertEqual(cell0?.kindLabel.text, pet0.kind)
+        XCTAssertEqual(cell0?.cityLabel.text, String(pet0.address[...2]))
+        
+        let cell1 = sut.itemAt(index: 1) as? AdoptListPetCell
+        XCTAssertEqual(cell1?.genderLabel.text, pet0.gender == "M" ? "♂" : "♀")
+        XCTAssertEqual(cell1?.kindLabel.text, pet0.kind)
+        XCTAssertEqual(cell1?.cityLabel.text, String(pet0.address[...2]))
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (AdoptListViewController, PetLoaderSpy) {
@@ -121,6 +174,33 @@ final class AdoptListViewControllerTests: XCTestCase {
         addTeardownBlock { [weak instance] in
             XCTAssertNil(instance, "Instance should have been deallocated. Potential memory leak.", file: file, line: line)
         }
+    }
+    
+    private func makePet(id: Int, location: String = "any location", kind: String = "any kind", gender: String = "M", bodyType: String = "any body", color: String = "any color", age: String = "any age", sterilization: String = "NA", bacterin: String = "NA", foundPlace: String = "any place", status: String = "any status", remark: String = "NA", openDate: Date = Date(), closedDate: Date = Date(), updatedDate: Date = Date(), createdDate: Date = Date(), photoURL: URL = URL(string:"https://any-url.com")!, address: String = "any place", telephone: String = "02", variety: String = "any variety", shelterName: String = "any shelter") -> Pet {
+        let pet = Pet(
+            id: id,
+            location: location,
+            kind: kind,
+            gender: gender,
+            bodyType: bodyType,
+            color: color,
+            age: age,
+            sterilization: sterilization,
+            bacterin: bacterin,
+            foundPlace: foundPlace,
+            status: status,
+            remark: remark,
+            openDate: openDate,
+            closedDate: closedDate,
+            updatedDate: updatedDate,
+            createdDate: createdDate,
+            photoURL: photoURL,
+            address: address,
+            telephone: telephone,
+            variety: variety,
+            shelterName: shelterName
+        )
+        return pet
     }
     
     private class PetLoaderSpy: PetLoader {
@@ -157,9 +237,20 @@ private extension AdoptListViewController {
         collectionView.refreshControl?.simulateRefresh()
     }
     
+    func itemAt(index: Int) -> UICollectionViewCell? {
+        let dataSource = collectionView.dataSource
+        return dataSource?.collectionView(collectionView, cellForItemAt: IndexPath(item: index, section: 0))
+    }
+    
     var isShowingLoadingIndicator: Bool {
         return collectionView.refreshControl?.isRefreshing == true
     }
+    
+    var numberOfPets: Int {
+        return collectionView.numberOfSections == 0 ? 0 : collectionView.numberOfItems(inSection: petsSection)
+    }
+    
+    private var petsSection: Int { return 0 }
 }
 
 private extension UIRefreshControl {
