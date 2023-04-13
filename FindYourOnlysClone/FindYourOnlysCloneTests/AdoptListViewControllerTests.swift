@@ -51,24 +51,16 @@ final class AdoptListViewControllerTests: XCTestCase {
         let pet0 = makePet(id: 0)
         let pet1 = makePet(id: 0)
         let (sut, loader) = makeSUT()
-        sut.loadViewIfNeeded()
         
-        loader.completesPetsLoading(at: 0)
-        XCTAssertEqual(sut.numberOfPets, 0)
+        sut.loadViewIfNeeded()
+        assertThat(sut, isRendering: [])
+        
+        loader.completesPetsLoading(with: [pet0], at: 0)
+        assertThat(sut, isRendering: [pet0])
         
         sut.simulateUserInitiatedPetsReload()
         loader.completesPetsLoading(with: [pet0, pet1], at: 1)
-        
-        XCTAssertEqual(sut.numberOfPets, 2)
-        let cell0 = sut.itemAt(index: 0) as? AdoptListPetCell
-        XCTAssertEqual(cell0?.genderLabel.text, pet0.gender == "M" ? "♂" : "♀")
-        XCTAssertEqual(cell0?.kindLabel.text, pet0.kind)
-        XCTAssertEqual(cell0?.cityLabel.text, String(pet0.address[...2]))
-        
-        let cell1 = sut.itemAt(index: 1) as? AdoptListPetCell
-        XCTAssertEqual(cell1?.genderLabel.text, pet0.gender == "M" ? "♂" : "♀")
-        XCTAssertEqual(cell1?.kindLabel.text, pet0.kind)
-        XCTAssertEqual(cell1?.cityLabel.text, String(pet0.address[...2]))
+        assertThat(sut, isRendering: [pet0, pet1])
     }
     
     // MARK: - Helpers
@@ -85,6 +77,27 @@ final class AdoptListViewControllerTests: XCTestCase {
         addTeardownBlock { [weak instance] in
             XCTAssertNil(instance, "Instance should have been deallocated. Potential memory leak.", file: file, line: line)
         }
+    }
+    
+    private func assertThat(_ sut: AdoptListViewController, isRendering pets: [Pet], file: StaticString = #filePath, line: UInt = #line) {
+        guard pets.count == sut.numberOfPets else {
+            return XCTFail("Expected \(pets.count), got \(sut.numberOfPets) instead")
+        }
+        
+        for (index, pet) in pets.enumerated() {
+            assertThat(sut, hasViewConfiguredFor: pet, at: index, file: file, line: line)
+        }
+    }
+    
+    private func assertThat(_ sut: AdoptListViewController, hasViewConfiguredFor pet: Pet, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
+        let view = sut.itemAt(index: 0)
+        guard let cell = view as? AdoptListPetCell else {
+            return XCTFail("Expected \(AdoptListPetCell.self) instance, got \(String(describing: view.self)) instead")
+        }
+        
+        XCTAssertEqual(cell.genderText, pet.gender == "M" ? "♂" : "♀", "Expected gender text should be \(pet.gender == "M" ? "♂" : "♀") at index \(index)", file: file, line: line)
+        XCTAssertEqual(cell.kindText, pet.kind, "Expected kind text should be \(pet.kind) at index \(index)", file: file, line: line)
+        XCTAssertEqual(cell.cityText, String(pet.address[...2]), "Expected city text should be \(String(pet.address[...2])) at index \(index)", file: file, line: line)
     }
     
     private func makePet(id: Int, location: String = "any location", kind: String = "any kind", gender: String = "M", bodyType: String = "any body", color: String = "any color", age: String = "any age", sterilization: String = "NA", bacterin: String = "NA", foundPlace: String = "any place", status: String = "any status", remark: String = "NA", openDate: Date = Date(), closedDate: Date = Date(), updatedDate: Date = Date(), createdDate: Date = Date(), photoURL: URL = URL(string:"https://any-url.com")!, address: String = "any place", telephone: String = "02", variety: String = "any variety", shelterName: String = "any shelter") -> Pet {
@@ -162,6 +175,20 @@ private extension AdoptListViewController {
     }
     
     private var petsSection: Int { return 0 }
+}
+
+private extension AdoptListPetCell {
+    var kindText: String? {
+        return kindLabel.text
+    }
+    
+    var genderText: String? {
+        return genderLabel.text
+    }
+    
+    var cityText: String? {
+        return cityLabel.text
+    }
 }
 
 private extension UIRefreshControl {
