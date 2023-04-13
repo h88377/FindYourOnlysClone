@@ -39,38 +39,25 @@ class AdoptListViewController: UICollectionViewController {
 
 final class AdoptListViewControllerTests: XCTestCase {
     
-    func test_init_doesNotRequestPetsFromLoader() {
-        let (_, loader) = makeSUT()
+    func test_loadPetsActions_requestsPetsFromLoader() {
+        let (sut, loader) = makeSUT()
+        XCTAssertTrue(loader.messages.isEmpty, "Expected no loading request before view is loaded")
         
-        XCTAssertTrue(loader.messages.isEmpty)
-    }
-    
-    func test_viewDidLoad_requestsPetsFromLoader() {
-        let (sut, loader) = makeSUT()
-
         sut.loadViewIfNeeded()
-
-        XCTAssertEqual(loader.messages, [.load(AdoptPetRequest(page: 0))])
-    }
-    
-    func test_simulateRefresh_requestsPetsFromLoader() {
-        let (sut, loader) = makeSUT()
-
-        sut.loadViewIfNeeded()
-        XCTAssertEqual(loader.messages, [.load(AdoptPetRequest(page: 0))])
+        XCTAssertEqual(loader.messages, [.load(AdoptPetRequest(page: 0))], "Expected a loading request once view is loaded")
         
         sut.simulateUserInitiatedPetsReload()
         XCTAssertEqual(loader.messages, [
             .load(AdoptPetRequest(page: 0)),
             .load(AdoptPetRequest(page: 0))
-        ])
+        ], "Expected another loading request once user initiates a reload")
         
         sut.simulateUserInitiatedPetsReload()
         XCTAssertEqual(loader.messages, [
             .load(AdoptPetRequest(page: 0)),
             .load(AdoptPetRequest(page: 0)),
             .load(AdoptPetRequest(page: 0))
-        ])
+        ], "Expected yet another loading request once user initiates a reload")
     }
     
     // MARK: - Helpers
