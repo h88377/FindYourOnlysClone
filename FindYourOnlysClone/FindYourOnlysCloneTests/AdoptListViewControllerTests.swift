@@ -11,13 +11,41 @@ struct AdoptPetRequest: Equatable {
     let page: Int
 }
 
+struct Pet {
+    let id: Int
+    let location: String
+    let kind: String
+    let gender: String
+    let bodyType: String
+    let color: String
+    let age: String
+    let sterilization: String
+    let bacterin: String
+    let foundPlace: String
+    let status: String
+    let remark: String
+    let openDate: Date
+    let closedDate: Date
+    let updatedDate: Date
+    let createdDate: Date
+    let photoURL: URL
+    let address: String
+    let telephone: String
+    let variety: String
+    let shelterName: String
+}
+
 protocol PetLoader {
-    func load(with request: AdoptPetRequest, completion: @escaping () -> Void)
+    typealias Result = Swift.Result<[Pet], Error>
+    
+    func load(with request: AdoptPetRequest, completion: @escaping (Result) -> Void)
 }
 
 class AdoptListViewController: UICollectionViewController {
-    private var loader: PetLoader?
     private var request = AdoptPetRequest(page: 0)
+    private var pets = [Pet]()
+    
+    private var loader: PetLoader?
     
     convenience init(loader: PetLoader) {
         self.init(collectionViewLayout: UICollectionViewLayout())
@@ -34,7 +62,7 @@ class AdoptListViewController: UICollectionViewController {
     
     @objc private func loadPets() {
         collectionView.refreshControl?.beginRefreshing()
-        loader?.load(with: request) { [weak self] in
+        loader?.load(with: request) { [weak self] _ in
             self?.collectionView?.refreshControl?.endRefreshing()
         }
     }
@@ -105,15 +133,15 @@ final class AdoptListViewControllerTests: XCTestCase {
         }
         
         private(set) var messages = [Message]()
-        private var completions = [() -> Void]()
+        private var completions = [(PetLoader.Result) -> Void]()
         
-        func load(with request: AdoptPetRequest, completion: @escaping () -> Void) {
+        func load(with request: AdoptPetRequest, completion: @escaping (PetLoader.Result) -> Void) {
             messages.append(.load(request))
             completions.append(completion)
         }
         
-        func completesPetsLoading(at index: Int = 0) {
-            completions[index]()
+        func completesPetsLoading(at index: Int = 0, with pets: [Pet] = []) {
+            completions[index](.success(pets))
         }
     }
 
