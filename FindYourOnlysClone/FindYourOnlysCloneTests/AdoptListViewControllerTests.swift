@@ -23,13 +23,26 @@ class AdoptListViewController: UICollectionViewController {
 final class AdoptListViewControllerTests: XCTestCase {
     
     func test_init_doesNotRequestPetsFromLoader() {
-        let loader = PetLoaderSpy()
-        let _ = AdoptListViewController(loader: loader)
+        let (_, loader) = makeSUT()
         
         XCTAssertEqual(loader.loadPetCallCount, 0)
     }
     
     // MARK: - Helpers
+    
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (AdoptListViewController, PetLoaderSpy) {
+        let loader = PetLoaderSpy()
+        let sut = AdoptListViewController(loader: loader)
+        trackForMemoryLeak(loader, file: file, line: line)
+        trackForMemoryLeak(sut, file: file, line: line)
+        return (sut, loader)
+    }
+    
+    private func trackForMemoryLeak(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(instance, "Instance should have been deallocated. Potential memory leak.", file: file, line: line)
+        }
+    }
     
     private class PetLoaderSpy: PetLoader {
         private(set) var loadPetCallCount = 0
