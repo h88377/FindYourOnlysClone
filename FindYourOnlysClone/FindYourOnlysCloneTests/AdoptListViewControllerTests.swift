@@ -8,9 +8,7 @@
 import XCTest
 @testable import FindYourOnlysClone
 
-struct AdoptPetRequest: Equatable {
-    let page: Int
-}
+
 
 extension StringProtocol {
     subscript(_ range: PartialRangeThrough<Int>) -> SubSequence { prefix(range.upperBound.advanced(by: 1)) }
