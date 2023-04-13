@@ -7,16 +7,27 @@
 
 import XCTest
 
+struct AdoptPetRequest: Equatable {
+    let page: Int
+}
+
 protocol PetLoader {
-    
+    func load(with request: AdoptPetRequest)
 }
 
 class AdoptListViewController: UICollectionViewController {
     private var loader: PetLoader?
+    private var request = AdoptPetRequest(page: 0)
     
     convenience init(loader: PetLoader) {
-        self.init()
+        self.init(collectionViewLayout: UICollectionViewLayout())
         self.loader = loader
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        loader?.load(with: request)
     }
 }
 
@@ -25,7 +36,15 @@ final class AdoptListViewControllerTests: XCTestCase {
     func test_init_doesNotRequestPetsFromLoader() {
         let (_, loader) = makeSUT()
         
-        XCTAssertEqual(loader.loadPetCallCount, 0)
+        XCTAssertTrue(loader.messages.isEmpty)
+    }
+    
+    func test_viewDidLoad_requestPetsFromLoader() {
+        let (sut, loader) = makeSUT()
+
+        sut.loadViewIfNeeded()
+
+        XCTAssertEqual(loader.messages, [.load(AdoptPetRequest(page: 0))])
     }
     
     // MARK: - Helpers
@@ -45,7 +64,19 @@ final class AdoptListViewControllerTests: XCTestCase {
     }
     
     private class PetLoaderSpy: PetLoader {
-        private(set) var loadPetCallCount = 0
+        enum Message: Equatable {
+            case load(AdoptPetRequest)
+        }
+        
+        var loadPetCallCount: Int {
+            return messages.count
+        }
+        
+        private(set) var messages = [Message]()
+        
+        func load(with request: AdoptPetRequest) {
+            messages.append(.load(request))
+        }
     }
 
 }
