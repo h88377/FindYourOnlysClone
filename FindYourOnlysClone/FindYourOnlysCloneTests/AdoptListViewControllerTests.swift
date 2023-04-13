@@ -27,6 +27,12 @@ class AdoptListViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        loadPets()
+        collectionView.refreshControl = UIRefreshControl()
+        collectionView.refreshControl?.addTarget(self, action: #selector(loadPets), for: .valueChanged)
+    }
+    
+    @objc private func loadPets() {
         loader?.load(with: request)
     }
 }
@@ -39,12 +45,32 @@ final class AdoptListViewControllerTests: XCTestCase {
         XCTAssertTrue(loader.messages.isEmpty)
     }
     
-    func test_viewDidLoad_requestPetsFromLoader() {
+    func test_viewDidLoad_requestsPetsFromLoader() {
         let (sut, loader) = makeSUT()
 
         sut.loadViewIfNeeded()
 
         XCTAssertEqual(loader.messages, [.load(AdoptPetRequest(page: 0))])
+    }
+    
+    func test_simulateRefresh_requestsPetsFromLoader() {
+        let (sut, loader) = makeSUT()
+
+        sut.loadViewIfNeeded()
+        XCTAssertEqual(loader.messages, [.load(AdoptPetRequest(page: 0))])
+        
+        sut.simulateUserInitiatedPetsReload()
+        XCTAssertEqual(loader.messages, [
+            .load(AdoptPetRequest(page: 0)),
+            .load(AdoptPetRequest(page: 0))
+        ])
+        
+        sut.simulateUserInitiatedPetsReload()
+        XCTAssertEqual(loader.messages, [
+            .load(AdoptPetRequest(page: 0)),
+            .load(AdoptPetRequest(page: 0)),
+            .load(AdoptPetRequest(page: 0))
+        ])
     }
     
     // MARK: - Helpers
@@ -79,4 +105,16 @@ final class AdoptListViewControllerTests: XCTestCase {
         }
     }
 
+}
+
+private extension AdoptListViewController {
+    func simulateUserInitiatedPetsReload() {
+        collectionView.refreshControl?.simulateRefresh()
+    }
+}
+
+private extension UIRefreshControl {
+    func simulateRefresh() {
+        sendActions(for: .valueChanged)
+    }
 }
