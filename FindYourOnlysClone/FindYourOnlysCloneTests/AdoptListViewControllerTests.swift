@@ -103,8 +103,8 @@ final class AdoptListViewControllerTests: XCTestCase {
         sut.simulateUserInitiatedPetsReload()
         XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once user initiate a reload")
         
-        loader.completesPetsLoading(at: 1)
-        XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once loading completes successfully")
+        loader.completesPetsLoadingWithError(at: 1)
+        XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once loading completes with error")
     }
     
     // MARK: - Helpers
@@ -140,8 +140,13 @@ final class AdoptListViewControllerTests: XCTestCase {
             completions.append(completion)
         }
         
-        func completesPetsLoading(at index: Int = 0, with pets: [Pet] = []) {
+        func completesPetsLoading(with pets: [Pet] = [], at index: Int = 0) {
             completions[index](.success(pets))
+        }
+        
+        func completesPetsLoadingWithError(at index: Int = 0) {
+            let error = NSError(domain: "any error", code: 0)
+            completions[index](.failure(error))
         }
     }
 
