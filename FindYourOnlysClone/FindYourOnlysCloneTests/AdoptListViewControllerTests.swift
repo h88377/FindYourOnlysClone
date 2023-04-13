@@ -12,7 +12,7 @@ struct AdoptPetRequest: Equatable {
 }
 
 protocol PetLoader {
-    func load(with request: AdoptPetRequest)
+    func load(with request: AdoptPetRequest, completion: @escaping () -> Void)
 }
 
 class AdoptListViewController: UICollectionViewController {
@@ -27,13 +27,16 @@ class AdoptListViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loadPets()
         collectionView.refreshControl = UIRefreshControl()
         collectionView.refreshControl?.addTarget(self, action: #selector(loadPets), for: .valueChanged)
+        loadPets()
     }
     
     @objc private func loadPets() {
-        loader?.load(with: request)
+        collectionView.refreshControl?.beginRefreshing()
+        loader?.load(with: request) { [weak self] in
+            self?.collectionView?.refreshControl?.endRefreshing()
+        }
     }
 }
 
@@ -58,6 +61,22 @@ final class AdoptListViewControllerTests: XCTestCase {
             .load(AdoptPetRequest(page: 0)),
             .load(AdoptPetRequest(page: 0))
         ], "Expected yet another loading request once user initiates a reload")
+    }
+    
+    func test_loadingIndicator_showsLoadingIndicatorWhileLoadingPets() {
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once view is loaded")
+        
+        loader.completesPetsLoading(at: 0)
+        XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once loading completes successfully")
+        
+        sut.simulateUserInitiatedPetsReload()
+        XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once user initiate a reload")
+        
+        loader.completesPetsLoading(at: 1)
+        XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once loading completes successfully")
     }
     
     // MARK: - Helpers
@@ -86,9 +105,15 @@ final class AdoptListViewControllerTests: XCTestCase {
         }
         
         private(set) var messages = [Message]()
+        private var completions = [() -> Void]()
         
-        func load(with request: AdoptPetRequest) {
+        func load(with request: AdoptPetRequest, completion: @escaping () -> Void) {
             messages.append(.load(request))
+            completions.append(completion)
+        }
+        
+        func completesPetsLoading(at index: Int = 0) {
+            completions[index]()
         }
     }
 
@@ -97,6 +122,10 @@ final class AdoptListViewControllerTests: XCTestCase {
 private extension AdoptListViewController {
     func simulateUserInitiatedPetsReload() {
         collectionView.refreshControl?.simulateRefresh()
+    }
+    
+    var isShowingLoadingIndicator: Bool {
+        return collectionView.refreshControl?.isRefreshing == true
     }
 }
 
