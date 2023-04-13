@@ -12,12 +12,6 @@ extension StringProtocol {
     subscript(_ range: PartialRangeThrough<Int>) -> SubSequence { prefix(range.upperBound.advanced(by: 1)) }
 }
 
-class AdoptListPetCell: UICollectionViewCell {
-    let kindLabel = UILabel()
-    let genderLabel = UILabel()
-    let cityLabel = UILabel()
-}
-
 class AdoptListViewController: UICollectionViewController {
     private lazy var dataSource: UICollectionViewDiffableDataSource<Int, Pet> = {
         .init(collectionView: collectionView) { collectionView, indexPath, pet in
