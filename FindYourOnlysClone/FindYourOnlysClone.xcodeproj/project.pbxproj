@@ -13,19 +13,10 @@
 		9891762629E80212000002A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9891762529E80212000002A4 /* Assets.xcassets */; };
 		9891762929E80212000002A4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9891762729E80212000002A4 /* LaunchScreen.storyboard */; };
 		9891763429E80212000002A4 /* FindYourOnlysCloneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891763329E80212000002A4 /* FindYourOnlysCloneTests.swift */; };
-		9891763E29E80212000002A4 /* FindYourOnlysCloneUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891763D29E80212000002A4 /* FindYourOnlysCloneUITests.swift */; };
-		9891764029E80212000002A4 /* FindYourOnlysCloneUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891763F29E80212000002A4 /* FindYourOnlysCloneUITestsLaunchTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		9891763029E80212000002A4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9891761129E80211000002A4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9891761829E80211000002A4;
-			remoteInfo = FindYourOnlysClone;
-		};
-		9891763A29E80212000002A4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9891761129E80211000002A4 /* Project object */;
 			proxyType = 1;
@@ -44,9 +35,6 @@
 		9891762A29E80212000002A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9891762F29E80212000002A4 /* FindYourOnlysCloneTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FindYourOnlysCloneTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9891763329E80212000002A4 /* FindYourOnlysCloneTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindYourOnlysCloneTests.swift; sourceTree = "<group>"; };
-		9891763929E80212000002A4 /* FindYourOnlysCloneUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FindYourOnlysCloneUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9891763D29E80212000002A4 /* FindYourOnlysCloneUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindYourOnlysCloneUITests.swift; sourceTree = "<group>"; };
-		9891763F29E80212000002A4 /* FindYourOnlysCloneUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindYourOnlysCloneUITestsLaunchTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,13 +52,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9891763629E80212000002A4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -79,7 +60,6 @@
 			children = (
 				9891761B29E80211000002A4 /* FindYourOnlysClone */,
 				9891763229E80212000002A4 /* FindYourOnlysCloneTests */,
-				9891763C29E80212000002A4 /* FindYourOnlysCloneUITests */,
 				9891761A29E80211000002A4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -89,7 +69,6 @@
 			children = (
 				9891761929E80211000002A4 /* FindYourOnlysClone.app */,
 				9891762F29E80212000002A4 /* FindYourOnlysCloneTests.xctest */,
-				9891763929E80212000002A4 /* FindYourOnlysCloneUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -113,15 +92,6 @@
 				9891763329E80212000002A4 /* FindYourOnlysCloneTests.swift */,
 			);
 			path = FindYourOnlysCloneTests;
-			sourceTree = "<group>";
-		};
-		9891763C29E80212000002A4 /* FindYourOnlysCloneUITests */ = {
-			isa = PBXGroup;
-			children = (
-				9891763D29E80212000002A4 /* FindYourOnlysCloneUITests.swift */,
-				9891763F29E80212000002A4 /* FindYourOnlysCloneUITestsLaunchTests.swift */,
-			);
-			path = FindYourOnlysCloneUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -162,24 +132,6 @@
 			productReference = 9891762F29E80212000002A4 /* FindYourOnlysCloneTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		9891763829E80212000002A4 /* FindYourOnlysCloneUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 9891764929E80212000002A4 /* Build configuration list for PBXNativeTarget "FindYourOnlysCloneUITests" */;
-			buildPhases = (
-				9891763529E80212000002A4 /* Sources */,
-				9891763629E80212000002A4 /* Frameworks */,
-				9891763729E80212000002A4 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				9891763B29E80212000002A4 /* PBXTargetDependency */,
-			);
-			name = FindYourOnlysCloneUITests;
-			productName = FindYourOnlysCloneUITests;
-			productReference = 9891763929E80212000002A4 /* FindYourOnlysCloneUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -194,10 +146,6 @@
 						CreatedOnToolsVersion = 14.2;
 					};
 					9891762E29E80212000002A4 = {
-						CreatedOnToolsVersion = 14.2;
-						TestTargetID = 9891761829E80211000002A4;
-					};
-					9891763829E80212000002A4 = {
 						CreatedOnToolsVersion = 14.2;
 						TestTargetID = 9891761829E80211000002A4;
 					};
@@ -218,7 +166,6 @@
 			targets = (
 				9891761829E80211000002A4 /* FindYourOnlysClone */,
 				9891762E29E80212000002A4 /* FindYourOnlysCloneTests */,
-				9891763829E80212000002A4 /* FindYourOnlysCloneUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -234,13 +181,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		9891762D29E80212000002A4 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9891763729E80212000002A4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -268,15 +208,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9891763529E80212000002A4 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9891764029E80212000002A4 /* FindYourOnlysCloneUITestsLaunchTests.swift in Sources */,
-				9891763E29E80212000002A4 /* FindYourOnlysCloneUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -284,11 +215,6 @@
 			isa = PBXTargetDependency;
 			target = 9891761829E80211000002A4 /* FindYourOnlysClone */;
 			targetProxy = 9891763029E80212000002A4 /* PBXContainerItemProxy */;
-		};
-		9891763B29E80212000002A4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9891761829E80211000002A4 /* FindYourOnlysClone */;
-			targetProxy = 9891763A29E80212000002A4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -512,42 +438,6 @@
 			};
 			name = Release;
 		};
-		9891764A29E80212000002A4 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6D8CRTN6K7;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.waynecheng.FindYourOnlysCloneUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = FindYourOnlysClone;
-			};
-			name = Debug;
-		};
-		9891764B29E80212000002A4 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6D8CRTN6K7;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.waynecheng.FindYourOnlysCloneUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = FindYourOnlysClone;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -574,15 +464,6 @@
 			buildConfigurations = (
 				9891764729E80212000002A4 /* Debug */,
 				9891764829E80212000002A4 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		9891764929E80212000002A4 /* Build configuration list for PBXNativeTarget "FindYourOnlysCloneUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9891764A29E80212000002A4 /* Debug */,
-				9891764B29E80212000002A4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
