@@ -13,6 +13,7 @@
 		9891762629E80212000002A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9891762529E80212000002A4 /* Assets.xcassets */; };
 		9891762929E80212000002A4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9891762729E80212000002A4 /* LaunchScreen.storyboard */; };
 		9891763429E80212000002A4 /* AdoptListViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891763329E80212000002A4 /* AdoptListViewControllerTests.swift */; };
+		9891764E29E89B08000002A4 /* Pet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891764D29E89B08000002A4 /* Pet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +36,7 @@
 		9891762A29E80212000002A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9891762F29E80212000002A4 /* FindYourOnlysCloneTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FindYourOnlysCloneTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9891763329E80212000002A4 /* AdoptListViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptListViewControllerTests.swift; sourceTree = "<group>"; };
+		9891764D29E89B08000002A4 /* Pet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 				9891761C29E80211000002A4 /* AppDelegate.swift */,
 				9891761E29E80211000002A4 /* SceneDelegate.swift */,
 				9891762029E80211000002A4 /* ViewController.swift */,
+				9891764C29E89AE2000002A4 /* Pet feature */,
 				9891762529E80212000002A4 /* Assets.xcassets */,
 				9891762729E80212000002A4 /* LaunchScreen.storyboard */,
 				9891762A29E80212000002A4 /* Info.plist */,
@@ -92,6 +95,14 @@
 				9891763329E80212000002A4 /* AdoptListViewControllerTests.swift */,
 			);
 			path = FindYourOnlysCloneTests;
+			sourceTree = "<group>";
+		};
+		9891764C29E89AE2000002A4 /* Pet feature */ = {
+			isa = PBXGroup;
+			children = (
+				9891764D29E89B08000002A4 /* Pet.swift */,
+			);
+			path = "Pet feature";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -195,6 +206,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9891762129E80211000002A4 /* ViewController.swift in Sources */,
+				9891764E29E89B08000002A4 /* Pet.swift in Sources */,
 				9891761D29E80211000002A4 /* AppDelegate.swift in Sources */,
 				9891761F29E80211000002A4 /* SceneDelegate.swift in Sources */,
 			);

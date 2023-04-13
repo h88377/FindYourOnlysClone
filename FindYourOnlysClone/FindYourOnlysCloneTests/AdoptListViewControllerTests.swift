@@ -6,33 +6,10 @@
 //
 
 import XCTest
+@testable import FindYourOnlysClone
 
 struct AdoptPetRequest: Equatable {
     let page: Int
-}
-
-struct Pet: Hashable {
-    let id: Int
-    let location: String
-    let kind: String
-    let gender: String
-    let bodyType: String
-    let color: String
-    let age: String
-    let sterilization: String
-    let bacterin: String
-    let foundPlace: String
-    let status: String
-    let remark: String
-    let openDate: Date
-    let closedDate: Date
-    let updatedDate: Date
-    let createdDate: Date
-    let photoURL: URL
-    let address: String
-    let telephone: String
-    let variety: String
-    let shelterName: String
 }
 
 extension StringProtocol {
