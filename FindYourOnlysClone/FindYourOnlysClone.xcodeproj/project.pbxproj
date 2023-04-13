@@ -17,6 +17,8 @@
 		9891765029E89B35000002A4 /* AdoptPetRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891764F29E89B35000002A4 /* AdoptPetRequest.swift */; };
 		9891765229E89B55000002A4 /* PetLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891765129E89B55000002A4 /* PetLoader.swift */; };
 		9891765529E89BA5000002A4 /* AdoptListPetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891765429E89BA5000002A4 /* AdoptListPetCell.swift */; };
+		9891765729E89BC6000002A4 /* AdoptListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891765629E89BC6000002A4 /* AdoptListViewController.swift */; };
+		9891765A29E89BFD000002A4 /* StringProtocol+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891765929E89BFD000002A4 /* StringProtocol+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +45,8 @@
 		9891764F29E89B35000002A4 /* AdoptPetRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptPetRequest.swift; sourceTree = "<group>"; };
 		9891765129E89B55000002A4 /* PetLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetLoader.swift; sourceTree = "<group>"; };
 		9891765429E89BA5000002A4 /* AdoptListPetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptListPetCell.swift; sourceTree = "<group>"; };
+		9891765629E89BC6000002A4 /* AdoptListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptListViewController.swift; sourceTree = "<group>"; };
+		9891765929E89BFD000002A4 /* StringProtocol+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StringProtocol+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +91,7 @@
 				9891761C29E80211000002A4 /* AppDelegate.swift */,
 				9891761E29E80211000002A4 /* SceneDelegate.swift */,
 				9891762029E80211000002A4 /* ViewController.swift */,
+				9891765829E89BEE000002A4 /* Extension */,
 				9891765329E89B96000002A4 /* Pet UI */,
 				9891764C29E89AE2000002A4 /* Pet feature */,
 				9891762529E80212000002A4 /* Assets.xcassets */,
@@ -118,8 +123,17 @@
 			isa = PBXGroup;
 			children = (
 				9891765429E89BA5000002A4 /* AdoptListPetCell.swift */,
+				9891765629E89BC6000002A4 /* AdoptListViewController.swift */,
 			);
 			path = "Pet UI";
+			sourceTree = "<group>";
+		};
+		9891765829E89BEE000002A4 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				9891765929E89BFD000002A4 /* StringProtocol+Extension.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -225,7 +239,9 @@
 				9891762129E80211000002A4 /* ViewController.swift in Sources */,
 				9891765029E89B35000002A4 /* AdoptPetRequest.swift in Sources */,
 				9891764E29E89B08000002A4 /* Pet.swift in Sources */,
+				9891765729E89BC6000002A4 /* AdoptListViewController.swift in Sources */,
 				9891765529E89BA5000002A4 /* AdoptListPetCell.swift in Sources */,
+				9891765A29E89BFD000002A4 /* StringProtocol+Extension.swift in Sources */,
 				9891761D29E80211000002A4 /* AppDelegate.swift in Sources */,
 				9891765229E89B55000002A4 /* PetLoader.swift in Sources */,
 				9891761F29E80211000002A4 /* SceneDelegate.swift in Sources */,
