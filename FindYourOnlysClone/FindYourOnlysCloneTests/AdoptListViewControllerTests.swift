@@ -8,16 +8,8 @@
 import XCTest
 @testable import FindYourOnlysClone
 
-
-
 extension StringProtocol {
     subscript(_ range: PartialRangeThrough<Int>) -> SubSequence { prefix(range.upperBound.advanced(by: 1)) }
-}
-
-protocol PetLoader {
-    typealias Result = Swift.Result<[Pet], Error>
-    
-    func load(with request: AdoptPetRequest, completion: @escaping (Result) -> Void)
 }
 
 class AdoptListPetCell: UICollectionViewCell {
