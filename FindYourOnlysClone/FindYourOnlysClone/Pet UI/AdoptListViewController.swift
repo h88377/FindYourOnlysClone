@@ -89,4 +89,11 @@ class AdoptListViewController: UICollectionViewController, UICollectionViewDataS
             tasks[indexPath] = imageLoader?.loadImageData(from: pet.photoURL) { _ in }
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+        for indexPath in indexPaths {
+            tasks[indexPath]?.cancel()
+            tasks[indexPath] = nil
+        }
+    }
 }

@@ -232,6 +232,22 @@ final class AdoptListViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.requestedImageURLs, [pet0.photoURL, pet1.photoURL], "Expected second requested image url when second cell near visible")
     }
     
+    func test_petImageView_cancelsImageURLWhenIsNotNearVisibleAnymore() {
+        let pet0 = makePet(photoURL: URL(string:"https://url-0.com")!)
+        let pet1 = makePet(photoURL: URL(string:"https://url-1.com")!)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        XCTAssertEqual(loader.cancelledURLs, [], "Expected no cancelled URL request until cells are not near visible")
+        loader.completesPetsLoading(with: [pet0, pet1], at: 0)
+        
+        sut.simulatePetImageViewIsNotNearVisible(at: 0)
+        XCTAssertEqual(loader.cancelledURLs, [pet0.photoURL], "Expected first cancelled URL request when first view is not near visible anymore")
+        
+        sut.simulatePetImageViewIsNotNearVisible(at: 1)
+        XCTAssertEqual(loader.cancelledURLs, [pet0.photoURL, pet1.photoURL], "Expected second cancelled URL request when second view is not near visible anymore")
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (AdoptListViewController, PetLoaderSpy) {
@@ -372,15 +388,21 @@ private extension AdoptListViewController {
         return cell as? AdoptListCell
     }
     
+    func simulatePetImageViewIsNotVisible(at index: Int) {
+        let cell = simulatePetImageViewIsVisible(at: index)!
+        let delegate = collectionView.delegate
+        delegate?.collectionView?(collectionView, didEndDisplaying: cell, forItemAt: IndexPath(item: index, section: petsSection))
+    }
+    
     func simulatePetImageViewIsNearVisible(at index: Int) {
         let dataSource = collectionView.prefetchDataSource
         dataSource?.collectionView(collectionView, prefetchItemsAt: [IndexPath(item: index, section: petsSection)])
     }
     
-    func simulatePetImageViewIsNotVisible(at index: Int) {
-        let cell = simulatePetImageViewIsVisible(at: index)!
-        let delegate = collectionView.delegate
-        delegate?.collectionView?(collectionView, didEndDisplaying: cell, forItemAt: IndexPath(item: index, section: petsSection))
+    func simulatePetImageViewIsNotNearVisible(at index: Int) {
+        simulatePetImageViewIsNearVisible(at: index)
+        let dataSource = collectionView.prefetchDataSource
+        dataSource?.collectionView?(collectionView, cancelPrefetchingForItemsAt: [IndexPath(item: index, section: petsSection)])
     }
     
     func itemAt(index: Int) -> UICollectionViewCell? {
