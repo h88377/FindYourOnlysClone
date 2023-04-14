@@ -13,5 +13,17 @@ class AdoptListCell: UICollectionViewCell {
     let cityLabel = UILabel()
     let petImageView = UIImageView()
     let petImageContainer = UIView()
-    let retryButton = UIButton()
+    
+    private(set) lazy var retryButton: UIButton = {
+        let button = UIButton()
+        button.addTarget(self, action: #selector(retryImageLoad), for: .touchUpInside)
+        
+        return button
+    }()
+    
+    var retryImageLoadHandler: (() -> Void)?
+    
+    @objc private func retryImageLoad() {
+        retryImageLoadHandler?()
+    }
 }

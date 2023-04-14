@@ -193,6 +193,28 @@ final class AdoptListViewControllerTests: XCTestCase {
         XCTAssertEqual(view1?.isShowingImageRetryAction, false, "Expected second view no retry action once second image loading completes successfully")
     }
     
+    func test_petImageViewRetryAction_retriesImageLoad() {
+        let pet0 = makePet(photoURL: URL(string:"https://url-0.com")!)
+        let pet1 = makePet(photoURL: URL(string:"https://url-1.com")!)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completesPetsLoading(with: [pet0, pet1], at: 0)
+        
+        let view0 = sut.simulatePetImageViewIsVisible(at: 0)
+        let view1 = sut.simulatePetImageViewIsVisible(at: 1)
+        XCTAssertEqual(loader.requestedImageURLs, [pet0.photoURL, pet1.photoURL], "Expected two image URL requests for the two visible views")
+        
+        loader.completesImageLoadingWithError(at: 0)
+        loader.completesImageLoadingWithError(at: 1)
+        XCTAssertEqual(loader.requestedImageURLs, [pet0.photoURL, pet1.photoURL], "Expected only two URL requests before retry action")
+        
+        view0?.simulateRetryAction()
+        XCTAssertEqual(loader.requestedImageURLs, [pet0.photoURL, pet1.photoURL, pet0.photoURL], "Expected third image URL request after first view retry action")
+        
+        view1?.simulateRetryAction()
+        XCTAssertEqual(loader.requestedImageURLs, [pet0.photoURL, pet1.photoURL, pet0.photoURL, pet1.photoURL], "Expected fourth image URL request after second view retry action")
+    }
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (AdoptListViewController, PetLoaderSpy) {
@@ -357,6 +379,10 @@ private extension AdoptListViewController {
 }
 
 private extension AdoptListCell {
+    func simulateRetryAction() {
+        retryButton.simulateTap()
+    }
+    
     var kindText: String? {
         return kindLabel.text
     }
@@ -385,6 +411,12 @@ private extension AdoptListCell {
 private extension UIRefreshControl {
     func simulateRefresh() {
         sendActions(for: .valueChanged)
+    }
+}
+
+private extension UIButton {
+    func simulateTap() {
+        sendActions(for: .touchUpInside)
     }
 }
 

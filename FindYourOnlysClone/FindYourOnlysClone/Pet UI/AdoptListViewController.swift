@@ -14,6 +14,19 @@ class AdoptListViewController: UICollectionViewController {
             cell.genderLabel.text = pet.gender == "M" ? "♂" : "♀"
             cell.kindLabel.text = pet.kind
             cell.cityLabel.text = String(pet.address[...2])
+            cell.retryImageLoadHandler = { [weak self, weak cell] in
+                cell?.retryButton.isHidden = true
+                cell?.petImageContainer.isShimmering = true
+                
+                self?.tasks[indexPath] = self?.imageLoader?.loadImageData(from: pet.photoURL) { [weak cell] result in
+                    if let image = (try? result.get()).flatMap(UIImage.init) {
+                        cell?.petImageView.image = image
+                    } else {
+                        cell?.retryButton.isHidden = false
+                    }
+                    cell?.petImageContainer.isShimmering = false
+                }
+            }
             return cell
         }
     }()
