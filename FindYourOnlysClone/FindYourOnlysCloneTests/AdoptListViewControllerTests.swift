@@ -15,19 +15,19 @@ final class AdoptListViewControllerTests: XCTestCase {
         XCTAssertTrue(loader.loadPetsRequests.isEmpty, "Expected no loading request before view is loaded")
         
         sut.loadViewIfNeeded()
-        XCTAssertEqual(loader.loadPetsRequests, [.load(AdoptPetRequest(page: 0))], "Expected a loading request once view is loaded")
+        XCTAssertEqual(loader.loadPetsRequests, [.load(AdoptListRequest(page: 0))], "Expected a loading request once view is loaded")
         
         sut.simulateUserInitiatedPetsReload()
         XCTAssertEqual(loader.loadPetsRequests, [
-            .load(AdoptPetRequest(page: 0)),
-            .load(AdoptPetRequest(page: 0))
+            .load(AdoptListRequest(page: 0)),
+            .load(AdoptListRequest(page: 0))
         ], "Expected another loading request once user initiates a reload")
         
         sut.simulateUserInitiatedPetsReload()
         XCTAssertEqual(loader.loadPetsRequests, [
-            .load(AdoptPetRequest(page: 0)),
-            .load(AdoptPetRequest(page: 0)),
-            .load(AdoptPetRequest(page: 0))
+            .load(AdoptListRequest(page: 0)),
+            .load(AdoptListRequest(page: 0)),
+            .load(AdoptListRequest(page: 0))
         ], "Expected yet another loading request once user initiates a reload")
     }
     
@@ -252,30 +252,30 @@ final class AdoptListViewControllerTests: XCTestCase {
         let (sut, loader) = makeSUT()
         
         sut.loadViewIfNeeded()
-        XCTAssertEqual(loader.loadPetsRequests, [.load(AdoptPetRequest(page: 0))], "Expected a loading request once view is loaded")
+        XCTAssertEqual(loader.loadPetsRequests, [.load(AdoptListRequest(page: 0))], "Expected a loading request once view is loaded")
 
         loader.completesPetsLoading(with: [makePet(id: 1)], at: 0)
         sut.simulatePaginationScrolling()
         XCTAssertEqual(loader.loadPetsRequests, [
-            .load(AdoptPetRequest(page: 0)),
-            .load(AdoptPetRequest(page: 1))
+            .load(AdoptListRequest(page: 0)),
+            .load(AdoptListRequest(page: 1))
         ], "Expected pagination loading request once user scrolling the view")
         
         loader.completesPetsLoading(with: [makePet(id: 1)], at: 1)
         sut.simulateUserInitiatedPetsReload()
         XCTAssertEqual(loader.loadPetsRequests, [
-            .load(AdoptPetRequest(page: 0)),
-            .load(AdoptPetRequest(page: 1)),
-            .load(AdoptPetRequest(page: 0))
+            .load(AdoptListRequest(page: 0)),
+            .load(AdoptListRequest(page: 1)),
+            .load(AdoptListRequest(page: 0))
         ], "Expected request first page once user initiated a reload")
         
         loader.completesPetsLoading(with: [makePet(id: 2)], at: 2)
         sut.simulatePaginationScrolling()
         XCTAssertEqual(loader.loadPetsRequests, [
-            .load(AdoptPetRequest(page: 0)),
-            .load(AdoptPetRequest(page: 1)),
-            .load(AdoptPetRequest(page: 0)),
-            .load(AdoptPetRequest(page: 1))
+            .load(AdoptListRequest(page: 0)),
+            .load(AdoptListRequest(page: 1)),
+            .load(AdoptListRequest(page: 0)),
+            .load(AdoptListRequest(page: 1))
         ], "Expected another pagination loading request once user scrolling the view")
     }
     
@@ -369,7 +369,7 @@ final class AdoptListViewControllerTests: XCTestCase {
         // MARK: - PetLoader
         
         enum Request: Equatable {
-            case load(AdoptPetRequest)
+            case load(AdoptListRequest)
         }
         
         var loadPetsRequests: [Request] {
@@ -378,7 +378,7 @@ final class AdoptListViewControllerTests: XCTestCase {
         
         private var loadPetsMessages = [(request: Request, completion: (PetLoader.Result) -> Void)]()
         
-        func load(with request: AdoptPetRequest, completion: @escaping (PetLoader.Result) -> Void) {
+        func load(with request: AdoptListRequest, completion: @escaping (PetLoader.Result) -> Void) {
             loadPetsMessages.append((.load(request), completion))
         }
         

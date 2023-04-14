@@ -10,5 +10,5 @@ import Foundation
 protocol PetLoader {
     typealias Result = Swift.Result<[Pet], Error>
     
-    func load(with request: AdoptPetRequest, completion: @escaping (Result) -> Void)
+    func load(with request: AdoptListRequest, completion: @escaping (Result) -> Void)
 }

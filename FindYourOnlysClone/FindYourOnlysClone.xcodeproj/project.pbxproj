@@ -14,7 +14,7 @@
 		9891762929E80212000002A4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9891762729E80212000002A4 /* LaunchScreen.storyboard */; };
 		9891763429E80212000002A4 /* AdoptListViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891763329E80212000002A4 /* AdoptListViewControllerTests.swift */; };
 		9891764E29E89B08000002A4 /* Pet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891764D29E89B08000002A4 /* Pet.swift */; };
-		9891765029E89B35000002A4 /* AdoptPetRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891764F29E89B35000002A4 /* AdoptPetRequest.swift */; };
+		9891765029E89B35000002A4 /* AdoptListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891764F29E89B35000002A4 /* AdoptListRequest.swift */; };
 		9891765229E89B55000002A4 /* PetLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891765129E89B55000002A4 /* PetLoader.swift */; };
 		9891765529E89BA5000002A4 /* AdoptListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891765429E89BA5000002A4 /* AdoptListCell.swift */; };
 		9891765729E89BC6000002A4 /* AdoptListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891765629E89BC6000002A4 /* AdoptListViewController.swift */; };
@@ -45,7 +45,7 @@
 		9891762F29E80212000002A4 /* FindYourOnlysCloneTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FindYourOnlysCloneTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9891763329E80212000002A4 /* AdoptListViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptListViewControllerTests.swift; sourceTree = "<group>"; };
 		9891764D29E89B08000002A4 /* Pet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pet.swift; sourceTree = "<group>"; };
-		9891764F29E89B35000002A4 /* AdoptPetRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptPetRequest.swift; sourceTree = "<group>"; };
+		9891764F29E89B35000002A4 /* AdoptListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptListRequest.swift; sourceTree = "<group>"; };
 		9891765129E89B55000002A4 /* PetLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetLoader.swift; sourceTree = "<group>"; };
 		9891765429E89BA5000002A4 /* AdoptListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptListCell.swift; sourceTree = "<group>"; };
 		9891765629E89BC6000002A4 /* AdoptListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptListViewController.swift; sourceTree = "<group>"; };
@@ -119,7 +119,7 @@
 			isa = PBXGroup;
 			children = (
 				9891764D29E89B08000002A4 /* Pet.swift */,
-				9891764F29E89B35000002A4 /* AdoptPetRequest.swift */,
+				9891764F29E89B35000002A4 /* AdoptListRequest.swift */,
 				9891765129E89B55000002A4 /* PetLoader.swift */,
 				9891765D29E91C9D000002A4 /* PetImageDataLoader.swift */,
 			);
@@ -246,7 +246,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9891762129E80211000002A4 /* ViewController.swift in Sources */,
-				9891765029E89B35000002A4 /* AdoptPetRequest.swift in Sources */,
+				9891765029E89B35000002A4 /* AdoptListRequest.swift in Sources */,
 				9891764E29E89B08000002A4 /* Pet.swift in Sources */,
 				9891765729E89BC6000002A4 /* AdoptListViewController.swift in Sources */,
 				9891765529E89BA5000002A4 /* AdoptListCell.swift in Sources */,

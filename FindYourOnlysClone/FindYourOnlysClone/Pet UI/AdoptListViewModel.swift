@@ -34,7 +34,7 @@ class AdoptListViewModel {
     
     private func loadPets() {
         isPetLoadingStateOnChange?(true)
-        petLoader?.load(with: AdoptPetRequest(page: currentPage)) { [weak self] result in
+        petLoader?.load(with: AdoptListRequest(page: currentPage)) { [weak self] result in
             if let pets = try? result.get() {
                 if self?.currentPage == 0 {
                     self?.isPetsRefreshingStateOnChange?(pets)

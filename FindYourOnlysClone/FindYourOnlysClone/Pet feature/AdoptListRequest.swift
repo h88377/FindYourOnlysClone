@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct AdoptPetRequest: Equatable {
+struct AdoptListRequest: Equatable {
     let page: Int
 }
