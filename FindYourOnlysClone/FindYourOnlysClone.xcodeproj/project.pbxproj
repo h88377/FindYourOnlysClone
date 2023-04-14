@@ -21,6 +21,7 @@
 		9891765A29E89BFD000002A4 /* StringProtocol+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891765929E89BFD000002A4 /* StringProtocol+Extension.swift */; };
 		9891765C29E90FB2000002A4 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891765B29E90FB2000002A4 /* UIView+Extension.swift */; };
 		9891765E29E91C9D000002A4 /* PetImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891765D29E91C9D000002A4 /* PetImageDataLoader.swift */; };
+		9891766029E98563000002A4 /* AdoptListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891765F29E98563000002A4 /* AdoptListViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		9891765929E89BFD000002A4 /* StringProtocol+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StringProtocol+Extension.swift"; sourceTree = "<group>"; };
 		9891765B29E90FB2000002A4 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		9891765D29E91C9D000002A4 /* PetImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetImageDataLoader.swift; sourceTree = "<group>"; };
+		9891765F29E98563000002A4 /* AdoptListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptListViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +131,7 @@
 			children = (
 				9891765429E89BA5000002A4 /* AdoptListCell.swift */,
 				9891765629E89BC6000002A4 /* AdoptListViewController.swift */,
+				9891765F29E98563000002A4 /* AdoptListViewModel.swift */,
 			);
 			path = "Pet UI";
 			sourceTree = "<group>";
@@ -253,6 +256,7 @@
 				9891765229E89B55000002A4 /* PetLoader.swift in Sources */,
 				9891765C29E90FB2000002A4 /* UIView+Extension.swift in Sources */,
 				9891761F29E80211000002A4 /* SceneDelegate.swift in Sources */,
+				9891766029E98563000002A4 /* AdoptListViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
