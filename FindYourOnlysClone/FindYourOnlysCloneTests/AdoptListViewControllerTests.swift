@@ -31,37 +31,6 @@ final class AdoptListViewControllerTests: XCTestCase {
         ], "Expected yet another loading request once user initiates a reload")
     }
     
-    func test_paginationActions_requestsPetsFromLoader() {
-        let (sut, loader) = makeSUT()
-        
-        sut.loadViewIfNeeded()
-        XCTAssertEqual(loader.loadPetsRequests, [.load(AdoptPetRequest(page: 0))], "Expected a loading request once view is loaded")
-
-        loader.completesPetsLoading(with: [makePet(id: 1)], at: 0)
-        sut.simulatePaginationScrolling()
-        XCTAssertEqual(loader.loadPetsRequests, [
-            .load(AdoptPetRequest(page: 0)),
-            .load(AdoptPetRequest(page: 1))
-        ], "Expected pagination loading request once user scrolling the view")
-        
-        loader.completesPetsLoading(with: [makePet(id: 1)], at: 1)
-        sut.simulateUserInitiatedPetsReload()
-        XCTAssertEqual(loader.loadPetsRequests, [
-            .load(AdoptPetRequest(page: 0)),
-            .load(AdoptPetRequest(page: 1)),
-            .load(AdoptPetRequest(page: 0))
-        ], "Expected request first page once user initiated a reload")
-        
-        loader.completesPetsLoading(with: [makePet(id: 2)], at: 2)
-        sut.simulatePaginationScrolling()
-        XCTAssertEqual(loader.loadPetsRequests, [
-            .load(AdoptPetRequest(page: 0)),
-            .load(AdoptPetRequest(page: 1)),
-            .load(AdoptPetRequest(page: 0)),
-            .load(AdoptPetRequest(page: 1))
-        ], "Expected another pagination loading request once user scrolling the view")
-    }
-    
     func test_loadingIndicator_showsLoadingIndicatorWhileLoadingPets() {
         let (sut, loader) = makeSUT()
         
@@ -277,6 +246,57 @@ final class AdoptListViewControllerTests: XCTestCase {
         
         sut.simulatePetImageViewIsNotNearVisible(at: 1)
         XCTAssertEqual(loader.cancelledURLs, [pet0.photoURL, pet1.photoURL], "Expected second cancelled URL request when second view is not near visible anymore")
+    }
+    
+    func test_paginationActions_requestsPetsFromLoader() {
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        XCTAssertEqual(loader.loadPetsRequests, [.load(AdoptPetRequest(page: 0))], "Expected a loading request once view is loaded")
+
+        loader.completesPetsLoading(with: [makePet(id: 1)], at: 0)
+        sut.simulatePaginationScrolling()
+        XCTAssertEqual(loader.loadPetsRequests, [
+            .load(AdoptPetRequest(page: 0)),
+            .load(AdoptPetRequest(page: 1))
+        ], "Expected pagination loading request once user scrolling the view")
+        
+        loader.completesPetsLoading(with: [makePet(id: 1)], at: 1)
+        sut.simulateUserInitiatedPetsReload()
+        XCTAssertEqual(loader.loadPetsRequests, [
+            .load(AdoptPetRequest(page: 0)),
+            .load(AdoptPetRequest(page: 1)),
+            .load(AdoptPetRequest(page: 0))
+        ], "Expected request first page once user initiated a reload")
+        
+        loader.completesPetsLoading(with: [makePet(id: 2)], at: 2)
+        sut.simulatePaginationScrolling()
+        XCTAssertEqual(loader.loadPetsRequests, [
+            .load(AdoptPetRequest(page: 0)),
+            .load(AdoptPetRequest(page: 1)),
+            .load(AdoptPetRequest(page: 0)),
+            .load(AdoptPetRequest(page: 1))
+        ], "Expected another pagination loading request once user scrolling the view")
+    }
+    
+    func test_refresh_afterPaginationRequest_rendersOnlyTheFirstPage() {
+        let firstPage = (0...3).map { makePet(id: $0) }
+        let secondPage = (4...6).map { makePet(id: $0) }
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        assertThat(sut, isRendering: [])
+        
+        loader.completesPetsLoading(with: firstPage, at: 0)
+        assertThat(sut, isRendering: firstPage)
+        
+        sut.simulatePaginationScrolling()
+        loader.completesPetsLoading(with: secondPage, at: 1)
+        assertThat(sut, isRendering: firstPage + secondPage)
+        
+        sut.simulateUserInitiatedPetsReload()
+        loader.completesPetsLoading(with: firstPage, at: 2)
+        assertThat(sut, isRendering: firstPage)
     }
     
     // MARK: - Helpers
