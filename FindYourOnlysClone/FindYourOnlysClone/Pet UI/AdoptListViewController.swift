@@ -21,7 +21,7 @@ class AdoptListViewController: UICollectionViewController, UICollectionViewDataS
         }
     }()
     
-    private var request = AdoptPetRequest(page: 0)
+    private var currentPage = 0
     private var loader: PetLoader?
     private var imageLoader: PetImageDataLoader?
     private var tasks = [IndexPath: PetImageDataLoaderTask]()
@@ -43,8 +43,9 @@ class AdoptListViewController: UICollectionViewController, UICollectionViewDataS
     }
     
     @objc private func loadPets() {
+        currentPage = 0
         collectionView.refreshControl?.beginRefreshing()
-        loader?.load(with: request) { [weak self] result in
+        loader?.load(with: AdoptPetRequest(page: 0)) { [weak self] result in
             if let pets = try? result.get() {
                 self?.set(pets)
             }
@@ -77,6 +78,12 @@ class AdoptListViewController: UICollectionViewController, UICollectionViewDataS
         dataSource.apply(snapshot, animatingDifferences: false)
     }
     
+    private func append(_ newItems: [Pet]) {
+        var snapshot = dataSource.snapshot()
+        snapshot.appendItems(newItems, toSection: 0)
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let pet = dataSource.itemIdentifier(for: indexPath), let cell = cell as? AdoptListCell else { return }
         
@@ -85,6 +92,19 @@ class AdoptListViewController: UICollectionViewController, UICollectionViewDataS
     
     override func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         cancelTask(forItemAt: indexPath)
+    }
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        if (offsetY > contentHeight - scrollView.frame.height) {
+            currentPage += 1
+            loader?.load(with: AdoptPetRequest(page: currentPage)) { [weak self] result in
+                if let pets = try? result.get() {
+                    self?.append(pets)
+                }
+            }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {

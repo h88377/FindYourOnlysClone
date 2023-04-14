@@ -31,6 +31,37 @@ final class AdoptListViewControllerTests: XCTestCase {
         ], "Expected yet another loading request once user initiates a reload")
     }
     
+    func test_paginationActions_requestsPetsFromLoader() {
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        XCTAssertEqual(loader.loadPetsRequests, [.load(AdoptPetRequest(page: 0))], "Expected a loading request once view is loaded")
+
+        loader.completesPetsLoading(with: [makePet(id: 1)], at: 0)
+        sut.simulatePaginationScrolling()
+        XCTAssertEqual(loader.loadPetsRequests, [
+            .load(AdoptPetRequest(page: 0)),
+            .load(AdoptPetRequest(page: 1))
+        ], "Expected pagination loading request once user scrolling the view")
+        
+        loader.completesPetsLoading(with: [makePet(id: 1)], at: 1)
+        sut.simulateUserInitiatedPetsReload()
+        XCTAssertEqual(loader.loadPetsRequests, [
+            .load(AdoptPetRequest(page: 0)),
+            .load(AdoptPetRequest(page: 1)),
+            .load(AdoptPetRequest(page: 0))
+        ], "Expected request first page once user initiated a reload")
+        
+        loader.completesPetsLoading(with: [makePet(id: 2)], at: 2)
+        sut.simulatePaginationScrolling()
+        XCTAssertEqual(loader.loadPetsRequests, [
+            .load(AdoptPetRequest(page: 0)),
+            .load(AdoptPetRequest(page: 1)),
+            .load(AdoptPetRequest(page: 0)),
+            .load(AdoptPetRequest(page: 1))
+        ], "Expected another pagination loading request once user scrolling the view")
+    }
+    
     func test_loadingIndicator_showsLoadingIndicatorWhileLoadingPets() {
         let (sut, loader) = makeSUT()
         
@@ -405,6 +436,12 @@ private extension AdoptListViewController {
         dataSource?.collectionView?(collectionView, cancelPrefetchingForItemsAt: [IndexPath(item: index, section: petsSection)])
     }
     
+    func simulatePaginationScrolling() {
+        let scrollView = DraggingScrollView()
+        scrollView.contentOffset.y = 1000
+        scrollViewDidScroll(scrollView)
+    }
+    
     func itemAt(index: Int) -> UICollectionViewCell? {
         let dataSource = collectionView.dataSource
         let cell = dataSource?.collectionView(collectionView, cellForItemAt: IndexPath(item: index, section: petsSection))
@@ -474,5 +511,11 @@ private extension UIImage {
             color.setFill()
             rendererContext.fill(rect)
         }
+    }
+}
+
+private class DraggingScrollView: UIScrollView {
+    override var isDragging: Bool {
+        return true
     }
 }
