@@ -63,6 +63,21 @@ final class AdoptListViewControllerTests: XCTestCase {
         assertThat(sut, isRendering: [pet0, pet1])
     }
     
+    func test_loadPetsCompletions_doesNotAlterCurrentRenderingStateOnError() {
+        let pet0 = makePet(id: 0)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        assertThat(sut, isRendering: [])
+        
+        loader.completesPetsLoading(with: [pet0], at: 0)
+        assertThat(sut, isRendering: [pet0])
+        
+        sut.simulateUserInitiatedPetsReload()
+        loader.completesPetsLoadingWithError(at: 1)
+        assertThat(sut, isRendering: [pet0])
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (AdoptListViewController, PetLoaderSpy) {
