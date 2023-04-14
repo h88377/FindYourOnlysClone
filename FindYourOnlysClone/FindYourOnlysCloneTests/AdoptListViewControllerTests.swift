@@ -128,6 +128,28 @@ final class AdoptListViewControllerTests: XCTestCase {
         XCTAssertEqual(view1?.isShowingImageLoadingIndicator, false, "Expected no image loading indicator when second image loading completes with error")
     }
     
+    func test_petImageView_rendersSuccessfullyLoadedImage() {
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completesPetsLoading(with: [makePet(), makePet()], at: 0)
+        
+        let view0 = sut.simulatePetImageViewIsVisible(at: 0)
+        let view1 = sut.simulatePetImageViewIsVisible(at: 1)
+        XCTAssertNil(view0?.renderedImageData, "Expected first view no image before first image loading completion")
+        XCTAssertNil(view1?.renderedImageData, "Expected second view no image before second image loading completion")
+        
+        let imageData0 = UIImage.make(withColor: .red).pngData()!
+        loader.completesImageLoading(with: imageData0, at: 0)
+        XCTAssertEqual(view0?.renderedImageData, imageData0, "Expected image for first view once first image loading completes successfully")
+        XCTAssertNil(view1?.renderedImageData, "Expected no state change for secod image before completing image loading")
+        
+        let imageData1 = UIImage.make(withColor: .blue).pngData()!
+        loader.completesImageLoading(with: imageData1, at: 1)
+        XCTAssertEqual(view0?.renderedImageData, imageData0, "Expected no state change for first image once second view completes image loading successfully")
+        XCTAssertEqual(view1?.renderedImageData, imageData1, "Expected image for second view once second image loading completes successfully")
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (AdoptListViewController, PetLoaderSpy) {
@@ -307,10 +329,27 @@ private extension AdoptListCell {
     var isShowingImageLoadingIndicator: Bool {
         return petImageContainer.isShimmering
     }
+    
+    var renderedImageData: Data? {
+        return petImageView.image?.pngData()
+    }
 }
 
 private extension UIRefreshControl {
     func simulateRefresh() {
         sendActions(for: .valueChanged)
+    }
+}
+
+private extension UIImage {
+    static func make(withColor color: UIColor) -> UIImage {
+        let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1
+        
+        return UIGraphicsImageRenderer(size: rect.size, format: format).image { rendererContext in
+            color.setFill()
+            rendererContext.fill(rect)
+        }
     }
 }

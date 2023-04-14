@@ -61,7 +61,10 @@ class AdoptListViewController: UICollectionViewController {
         else { return }
         
         cell.petImageContainer.isShimmering = true
-        tasks[indexPath] = imageLoader?.loadImageData(from: pet.photoURL) { [weak cell] _ in
+        tasks[indexPath] = imageLoader?.loadImageData(from: pet.photoURL) { [weak cell] result in
+            if let data = try? result.get() {
+                cell?.petImageView.image = UIImage(data: data)
+            }
             cell?.petImageContainer.isShimmering = false
         }
     }
