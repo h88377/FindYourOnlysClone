@@ -10,7 +10,7 @@ import Foundation
 class AdoptListViewModel {
     typealias Observer<T> = ((T) -> Void)
     
-    private var petLoader: PetLoader?
+    private var petLoader: PetLoader
     
     init(petLoader: PetLoader) {
         self.petLoader = petLoader
@@ -34,7 +34,7 @@ class AdoptListViewModel {
     
     private func loadPets() {
         isPetLoadingStateOnChange?(true)
-        petLoader?.load(with: AdoptListRequest(page: currentPage)) { [weak self] result in
+        petLoader.load(with: AdoptListRequest(page: currentPage)) { [weak self] result in
             if let pets = try? result.get() {
                 if self?.currentPage == 0 {
                     self?.isPetsRefreshingStateOnChange?(pets)
