@@ -12,19 +12,19 @@ final class AdoptListViewControllerTests: XCTestCase {
     
     func test_loadPetsActions_requestsPetsFromLoader() {
         let (sut, loader) = makeSUT()
-        XCTAssertTrue(loader.messages.isEmpty, "Expected no loading request before view is loaded")
+        XCTAssertTrue(loader.loadPetsMessages.isEmpty, "Expected no loading request before view is loaded")
         
         sut.loadViewIfNeeded()
-        XCTAssertEqual(loader.messages, [.load(AdoptPetRequest(page: 0))], "Expected a loading request once view is loaded")
+        XCTAssertEqual(loader.loadPetsMessages, [.load(AdoptPetRequest(page: 0))], "Expected a loading request once view is loaded")
         
         sut.simulateUserInitiatedPetsReload()
-        XCTAssertEqual(loader.messages, [
+        XCTAssertEqual(loader.loadPetsMessages, [
             .load(AdoptPetRequest(page: 0)),
             .load(AdoptPetRequest(page: 0))
         ], "Expected another loading request once user initiates a reload")
         
         sut.simulateUserInitiatedPetsReload()
-        XCTAssertEqual(loader.messages, [
+        XCTAssertEqual(loader.loadPetsMessages, [
             .load(AdoptPetRequest(page: 0)),
             .load(AdoptPetRequest(page: 0)),
             .load(AdoptPetRequest(page: 0))
@@ -110,6 +110,26 @@ final class AdoptListViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.cancelledURLs, [pet0.photoURL, pet1.photoURL], "Expected second cancelled URL request when second view is not visible anymore")
     }
     
+    func test_petImageViewLoadingIndicator_isVisibleWhenLoadingPet() {
+        let pet0 = makePet()
+        let pet1 = makePet()
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completesPetsLoading(with: [pet0, pet1], at: 0)
+        
+        let view0 = sut.simulatePetImageViewIsVisible(at: 0)
+        let view1 = sut.simulatePetImageViewIsVisible(at: 1)
+        XCTAssertEqual(view0?.isShowingImageLoadingIndicator, true, "Expected first image loading indicator when loading first image")
+        XCTAssertEqual(view1?.isShowingImageLoadingIndicator, true, "Expected second image loading indicator when loading second image")
+        
+        loader.completesImageLoading(at: 0)
+        XCTAssertEqual(view0?.isShowingImageLoadingIndicator, false, "Expected no image loading indicator when first image loading completes successfully")
+        
+        loader.completesImageLoadingWithError(at: 1)
+        XCTAssertEqual(view1?.isShowingImageLoadingIndicator, false, "Expected no image loading indicator when second image loading completes with error")
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (AdoptListViewController, PetLoaderSpy) {
@@ -183,14 +203,14 @@ final class AdoptListViewControllerTests: XCTestCase {
         }
         
         var loadPetCallCount: Int {
-            return messages.count
+            return loadPetsMessages.count
         }
         
-        private(set) var messages = [Message]()
+        private(set) var loadPetsMessages = [Message]()
         private var completions = [(PetLoader.Result) -> Void]()
         
         func load(with request: AdoptPetRequest, completion: @escaping (PetLoader.Result) -> Void) {
-            messages.append(.load(request))
+            loadPetsMessages.append(.load(request))
             completions.append(completion)
         }
         
@@ -213,15 +233,28 @@ final class AdoptListViewControllerTests: XCTestCase {
             }
         }
         
-        private(set) var requestedImageURLs = [URL]()
+        private var requestedImageMessages = [(url: URL, completion: (PetImageDataLoader.Result) -> Void)]()
+        
+        var requestedImageURLs: [URL] {
+            return requestedImageMessages.map { $0.url }
+        }
+        
         private(set) var cancelledURLs = [URL]()
         
-        func loadImageData(from url: URL) -> PetImageDataLoaderTask {
-            requestedImageURLs.append(url)
+        func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) -> PetImageDataLoaderTask {
+            requestedImageMessages.append((url, completion))
             
             return TaskSpy { [weak self] in  self?.cancelledURLs.append(url) }
         }
         
+        func completesImageLoading(with data: Data = Data(), at index: Int = 0) {
+            requestedImageMessages[index].completion(.success(data))
+        }
+        
+        func completesImageLoadingWithError(at index: Int = 0) {
+            let error = NSError(domain: "any error", code: 0)
+            requestedImageMessages[index].completion(.failure(error))
+        }
     }
 
 }
@@ -232,11 +265,11 @@ private extension AdoptListViewController {
     }
     
     @discardableResult
-    func simulatePetImageViewIsVisible(at index: Int) -> UICollectionViewCell? {
+    func simulatePetImageViewIsVisible(at index: Int) -> AdoptListCell? {
         let cell = itemAt(index: index)!
         let delegate = collectionView.delegate
         delegate?.collectionView?(collectionView, willDisplay: cell, forItemAt: IndexPath(item: index, section: petsSection))
-        return cell
+        return cell as? AdoptListCell
     }
     
     func simulatePetImageViewIsNotVisible(at index: Int) {
@@ -247,7 +280,8 @@ private extension AdoptListViewController {
     
     func itemAt(index: Int) -> UICollectionViewCell? {
         let dataSource = collectionView.dataSource
-        return dataSource?.collectionView(collectionView, cellForItemAt: IndexPath(item: index, section: petsSection))
+        let cell = dataSource?.collectionView(collectionView, cellForItemAt: IndexPath(item: index, section: petsSection))
+        return cell
     }
     
     var isShowingLoadingIndicator: Bool {
@@ -272,6 +306,10 @@ private extension AdoptListCell {
     
     var cityText: String? {
         return cityLabel.text
+    }
+    
+    var isShowingImageLoadingIndicator: Bool {
+        return petImageContainer.isShimmering
     }
 }
 

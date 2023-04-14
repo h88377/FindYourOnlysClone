@@ -12,7 +12,9 @@ protocol PetImageDataLoaderTask {
 }
 
 protocol PetImageDataLoader {
-    func loadImageData(from url: URL) -> PetImageDataLoaderTask
+    typealias Result = Swift.Result<Data, Error>
+    
+    func loadImageData(from url: URL, completion: @escaping (Result) -> Void) -> PetImageDataLoaderTask
 }
 
 class AdoptListViewController: UICollectionViewController {
@@ -64,9 +66,14 @@ class AdoptListViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let pet = dataSource.itemIdentifier(for: indexPath) else { return }
+        guard let pet = dataSource.itemIdentifier(for: indexPath),
+              let cell = cell as? AdoptListCell
+        else { return }
         
-        tasks[indexPath] = imageLoader?.loadImageData(from: pet.photoURL)
+        cell.petImageContainer.isShimmering = true
+        tasks[indexPath] = imageLoader?.loadImageData(from: pet.photoURL) { [weak cell] _ in 
+            cell?.petImageContainer.isShimmering = false
+        }
     }
     
     override func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
