@@ -12,19 +12,30 @@ class AdoptListViewModel {
     
     private var petLoader: PetLoader?
     
-    var isPetLoadingStateOnChange: Observer<Bool>?
-    var isPetsAppendingStateOnChange: Observer<[Pet]>?
-    var isPetsRefreshingStateOnChange: Observer<[Pet]>?
-    
     init(petLoader: PetLoader) {
         self.petLoader = petLoader
     }
     
-    func loadPets(with page: Int) {
+    private var currentPage = 0
+    var isPetLoadingStateOnChange: Observer<Bool>?
+    var isPetsAppendingStateOnChange: Observer<[Pet]>?
+    var isPetsRefreshingStateOnChange: Observer<[Pet]>?
+    
+    func refreshPets() {
+        currentPage = 0
+        loadPets()
+    }
+    
+    func loadNextPagePets() {
+        currentPage += 1
+        loadPets()
+    }
+    
+    private func loadPets() {
         isPetLoadingStateOnChange?(true)
-        petLoader?.load(with: AdoptPetRequest(page: page)) { [weak self] result in
+        petLoader?.load(with: AdoptPetRequest(page: currentPage)) { [weak self] result in
             if let pets = try? result.get() {
-                if page == 0 {
+                if self?.currentPage == 0 {
                     self?.isPetsRefreshingStateOnChange?(pets)
                 } else {
                     self?.isPetsAppendingStateOnChange?(pets)
@@ -64,7 +75,6 @@ class AdoptListViewController: UICollectionViewController {
     
     private var viewModel: AdoptListViewModel?
     private var imageLoader: PetImageDataLoader?
-    private var currentPage = 0
     private var tasks = [IndexPath: PetImageDataLoaderTask]()
     
     convenience init(viewModel: AdoptListViewModel, imageLoader: PetImageDataLoader) {
@@ -84,8 +94,7 @@ class AdoptListViewController: UICollectionViewController {
     }
     
     @objc private func loadPets() {
-        currentPage = 0
-        viewModel?.loadPets(with: currentPage)
+        viewModel?.refreshPets()
     }
     
     private func binded(refreshView: UIRefreshControl) -> UIRefreshControl {
@@ -148,8 +157,7 @@ extension AdoptListViewController {
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
         if (offsetY > contentHeight - scrollView.frame.height) {
-            currentPage += 1
-            viewModel?.loadPets(with: currentPage)
+            viewModel?.loadNextPagePets()
         }
     }
 }
