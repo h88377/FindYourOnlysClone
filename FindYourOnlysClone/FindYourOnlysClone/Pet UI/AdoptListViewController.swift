@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AdoptListViewController: UICollectionViewController {
+class AdoptListViewController: UICollectionViewController, UICollectionViewDataSourcePrefetching {
     private lazy var dataSource: UICollectionViewDiffableDataSource<Int, Pet> = {
         .init(collectionView: collectionView) { [weak self] collectionView, indexPath, pet in
             let cell = AdoptListCell()
@@ -38,6 +38,7 @@ class AdoptListViewController: UICollectionViewController {
         collectionView.refreshControl = UIRefreshControl()
         collectionView.refreshControl?.addTarget(self, action: #selector(loadPets), for: .valueChanged)
         collectionView.dataSource = self.dataSource
+        collectionView.prefetchDataSource = self
         loadPets()
     }
     
@@ -72,9 +73,7 @@ class AdoptListViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let pet = dataSource.itemIdentifier(for: indexPath),
-              let cell = cell as? AdoptListCell
-        else { return }
+        guard let pet = dataSource.itemIdentifier(for: indexPath), let cell = cell as? AdoptListCell else { return }
         
         requestImageData(with: pet, in: cell, at: indexPath)
     }
@@ -82,5 +81,12 @@ class AdoptListViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         tasks[indexPath]?.cancel()
         tasks[indexPath] = nil
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        for indexPath in indexPaths {
+            guard let pet = dataSource.itemIdentifier(for: indexPath) else { return }
+            tasks[indexPath] = imageLoader?.loadImageData(from: pet.photoURL) { _ in }
+        }
     }
 }

@@ -215,6 +215,23 @@ final class AdoptListViewControllerTests: XCTestCase {
         view1?.simulateRetryAction()
         XCTAssertEqual(loader.requestedImageURLs, [pet0.photoURL, pet1.photoURL, pet0.photoURL, pet1.photoURL], "Expected fourth image URL request after second view retry action")
     }
+    
+    func test_petImageView_preloadsImageURLWhenNearVisible() {
+        let pet0 = makePet(photoURL: URL(string:"https://url-0.com")!)
+        let pet1 = makePet(photoURL: URL(string:"https://url-1.com")!)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completesPetsLoading(with: [pet0, pet1], at: 0)
+        XCTAssertEqual(loader.requestedImageURLs, [], "Expected no requested image url until cells near visible")
+        
+        sut.simulatePetImageViewIsNearVisible(at: 0)
+        XCTAssertEqual(loader.requestedImageURLs, [pet0.photoURL], "Expected first requested image url when first cell near visible")
+        
+        sut.simulatePetImageViewIsNearVisible(at: 1)
+        XCTAssertEqual(loader.requestedImageURLs, [pet0.photoURL, pet1.photoURL], "Expected second requested image url when second cell near visible")
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (AdoptListViewController, PetLoaderSpy) {
@@ -353,6 +370,11 @@ private extension AdoptListViewController {
         let delegate = collectionView.delegate
         delegate?.collectionView?(collectionView, willDisplay: cell, forItemAt: IndexPath(item: index, section: petsSection))
         return cell as? AdoptListCell
+    }
+    
+    func simulatePetImageViewIsNearVisible(at index: Int) {
+        let dataSource = collectionView.prefetchDataSource
+        dataSource?.collectionView(collectionView, prefetchItemsAt: [IndexPath(item: index, section: petsSection)])
     }
     
     func simulatePetImageViewIsNotVisible(at index: Int) {
