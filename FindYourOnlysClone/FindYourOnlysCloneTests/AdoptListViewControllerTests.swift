@@ -111,12 +111,10 @@ final class AdoptListViewControllerTests: XCTestCase {
     }
     
     func test_petImageViewLoadingIndicator_isVisibleWhenLoadingPet() {
-        let pet0 = makePet()
-        let pet1 = makePet()
         let (sut, loader) = makeSUT()
         
         sut.loadViewIfNeeded()
-        loader.completesPetsLoading(with: [pet0, pet1], at: 0)
+        loader.completesPetsLoading(with: [makePet(), makePet()], at: 0)
         
         let view0 = sut.simulatePetImageViewIsVisible(at: 0)
         let view1 = sut.simulatePetImageViewIsVisible(at: 1)
