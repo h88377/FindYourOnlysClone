@@ -13,4 +13,5 @@ class AdoptListCell: UICollectionViewCell {
     let cityLabel = UILabel()
     let petImageView = UIImageView()
     let petImageContainer = UIView()
+    let retryButton = UIButton()
 }

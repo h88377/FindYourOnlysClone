@@ -150,6 +150,27 @@ final class AdoptListViewControllerTests: XCTestCase {
         XCTAssertEqual(view1?.renderedImageData, imageData1, "Expected image for second view once second image loading completes successfully")
     }
     
+    func test_petImageViewRetryButton_isVisibleOnPetImageLoadedError() {
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completesPetsLoading(with: [makePet(), makePet()], at: 0)
+        
+        let view0 = sut.simulatePetImageViewIsVisible(at: 0)
+        let view1 = sut.simulatePetImageViewIsVisible(at: 1)
+        XCTAssertEqual(view0?.isShowingImageRetryAction, false, "Expected first view no retry action before first image loading completion")
+        XCTAssertEqual(view1?.isShowingImageRetryAction, false, "Expected second view no retry action before second image loading completion")
+        
+        loader.completesImageLoadingWithError(at: 0)
+        XCTAssertEqual(view0?.isShowingImageRetryAction, true, "Expected first view is showing retry action once first image completes with error")
+        XCTAssertEqual(view1?.isShowingImageRetryAction, false, "Expected no retry action state change for second view once first image loading completes with error")
+        
+        let imageData1 = UIImage.make(withColor: .blue).pngData()!
+        loader.completesImageLoading(with: imageData1, at: 1)
+        XCTAssertEqual(view0?.isShowingImageRetryAction, true, "Expected first view is showing retry action once first image completes with error")
+        XCTAssertEqual(view1?.isShowingImageRetryAction, false, "Expected second view no retry action once second image loading completes successfully")
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (AdoptListViewController, PetLoaderSpy) {
@@ -328,6 +349,10 @@ private extension AdoptListCell {
     
     var isShowingImageLoadingIndicator: Bool {
         return petImageContainer.isShimmering
+    }
+    
+    var isShowingImageRetryAction: Bool {
+        return !retryButton.isHidden
     }
     
     var renderedImageData: Data? {
