@@ -303,7 +303,8 @@ final class AdoptListViewControllerTests: XCTestCase {
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (AdoptListViewController, PetLoaderSpy) {
         let loader = PetLoaderSpy()
-        let sut = AdoptListViewController(loader: loader, imageLoader: loader)
+        let viewModel = AdoptListViewModel(petLoader: loader)
+        let sut = AdoptListViewController(viewModel: viewModel, imageLoader: loader)
         trackForMemoryLeak(loader, file: file, line: line)
         trackForMemoryLeak(sut, file: file, line: line)
         return (sut, loader)
