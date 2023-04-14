@@ -7,16 +7,6 @@
 
 import UIKit
 
-protocol PetImageDataLoaderTask {
-    func cancel()
-}
-
-protocol PetImageDataLoader {
-    typealias Result = Swift.Result<Data, Error>
-    
-    func loadImageData(from url: URL, completion: @escaping (Result) -> Void) -> PetImageDataLoaderTask
-}
-
 class AdoptListViewController: UICollectionViewController {
     private lazy var dataSource: UICollectionViewDiffableDataSource<Int, Pet> = {
         .init(collectionView: collectionView) { [weak self] collectionView, indexPath, pet in
@@ -71,7 +61,7 @@ class AdoptListViewController: UICollectionViewController {
         else { return }
         
         cell.petImageContainer.isShimmering = true
-        tasks[indexPath] = imageLoader?.loadImageData(from: pet.photoURL) { [weak cell] _ in 
+        tasks[indexPath] = imageLoader?.loadImageData(from: pet.photoURL) { [weak cell] _ in
             cell?.petImageContainer.isShimmering = false
         }
     }
