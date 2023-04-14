@@ -22,6 +22,7 @@
 		9891765C29E90FB2000002A4 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891765B29E90FB2000002A4 /* UIView+Extension.swift */; };
 		9891765E29E91C9D000002A4 /* PetImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891765D29E91C9D000002A4 /* PetImageDataLoader.swift */; };
 		9891766029E98563000002A4 /* AdoptListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891765F29E98563000002A4 /* AdoptListViewModel.swift */; };
+		9891766229E99A20000002A4 /* AdoptListCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891766129E99A20000002A4 /* AdoptListCellViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		9891765B29E90FB2000002A4 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		9891765D29E91C9D000002A4 /* PetImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetImageDataLoader.swift; sourceTree = "<group>"; };
 		9891765F29E98563000002A4 /* AdoptListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptListViewModel.swift; sourceTree = "<group>"; };
+		9891766129E99A20000002A4 /* AdoptListCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptListCellViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 			children = (
 				9891765429E89BA5000002A4 /* AdoptListCell.swift */,
 				9891765629E89BC6000002A4 /* AdoptListViewController.swift */,
+				9891766129E99A20000002A4 /* AdoptListCellViewModel.swift */,
 				9891765F29E98563000002A4 /* AdoptListViewModel.swift */,
 			);
 			path = "Pet UI";
@@ -245,6 +248,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9891766229E99A20000002A4 /* AdoptListCellViewModel.swift in Sources */,
 				9891762129E80211000002A4 /* ViewController.swift in Sources */,
 				9891765029E89B35000002A4 /* AdoptListRequest.swift in Sources */,
 				9891764E29E89B08000002A4 /* Pet.swift in Sources */,
