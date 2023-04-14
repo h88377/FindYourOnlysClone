@@ -63,11 +63,9 @@ class AdoptListViewController: UICollectionViewController {
         cell.retryButton.isHidden = true
         cell.petImageContainer.isShimmering = true
         tasks[indexPath] = imageLoader?.loadImageData(from: pet.photoURL) { [weak cell] result in
-            switch result {
-            case let .success(data):
-                cell?.petImageView.image = UIImage(data: data)
-                
-            case .failure:
+            if let image = (try? result.get()).flatMap(UIImage.init) {
+                cell?.petImageView.image = image
+            } else {
                 cell?.retryButton.isHidden = false
             }
             cell?.petImageContainer.isShimmering = false
