@@ -202,10 +202,6 @@ final class AdoptListViewControllerTests: XCTestCase {
             case load(AdoptPetRequest)
         }
         
-        var loadPetCallCount: Int {
-            return loadPetsMessages.count
-        }
-        
         private(set) var loadPetsMessages = [Message]()
         private var completions = [(PetLoader.Result) -> Void]()
         
