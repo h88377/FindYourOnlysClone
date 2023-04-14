@@ -133,11 +133,9 @@
 		9891765329E89B96000002A4 /* Pet UI */ = {
 			isa = PBXGroup;
 			children = (
-				9891765429E89BA5000002A4 /* AdoptListCell.swift */,
-				9891765629E89BC6000002A4 /* AdoptListViewController.swift */,
-				9891766329E99A44000002A4 /* AdoptListCellViewController.swift */,
-				9891766129E99A20000002A4 /* AdoptListCellViewModel.swift */,
-				9891765F29E98563000002A4 /* AdoptListViewModel.swift */,
+				9891766729E99A91000002A4 /* ViewModel */,
+				9891766629E99A87000002A4 /* View */,
+				9891766529E99A7C000002A4 /* Controller */,
 			);
 			path = "Pet UI";
 			sourceTree = "<group>";
@@ -149,6 +147,32 @@
 				9891765B29E90FB2000002A4 /* UIView+Extension.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		9891766529E99A7C000002A4 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				9891765629E89BC6000002A4 /* AdoptListViewController.swift */,
+				9891766329E99A44000002A4 /* AdoptListCellViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		9891766629E99A87000002A4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9891765429E89BA5000002A4 /* AdoptListCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		9891766729E99A91000002A4 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				9891765F29E98563000002A4 /* AdoptListViewModel.swift */,
+				9891766129E99A20000002A4 /* AdoptListCellViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
