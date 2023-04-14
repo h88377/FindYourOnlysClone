@@ -85,13 +85,13 @@ final class AdoptListViewControllerTests: XCTestCase {
         
         sut.loadViewIfNeeded()
         loader.completesPetsLoading(with: [pet0, pet1], at: 0)
-        XCTAssertEqual(loader.requestedURLs, [])
+        XCTAssertEqual(loader.requestedImageURLs, [], "Expected no requested image url until cells become visible")
         
         sut.simulatePetImageViewIsVisible(at: 0)
-        XCTAssertEqual(loader.requestedURLs, [pet0.photoURL])
+        XCTAssertEqual(loader.requestedImageURLs, [pet0.photoURL], "Expected first requested image url when first cell become visible")
         
         sut.simulatePetImageViewIsVisible(at: 1)
-        XCTAssertEqual(loader.requestedURLs, [pet0.photoURL, pet1.photoURL])
+        XCTAssertEqual(loader.requestedImageURLs, [pet0.photoURL, pet1.photoURL], "Expected second requested image url when second cell become visible")
     }
     
     func test_petImageView_cancelsImageURLWhenIsNotVisibleAnymore() {
@@ -100,14 +100,14 @@ final class AdoptListViewControllerTests: XCTestCase {
         let (sut, loader) = makeSUT()
         
         sut.loadViewIfNeeded()
-        XCTAssertEqual(loader.cancelledURLs, [])
+        XCTAssertEqual(loader.cancelledURLs, [], "Expected no cancelled URL request until cells become visible")
         loader.completesPetsLoading(with: [pet0, pet1], at: 0)
         
         sut.simulatePetImageViewIsNotVisible(at: 0)
-        XCTAssertEqual(loader.cancelledURLs, [pet0.photoURL])
+        XCTAssertEqual(loader.cancelledURLs, [pet0.photoURL], "Expected first cancelled URL request when first view is not visible anymore")
         
         sut.simulatePetImageViewIsNotVisible(at: 1)
-        XCTAssertEqual(loader.cancelledURLs, [pet0.photoURL, pet1.photoURL])
+        XCTAssertEqual(loader.cancelledURLs, [pet0.photoURL, pet1.photoURL], "Expected second cancelled URL request when second view is not visible anymore")
     }
     
     // MARK: - Helpers
@@ -213,11 +213,11 @@ final class AdoptListViewControllerTests: XCTestCase {
             }
         }
         
-        private(set) var requestedURLs = [URL]()
+        private(set) var requestedImageURLs = [URL]()
         private(set) var cancelledURLs = [URL]()
         
         func loadImageData(from url: URL) -> PetImageDataLoaderTask {
-            requestedURLs.append(url)
+            requestedImageURLs.append(url)
             
             return TaskSpy { [weak self] in  self?.cancelledURLs.append(url) }
         }
