@@ -10,7 +10,7 @@ import UIKit
 class AdoptListViewController: UICollectionViewController {
     private lazy var dataSource: UICollectionViewDiffableDataSource<Int, Pet> = {
         .init(collectionView: collectionView) { collectionView, indexPath, pet in
-            let cell = AdoptListPetCell()
+            let cell = AdoptListCell()
             cell.genderLabel.text = pet.gender == "M" ? "♂" : "♀"
             cell.kindLabel.text = pet.kind
             cell.cityLabel.text = String(pet.address[...2])

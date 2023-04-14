@@ -106,8 +106,8 @@ final class AdoptListViewControllerTests: XCTestCase {
     
     private func assertThat(_ sut: AdoptListViewController, hasViewConfiguredFor pet: Pet, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
         let view = sut.itemAt(index: 0)
-        guard let cell = view as? AdoptListPetCell else {
-            return XCTFail("Expected \(AdoptListPetCell.self) instance, got \(String(describing: view.self)) instead")
+        guard let cell = view as? AdoptListCell else {
+            return XCTFail("Expected \(AdoptListCell.self) instance, got \(String(describing: view.self)) instead")
         }
         
         XCTAssertEqual(cell.genderText, pet.gender == "M" ? "♂" : "♀", "Expected gender text should be \(pet.gender == "M" ? "♂" : "♀") at index \(index)", file: file, line: line)
@@ -192,7 +192,7 @@ private extension AdoptListViewController {
     private var petsSection: Int { return 0 }
 }
 
-private extension AdoptListPetCell {
+private extension AdoptListCell {
     var kindText: String? {
         return kindLabel.text
     }
