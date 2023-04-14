@@ -15,17 +15,7 @@ class AdoptListViewController: UICollectionViewController {
             cell.kindLabel.text = pet.kind
             cell.cityLabel.text = String(pet.address[...2])
             cell.retryImageLoadHandler = { [weak self, weak cell] in
-                cell?.retryButton.isHidden = true
-                cell?.petImageContainer.isShimmering = true
-                
-                self?.tasks[indexPath] = self?.imageLoader?.loadImageData(from: pet.photoURL) { [weak cell] result in
-                    if let image = (try? result.get()).flatMap(UIImage.init) {
-                        cell?.petImageView.image = image
-                    } else {
-                        cell?.retryButton.isHidden = false
-                    }
-                    cell?.petImageContainer.isShimmering = false
-                }
+                self?.requestImageData(with: pet, in: cell, at: indexPath)
             }
             return cell
         }
@@ -61,6 +51,19 @@ class AdoptListViewController: UICollectionViewController {
         }
     }
     
+    private func requestImageData(with pet: Pet, in cell: AdoptListCell?, at indexPath: IndexPath) {
+        cell?.retryButton.isHidden = true
+        cell?.petImageContainer.isShimmering = true
+        tasks[indexPath] = imageLoader?.loadImageData(from: pet.photoURL) { [weak cell] result in
+            if let image = (try? result.get()).flatMap(UIImage.init) {
+                cell?.petImageView.image = image
+            } else {
+                cell?.retryButton.isHidden = false
+            }
+            cell?.petImageContainer.isShimmering = false
+        }
+    }
+    
     private func set(_ newItems: [Pet]) {
         var snapshot = NSDiffableDataSourceSnapshot<Int, Pet>()
         snapshot.appendSections([0])
@@ -73,16 +76,7 @@ class AdoptListViewController: UICollectionViewController {
               let cell = cell as? AdoptListCell
         else { return }
         
-        cell.retryButton.isHidden = true
-        cell.petImageContainer.isShimmering = true
-        tasks[indexPath] = imageLoader?.loadImageData(from: pet.photoURL) { [weak cell] result in
-            if let image = (try? result.get()).flatMap(UIImage.init) {
-                cell?.petImageView.image = image
-            } else {
-                cell?.retryButton.isHidden = false
-            }
-            cell?.petImageContainer.isShimmering = false
-        }
+        requestImageData(with: pet, in: cell, at: indexPath)
     }
     
     override func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
