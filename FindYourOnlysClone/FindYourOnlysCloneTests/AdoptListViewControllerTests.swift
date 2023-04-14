@@ -78,11 +78,27 @@ final class AdoptListViewControllerTests: XCTestCase {
         assertThat(sut, isRendering: [pet0])
     }
     
+    func test_petImageView_loadsImageURLWhenVisible() {
+        let pet0 = makePet(photoURL: URL(string:"https://url-0.com")!)
+        let pet1 = makePet(photoURL: URL(string:"https://url-1.com")!)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completesPetsLoading(with: [pet0, pet1], at: 0)
+        XCTAssertEqual(loader.requestedURLs, [])
+        
+        sut.simulatePetImageViewIsVisible(at: 0)
+        XCTAssertEqual(loader.requestedURLs, [pet0.photoURL])
+        
+        sut.simulatePetImageViewIsVisible(at: 1)
+        XCTAssertEqual(loader.requestedURLs, [pet0.photoURL, pet1.photoURL])
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (AdoptListViewController, PetLoaderSpy) {
         let loader = PetLoaderSpy()
-        let sut = AdoptListViewController(loader: loader)
+        let sut = AdoptListViewController(loader: loader, imageLoader: loader)
         trackForMemoryLeak(loader, file: file, line: line)
         trackForMemoryLeak(sut, file: file, line: line)
         return (sut, loader)
@@ -115,7 +131,7 @@ final class AdoptListViewControllerTests: XCTestCase {
         XCTAssertEqual(cell.cityText, String(pet.address[...2]), "Expected city text should be \(String(pet.address[...2])) at index \(index)", file: file, line: line)
     }
     
-    private func makePet(id: Int, location: String = "any location", kind: String = "any kind", gender: String = "M", bodyType: String = "any body", color: String = "any color", age: String = "any age", sterilization: String = "NA", bacterin: String = "NA", foundPlace: String = "any place", status: String = "any status", remark: String = "NA", openDate: Date = Date(), closedDate: Date = Date(), updatedDate: Date = Date(), createdDate: Date = Date(), photoURL: URL = URL(string:"https://any-url.com")!, address: String = "any place", telephone: String = "02", variety: String = "any variety", shelterName: String = "any shelter") -> Pet {
+    private func makePet(id: Int = 0, location: String = "any location", kind: String = "any kind", gender: String = "M", bodyType: String = "any body", color: String = "any color", age: String = "any age", sterilization: String = "NA", bacterin: String = "NA", foundPlace: String = "any place", status: String = "any status", remark: String = "NA", openDate: Date = Date(), closedDate: Date = Date(), updatedDate: Date = Date(), createdDate: Date = Date(), photoURL: URL = URL(string:"https://any-url.com")!, address: String = "any place", telephone: String = "02", variety: String = "any variety", shelterName: String = "any shelter") -> Pet {
         let pet = Pet(
             id: id,
             location: location,
@@ -142,7 +158,10 @@ final class AdoptListViewControllerTests: XCTestCase {
         return pet
     }
     
-    private class PetLoaderSpy: PetLoader {
+    private class PetLoaderSpy: PetLoader, PetImageDataLoader {
+        
+        // MARK: - PetLoader
+        
         enum Message: Equatable {
             case load(AdoptPetRequest)
         }
@@ -167,6 +186,15 @@ final class AdoptListViewControllerTests: XCTestCase {
             let error = NSError(domain: "any error", code: 0)
             completions[index](.failure(error))
         }
+        
+        // MARK: - PetImageDataLoader
+        
+        private(set) var requestedURLs = [URL]()
+        
+        func loadImageData(from url: URL) {
+            requestedURLs.append(url)
+        }
+        
     }
 
 }
@@ -176,9 +204,15 @@ private extension AdoptListViewController {
         collectionView.refreshControl?.simulateRefresh()
     }
     
+    func simulatePetImageViewIsVisible(at index: Int) {
+        let cell = itemAt(index: index)!
+        let delegate = collectionView.delegate
+        delegate?.collectionView?(collectionView, willDisplay: cell, forItemAt: IndexPath(item: index, section: petsSection))
+    }
+    
     func itemAt(index: Int) -> UICollectionViewCell? {
         let dataSource = collectionView.dataSource
-        return dataSource?.collectionView(collectionView, cellForItemAt: IndexPath(item: index, section: 0))
+        return dataSource?.collectionView(collectionView, cellForItemAt: IndexPath(item: index, section: petsSection))
     }
     
     var isShowingLoadingIndicator: Bool {

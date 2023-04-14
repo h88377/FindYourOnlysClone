@@ -7,9 +7,13 @@
 
 import UIKit
 
+protocol PetImageDataLoader {
+    func loadImageData(from url: URL)
+}
+
 class AdoptListViewController: UICollectionViewController {
     private lazy var dataSource: UICollectionViewDiffableDataSource<Int, Pet> = {
-        .init(collectionView: collectionView) { collectionView, indexPath, pet in
+        .init(collectionView: collectionView) { [weak self] collectionView, indexPath, pet in
             let cell = AdoptListCell()
             cell.genderLabel.text = pet.gender == "M" ? "♂" : "♀"
             cell.kindLabel.text = pet.kind
@@ -20,10 +24,12 @@ class AdoptListViewController: UICollectionViewController {
     
     private var request = AdoptPetRequest(page: 0)
     private var loader: PetLoader?
+    private var imageLoader: PetImageDataLoader?
     
-    convenience init(loader: PetLoader) {
+    convenience init(loader: PetLoader, imageLoader: PetImageDataLoader) {
         self.init(collectionViewLayout: UICollectionViewLayout())
         self.loader = loader
+        self.imageLoader = imageLoader
     }
     
     override func viewDidLoad() {
@@ -50,5 +56,11 @@ class AdoptListViewController: UICollectionViewController {
         snapshot.appendSections([0])
         snapshot.appendItems(newItems, toSection: 0)
         dataSource.apply(snapshot, animatingDifferences: false)
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let pet = dataSource.itemIdentifier(for: indexPath) else { return }
+        
+        imageLoader?.loadImageData(from: pet.photoURL)
     }
 }

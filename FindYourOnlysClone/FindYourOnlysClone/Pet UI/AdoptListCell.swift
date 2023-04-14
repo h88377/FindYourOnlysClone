@@ -11,4 +11,5 @@ class AdoptListCell: UICollectionViewCell {
     let kindLabel = UILabel()
     let genderLabel = UILabel()
     let cityLabel = UILabel()
+    let petImageView = UIImageView()
 }
