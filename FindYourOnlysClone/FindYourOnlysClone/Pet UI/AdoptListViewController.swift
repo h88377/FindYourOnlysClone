@@ -7,8 +7,12 @@
 
 import UIKit
 
+protocol PetImageDataLoaderTask {
+    func cancel()
+}
+
 protocol PetImageDataLoader {
-    func loadImageData(from url: URL)
+    func loadImageData(from url: URL) -> PetImageDataLoaderTask
 }
 
 class AdoptListViewController: UICollectionViewController {
@@ -25,6 +29,7 @@ class AdoptListViewController: UICollectionViewController {
     private var request = AdoptPetRequest(page: 0)
     private var loader: PetLoader?
     private var imageLoader: PetImageDataLoader?
+    private var tasks = [IndexPath: PetImageDataLoaderTask]()
     
     convenience init(loader: PetLoader, imageLoader: PetImageDataLoader) {
         self.init(collectionViewLayout: UICollectionViewLayout())
@@ -61,6 +66,11 @@ class AdoptListViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let pet = dataSource.itemIdentifier(for: indexPath) else { return }
         
-        imageLoader?.loadImageData(from: pet.photoURL)
+        tasks[indexPath] = imageLoader?.loadImageData(from: pet.photoURL)
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        tasks[indexPath]?.cancel()
+        tasks[indexPath] = nil
     }
 }

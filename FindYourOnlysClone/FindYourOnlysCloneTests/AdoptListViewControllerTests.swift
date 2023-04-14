@@ -94,6 +94,22 @@ final class AdoptListViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.requestedURLs, [pet0.photoURL, pet1.photoURL])
     }
     
+    func test_petImageView_cancelsImageURLWhenIsNotVisibleAnymore() {
+        let pet0 = makePet(photoURL: URL(string:"https://url-0.com")!)
+        let pet1 = makePet(photoURL: URL(string:"https://url-1.com")!)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        XCTAssertEqual(loader.cancelledURLs, [])
+        loader.completesPetsLoading(with: [pet0, pet1], at: 0)
+        
+        sut.simulatePetImageViewIsNotVisible(at: 0)
+        XCTAssertEqual(loader.cancelledURLs, [pet0.photoURL])
+        
+        sut.simulatePetImageViewIsNotVisible(at: 1)
+        XCTAssertEqual(loader.cancelledURLs, [pet0.photoURL, pet1.photoURL])
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (AdoptListViewController, PetLoaderSpy) {
@@ -189,10 +205,21 @@ final class AdoptListViewControllerTests: XCTestCase {
         
         // MARK: - PetImageDataLoader
         
-        private(set) var requestedURLs = [URL]()
+        private struct TaskSpy: PetImageDataLoaderTask {
+            let cancelHandler: () -> Void
+            
+            func cancel() {
+                cancelHandler()
+            }
+        }
         
-        func loadImageData(from url: URL) {
+        private(set) var requestedURLs = [URL]()
+        private(set) var cancelledURLs = [URL]()
+        
+        func loadImageData(from url: URL) -> PetImageDataLoaderTask {
             requestedURLs.append(url)
+            
+            return TaskSpy { [weak self] in  self?.cancelledURLs.append(url) }
         }
         
     }
@@ -204,10 +231,18 @@ private extension AdoptListViewController {
         collectionView.refreshControl?.simulateRefresh()
     }
     
-    func simulatePetImageViewIsVisible(at index: Int) {
+    @discardableResult
+    func simulatePetImageViewIsVisible(at index: Int) -> UICollectionViewCell? {
         let cell = itemAt(index: index)!
         let delegate = collectionView.delegate
         delegate?.collectionView?(collectionView, willDisplay: cell, forItemAt: IndexPath(item: index, section: petsSection))
+        return cell
+    }
+    
+    func simulatePetImageViewIsNotVisible(at index: Int) {
+        let cell = simulatePetImageViewIsVisible(at: index)!
+        let delegate = collectionView.delegate
+        delegate?.collectionView?(collectionView, didEndDisplaying: cell, forItemAt: IndexPath(item: index, section: petsSection))
     }
     
     func itemAt(index: Int) -> UICollectionViewCell? {
