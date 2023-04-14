@@ -35,7 +35,7 @@ class AdoptListViewModel {
     }
 }
 
-class AdoptListViewController: UICollectionViewController, UICollectionViewDataSourcePrefetching {
+class AdoptListViewController: UICollectionViewController {
     private lazy var dataSource: UICollectionViewDiffableDataSource<Int, Pet> = {
         .init(collectionView: collectionView) { [weak self] collectionView, indexPath, pet in
             let cell = AdoptListCell()
@@ -48,6 +48,19 @@ class AdoptListViewController: UICollectionViewController, UICollectionViewDataS
             return cell
         }
     }()
+    
+    private func set(_ newItems: [Pet]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Pet>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(newItems, toSection: 0)
+        dataSource.apply(snapshot, animatingDifferences: false)
+    }
+    
+    private func append(_ newItems: [Pet]) {
+        var snapshot = dataSource.snapshot()
+        snapshot.appendItems(newItems, toSection: 0)
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
     
     private var viewModel: AdoptListViewModel?
     private var imageLoader: PetImageDataLoader?
@@ -115,19 +128,11 @@ class AdoptListViewController: UICollectionViewController, UICollectionViewDataS
         tasks[indexPath]?.cancel()
         tasks[indexPath] = nil
     }
-    
-    private func set(_ newItems: [Pet]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, Pet>()
-        snapshot.appendSections([0])
-        snapshot.appendItems(newItems, toSection: 0)
-        dataSource.apply(snapshot, animatingDifferences: false)
-    }
-    
-    private func append(_ newItems: [Pet]) {
-        var snapshot = dataSource.snapshot()
-        snapshot.appendItems(newItems, toSection: 0)
-        dataSource.apply(snapshot, animatingDifferences: true)
-    }
+}
+
+// MARK: - UICollectionViewDelegate
+
+extension AdoptListViewController {
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let pet = dataSource.itemIdentifier(for: indexPath), let cell = cell as? AdoptListCell else { return }
@@ -145,13 +150,13 @@ class AdoptListViewController: UICollectionViewController, UICollectionViewDataS
         if (offsetY > contentHeight - scrollView.frame.height) {
             currentPage += 1
             viewModel?.loadPets(with: currentPage)
-//            loader?.load(with: AdoptPetRequest(page: currentPage)) { [weak self] result in
-//                if let pets = try? result.get() {
-//                    self?.append(pets)
-//                }
-//            }
         }
     }
+}
+
+// MARK: - UICollectionViewDataSourcePrefetching
+
+extension AdoptListViewController: UICollectionViewDataSourcePrefetching {
     
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         for indexPath in indexPaths {
