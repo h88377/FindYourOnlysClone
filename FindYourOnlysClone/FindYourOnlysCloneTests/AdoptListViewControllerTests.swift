@@ -304,7 +304,25 @@ final class AdoptListViewControllerTests: XCTestCase {
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (AdoptListViewController, PetLoaderSpy) {
         let loader = PetLoaderSpy()
         let viewModel = AdoptListViewModel(petLoader: loader)
-        let sut = AdoptListViewController(viewModel: viewModel, imageLoader: loader)
+        let sut = AdoptListViewController(viewModel: viewModel)
+        
+        viewModel.isPetsRefreshingStateOnChange = { [weak sut] pets in
+            let cellControllers = pets.map { pet in
+                let cellViewModel = AdoptListCellViewModel(pet: pet, imageLoader: loader, imageTransformer: UIImage.init)
+                let cellController = AdoptListCellViewController(viewModel: cellViewModel)
+                return cellController
+            }
+            sut?.set(cellControllers)
+        }
+        viewModel.isPetsAppendingStateOnChange = { [weak sut] pets in
+            let cellControllers = pets.map { pet in
+                let cellViewModel = AdoptListCellViewModel(pet: pet, imageLoader: loader, imageTransformer: UIImage.init)
+                let cellController = AdoptListCellViewController(viewModel: cellViewModel)
+                return cellController
+            }
+            sut?.append(cellControllers)
+        }
+        
         trackForMemoryLeak(loader, file: file, line: line)
         trackForMemoryLeak(sut, file: file, line: line)
         return (sut, loader)
