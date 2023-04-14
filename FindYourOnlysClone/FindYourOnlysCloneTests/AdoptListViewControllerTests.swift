@@ -12,19 +12,19 @@ final class AdoptListViewControllerTests: XCTestCase {
     
     func test_loadPetsActions_requestsPetsFromLoader() {
         let (sut, loader) = makeSUT()
-        XCTAssertTrue(loader.loadPetsMessages.isEmpty, "Expected no loading request before view is loaded")
+        XCTAssertTrue(loader.loadPetsRequests.isEmpty, "Expected no loading request before view is loaded")
         
         sut.loadViewIfNeeded()
-        XCTAssertEqual(loader.loadPetsMessages, [.load(AdoptPetRequest(page: 0))], "Expected a loading request once view is loaded")
+        XCTAssertEqual(loader.loadPetsRequests, [.load(AdoptPetRequest(page: 0))], "Expected a loading request once view is loaded")
         
         sut.simulateUserInitiatedPetsReload()
-        XCTAssertEqual(loader.loadPetsMessages, [
+        XCTAssertEqual(loader.loadPetsRequests, [
             .load(AdoptPetRequest(page: 0)),
             .load(AdoptPetRequest(page: 0))
         ], "Expected another loading request once user initiates a reload")
         
         sut.simulateUserInitiatedPetsReload()
-        XCTAssertEqual(loader.loadPetsMessages, [
+        XCTAssertEqual(loader.loadPetsRequests, [
             .load(AdoptPetRequest(page: 0)),
             .load(AdoptPetRequest(page: 0)),
             .load(AdoptPetRequest(page: 0))
@@ -198,25 +198,27 @@ final class AdoptListViewControllerTests: XCTestCase {
         
         // MARK: - PetLoader
         
-        enum Message: Equatable {
+        enum Request: Equatable {
             case load(AdoptPetRequest)
         }
         
-        private(set) var loadPetsMessages = [Message]()
-        private var completions = [(PetLoader.Result) -> Void]()
+        var loadPetsRequests: [Request] {
+            return loadPetsMessages.map { $0.request }
+        }
+        
+        private var loadPetsMessages = [(request: Request, completion: (PetLoader.Result) -> Void)]()
         
         func load(with request: AdoptPetRequest, completion: @escaping (PetLoader.Result) -> Void) {
-            loadPetsMessages.append(.load(request))
-            completions.append(completion)
+            loadPetsMessages.append((.load(request), completion))
         }
         
         func completesPetsLoading(with pets: [Pet] = [], at index: Int = 0) {
-            completions[index](.success(pets))
+            loadPetsMessages[index].completion(.success(pets))
         }
         
         func completesPetsLoadingWithError(at index: Int = 0) {
             let error = NSError(domain: "any error", code: 0)
-            completions[index](.failure(error))
+            loadPetsMessages[index].completion(.failure(error))
         }
         
         // MARK: - PetImageDataLoader
