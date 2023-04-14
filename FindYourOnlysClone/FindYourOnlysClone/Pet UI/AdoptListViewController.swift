@@ -65,6 +65,11 @@ class AdoptListViewController: UICollectionViewController, UICollectionViewDataS
         }
     }
     
+    private func cancelTask(forItemAt indexPath: IndexPath) {
+        tasks[indexPath]?.cancel()
+        tasks[indexPath] = nil
+    }
+    
     private func set(_ newItems: [Pet]) {
         var snapshot = NSDiffableDataSourceSnapshot<Int, Pet>()
         snapshot.appendSections([0])
@@ -79,8 +84,7 @@ class AdoptListViewController: UICollectionViewController, UICollectionViewDataS
     }
     
     override func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        tasks[indexPath]?.cancel()
-        tasks[indexPath] = nil
+        cancelTask(forItemAt: indexPath)
     }
     
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
@@ -91,9 +95,6 @@ class AdoptListViewController: UICollectionViewController, UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
-        for indexPath in indexPaths {
-            tasks[indexPath]?.cancel()
-            tasks[indexPath] = nil
-        }
+        indexPaths.forEach(cancelTask)
     }
 }
