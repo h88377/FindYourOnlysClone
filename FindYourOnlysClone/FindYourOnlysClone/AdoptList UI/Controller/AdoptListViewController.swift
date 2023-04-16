@@ -8,13 +8,13 @@
 import UIKit
 
 final class AdoptListViewController: UICollectionViewController {
-    private var petsSection: Int { return 0 }
-    
     private lazy var dataSource: UICollectionViewDiffableDataSource<Int, AdoptListCellViewController> = {
         .init(collectionView: collectionView) { [weak self] collectionView, indexPath, controller in
             return controller.view(in: collectionView, at: indexPath)
         }
     }()
+    
+    private var petsSection: Int { return 0 }
     
     func set(_ newItems: [AdoptListCellViewController]) {
         var snapshot = NSDiffableDataSourceSnapshot<Int, AdoptListCellViewController>()
@@ -43,15 +43,31 @@ final class AdoptListViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView.refreshControl = binded(refreshView: UIRefreshControl())
-        collectionView.dataSource = self.dataSource
-        collectionView.prefetchDataSource = self
-        collectionView.register(AdoptListCell.self, forCellWithReuseIdentifier: AdoptListCell.identifier)
+        configureCollectionView()
         loadPets()
     }
     
-    @objc private func loadPets() {
-        viewModel.refreshPets()
+    private func configureCollectionView() {
+        collectionView.collectionViewLayout = configureCollectionViewLayout()
+        collectionView.dataSource = self.dataSource
+        collectionView.prefetchDataSource = self
+        collectionView.register(AdoptListCell.self, forCellWithReuseIdentifier: AdoptListCell.identifier)
+        collectionView.refreshControl = binded(refreshView: UIRefreshControl())
+    }
+    
+    private func configureCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .absolute(290))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(290))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
+        group.interItemSpacing = .fixed(16)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16)
+        section.interGroupSpacing = 16
+        
+        return UICollectionViewCompositionalLayout(section: section)
     }
     
     private func binded(refreshView: UIRefreshControl) -> UIRefreshControl {
@@ -65,6 +81,10 @@ final class AdoptListViewController: UICollectionViewController {
         refreshView.addTarget(self, action: #selector(loadPets), for: .valueChanged)
         
         return refreshView
+    }
+    
+    @objc private func loadPets() {
+        viewModel.refreshPets()
     }
     
     private func requestImageData(at indexPath: IndexPath) {
