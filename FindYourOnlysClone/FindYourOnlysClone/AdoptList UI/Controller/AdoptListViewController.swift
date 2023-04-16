@@ -8,6 +8,8 @@
 import UIKit
 
 class AdoptListViewController: UICollectionViewController {
+    private var petsSection: Int { return 0 }
+    
     private lazy var dataSource: UICollectionViewDiffableDataSource<Int, AdoptListCellViewController> = {
         .init(collectionView: collectionView) { [weak self] collectionView, indexPath, controller in
             return controller.view(in: collectionView, at: indexPath)
@@ -16,14 +18,14 @@ class AdoptListViewController: UICollectionViewController {
     
     func set(_ newItems: [AdoptListCellViewController]) {
         var snapshot = NSDiffableDataSourceSnapshot<Int, AdoptListCellViewController>()
-        snapshot.appendSections([0])
-        snapshot.appendItems(newItems, toSection: 0)
+        snapshot.appendSections([petsSection])
+        snapshot.appendItems(newItems, toSection: petsSection)
         dataSource.apply(snapshot, animatingDifferences: false)
     }
     
     func append(_ newItems: [AdoptListCellViewController]) {
         var snapshot = dataSource.snapshot()
-        snapshot.appendItems(newItems, toSection: 0)
+        snapshot.appendItems(newItems, toSection: petsSection)
         dataSource.apply(snapshot, animatingDifferences: true)
     }
     
