@@ -7,10 +7,6 @@
 
 import UIKit
 
-extension UICollectionViewCell {
-    static var identifier: String { return String(describing: self) }
-}
-
 class AdoptListCellViewController {
     private let id = UUID()
     private var cell: AdoptListCell?
