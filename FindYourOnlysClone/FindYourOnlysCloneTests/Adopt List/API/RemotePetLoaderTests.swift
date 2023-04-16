@@ -78,17 +78,9 @@ class RemotePetLoaderTests: XCTestCase {
     
     func test_loadWithRequest_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
-        let exp = expectation(description: "Wait for completion")
-        
-        var receivedError: RemotePetLoader.Error?
-        sut.load(with: anyRequest()) { error in
-            receivedError = error
-            exp.fulfill()
-        }
-        client.completesWithError()
-        wait(for: [exp], timeout: 1.0)
-        
-        XCTAssertEqual(receivedError, .connectivity)
+        expect(sut, toCompleteWithError: .connectivity, when: {
+            client.completesWithError()
+        })
     }
     
     func test_loadWithRequest_deliversErrorOnNon200HTTPResponse() {
@@ -96,17 +88,9 @@ class RemotePetLoaderTests: XCTestCase {
         let samples = [199, 201, 300, 400, 500]
         
         for (index, statusCode) in samples.enumerated() {
-            let exp = expectation(description: "Wait for completion")
-            
-            var receivedError: RemotePetLoader.Error?
-            sut.load(with: anyRequest()) { error in
-                receivedError = error
-                exp.fulfill()
-            }
-            client.completesWith(statusCode: statusCode, at: index)
-            wait(for: [exp], timeout: 1.0)
-            
-            XCTAssertEqual(receivedError, .connectivity)
+            expect(sut, toCompleteWithError: .connectivity, when: {
+                client.completesWith(statusCode: statusCode, at: index)
+            })
         }
     }
     
@@ -124,6 +108,20 @@ class RemotePetLoaderTests: XCTestCase {
         let urlString = url.absoluteString
         let expectedURL = URL(string: "\(urlString)?UnitId=QcbUEzN6E6DL&$top=20&$skip=\(20 * request.page)")!
         return expectedURL
+    }
+    
+    private func expect(_ sut: RemotePetLoader, toCompleteWithError expectedResult: RemotePetLoader.Error, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+        let exp = expectation(description: "Wait for completion")
+        
+        sut.load(with: anyRequest()) { receivedResult in
+            XCTAssertEqual(receivedResult, expectedResult, "Expected \(expectedResult), got \(receivedResult) instead", file: file, line: line)
+            
+            exp.fulfill()
+        }
+        
+        action()
+        
+        wait(for: [exp], timeout: 1.0)
     }
     
     private func anyRequest() -> AdoptListRequest {
