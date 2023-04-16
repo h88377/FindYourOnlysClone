@@ -27,6 +27,7 @@
 		9891766A29E99C13000002A4 /* AdoptListUIComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891766929E99C13000002A4 /* AdoptListUIComposer.swift */; };
 		9891766C29EC0A60000002A4 /* UICollectionView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891766B29EC0A60000002A4 /* UICollectionView+Extension.swift */; };
 		9891766E29EC0AB0000002A4 /* UICollectionViewCell+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891766D29EC0AB0000002A4 /* UICollectionViewCell+Extension.swift */; };
+		9891767F29EC8566000002A4 /* RemotePetLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891767E29EC8566000002A4 /* RemotePetLoaderTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		9891766929E99C13000002A4 /* AdoptListUIComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptListUIComposer.swift; sourceTree = "<group>"; };
 		9891766B29EC0A60000002A4 /* UICollectionView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extension.swift"; sourceTree = "<group>"; };
 		9891766D29EC0AB0000002A4 /* UICollectionViewCell+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell+Extension.swift"; sourceTree = "<group>"; };
+		9891767E29EC8566000002A4 /* RemotePetLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePetLoaderTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -204,6 +206,7 @@
 			isa = PBXGroup;
 			children = (
 				9891767C29EC8506000002A4 /* UI */,
+				9891767D29EC8547000002A4 /* API */,
 			);
 			path = "Adopt List";
 			sourceTree = "<group>";
@@ -214,6 +217,14 @@
 				9891763329E80212000002A4 /* AdoptListUIIntegrationTests.swift */,
 			);
 			path = UI;
+			sourceTree = "<group>";
+		};
+		9891767D29EC8547000002A4 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				9891767E29EC8566000002A4 /* RemotePetLoaderTests.swift */,
+			);
+			path = API;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -340,6 +351,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9891767F29EC8566000002A4 /* RemotePetLoaderTests.swift in Sources */,
 				9891763429E80212000002A4 /* AdoptListUIIntegrationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
