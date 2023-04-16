@@ -57,6 +57,18 @@ class RemotePetLoaderTests: XCTestCase {
         XCTAssertEqual(client.receivedURLs, [expectedURL])
     }
     
+    func test_loadWithRequestTwice_requestsDataFromRequestTwice() {
+        let request = AdoptListRequest(page: 0)
+        let url = URL(string: "https://any-url.com")!
+        let expectedURL = makeExpectedURL(url, with: request)
+        let (sut, client) = makeSUT(baseURL: url)
+        
+        sut.load(with: request)
+        sut.load(with: request)
+        
+        XCTAssertEqual(client.receivedURLs, [expectedURL, expectedURL])
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(baseURL: URL = URL(string: "https://any-url.com")!, file: StaticString = #filePath, line: UInt = #line) -> (RemotePetLoader, HTTPClientSpy) {
