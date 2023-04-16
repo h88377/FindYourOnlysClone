@@ -22,6 +22,11 @@ final class RemotePetLoader {
     }
     
     func load(with request: AdoptListRequest) {
+        let url = enrich(baseURL, with: request)
+        client.dispatch(URLRequest(url: url))
+    }
+    
+    private func enrich(_ baseURL: URL, with request: AdoptListRequest) -> URL {
         var component = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)
         component?.queryItems = [
             URLQueryItem(name: "UnitId", value: "QcbUEzN6E6DL"),
@@ -29,10 +34,7 @@ final class RemotePetLoader {
             URLQueryItem(name: "$skip", value: "\(20 * request.page)"),
         ]
         
-        let enrichedURL = component?.url ?? baseURL
-        let request = URLRequest(url: enrichedURL)
-        
-        client.dispatch(request)
+        return component?.url ?? baseURL
     }
 }
 
