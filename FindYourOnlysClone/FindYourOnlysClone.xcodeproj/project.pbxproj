@@ -12,7 +12,7 @@
 		9891762129E80211000002A4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891762029E80211000002A4 /* ViewController.swift */; };
 		9891762629E80212000002A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9891762529E80212000002A4 /* Assets.xcassets */; };
 		9891762929E80212000002A4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9891762729E80212000002A4 /* LaunchScreen.storyboard */; };
-		9891763429E80212000002A4 /* AdoptListViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891763329E80212000002A4 /* AdoptListViewControllerTests.swift */; };
+		9891763429E80212000002A4 /* AdoptListUIIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891763329E80212000002A4 /* AdoptListUIIntegrationTests.swift */; };
 		9891764E29E89B08000002A4 /* Pet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891764D29E89B08000002A4 /* Pet.swift */; };
 		9891765029E89B35000002A4 /* AdoptListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891764F29E89B35000002A4 /* AdoptListRequest.swift */; };
 		9891765229E89B55000002A4 /* PetLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891765129E89B55000002A4 /* PetLoader.swift */; };
@@ -48,7 +48,7 @@
 		9891762829E80212000002A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9891762A29E80212000002A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9891762F29E80212000002A4 /* FindYourOnlysCloneTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FindYourOnlysCloneTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9891763329E80212000002A4 /* AdoptListViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptListViewControllerTests.swift; sourceTree = "<group>"; };
+		9891763329E80212000002A4 /* AdoptListUIIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptListUIIntegrationTests.swift; sourceTree = "<group>"; };
 		9891764D29E89B08000002A4 /* Pet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pet.swift; sourceTree = "<group>"; };
 		9891764F29E89B35000002A4 /* AdoptListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptListRequest.swift; sourceTree = "<group>"; };
 		9891765129E89B55000002A4 /* PetLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetLoader.swift; sourceTree = "<group>"; };
@@ -120,7 +120,7 @@
 		9891763229E80212000002A4 /* FindYourOnlysCloneTests */ = {
 			isa = PBXGroup;
 			children = (
-				9891763329E80212000002A4 /* AdoptListViewControllerTests.swift */,
+				9891763329E80212000002A4 /* AdoptListUIIntegrationTests.swift */,
 			);
 			path = FindYourOnlysCloneTests;
 			sourceTree = "<group>";
@@ -316,7 +316,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9891763429E80212000002A4 /* AdoptListViewControllerTests.swift in Sources */,
+				9891763429E80212000002A4 /* AdoptListUIIntegrationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

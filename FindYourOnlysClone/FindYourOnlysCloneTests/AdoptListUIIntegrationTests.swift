@@ -8,7 +8,7 @@
 import XCTest
 @testable import FindYourOnlysClone
 
-final class AdoptListViewControllerTests: XCTestCase {
+class AdoptListUIIntegrationTests: XCTestCase {
     
     func test_loadPetsActions_requestsPetsFromLoader() {
         let (sut, loader) = makeSUT()
