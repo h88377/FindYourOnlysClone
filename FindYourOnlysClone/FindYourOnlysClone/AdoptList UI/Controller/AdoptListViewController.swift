@@ -10,7 +10,7 @@ import UIKit
 class AdoptListViewController: UICollectionViewController {
     private lazy var dataSource: UICollectionViewDiffableDataSource<Int, AdoptListCellViewController> = {
         .init(collectionView: collectionView) { [weak self] collectionView, indexPath, controller in
-            return controller.view()
+            return controller.view(in: collectionView, at: indexPath)
         }
     }()
     
@@ -40,6 +40,7 @@ class AdoptListViewController: UICollectionViewController {
         collectionView.refreshControl = binded(refreshView: UIRefreshControl())
         collectionView.dataSource = self.dataSource
         collectionView.prefetchDataSource = self
+        collectionView.register(AdoptListCell.self, forCellWithReuseIdentifier: AdoptListCell.identifier)
         loadPets()
     }
     

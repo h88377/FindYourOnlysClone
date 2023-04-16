@@ -299,6 +299,23 @@ final class AdoptListViewControllerTests: XCTestCase {
         assertThat(sut, isRendering: firstPage)
     }
     
+    func test_petImageView_doesNotAlterStatesAfterNotVisible() {
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.completesPetsLoading(with: [makePet(), makePet()])
+        
+        let view0 = sut.simulatePetImageViewIsNotVisible(at: 0)
+        let view1 = sut.simulatePetImageViewIsNotVisible(at: 1)
+        
+        let image = UIImage.make(withColor: .red).pngData()!
+        loader.completesImageLoading(with: image, at: 0)
+        XCTAssertNil(view0.renderedImageData, "Expected not to alter image state")
+        
+        loader.completesImageLoadingWithError(at: 1)
+        XCTAssertFalse(view1.isShowingImageRetryAction, "Expected not to alter retry button state")
+        XCTAssertTrue(view1.isShowingImageLoadingIndicator, "Expected not to alter image loading state")
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (AdoptListViewController, PetLoaderSpy) {
@@ -439,10 +456,12 @@ private extension AdoptListViewController {
         return cell as? AdoptListCell
     }
     
-    func simulatePetImageViewIsNotVisible(at index: Int) {
+    @discardableResult
+    func simulatePetImageViewIsNotVisible(at index: Int) -> AdoptListCell {
         let cell = simulatePetImageViewIsVisible(at: index)!
         let delegate = collectionView.delegate
         delegate?.collectionView?(collectionView, didEndDisplaying: cell, forItemAt: IndexPath(item: index, section: petsSection))
+        return cell
     }
     
     func simulatePetImageViewIsNearVisible(at index: Int) {
