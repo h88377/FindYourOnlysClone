@@ -9,7 +9,8 @@ import XCTest
 @testable import FindYourOnlysClone
 
 protocol HTTPClient {
-    func dispatch(_ request: URLRequest, completion: @escaping (Error) -> Void)
+    typealias Result = Swift.Result<(Data, HTTPURLResponse), Error>
+    func dispatch(_ request: URLRequest, completion: @escaping (Result) -> Void)
 }
 
 final class RemotePetLoader {
@@ -77,8 +78,8 @@ class RemotePetLoaderTests: XCTestCase {
     
     func test_loadWithRequest_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
-        
         let exp = expectation(description: "Wait for completion")
+        
         var receivedError: RemotePetLoader.Error?
         sut.load(with: anyRequest()) { error in
             receivedError = error
@@ -88,6 +89,25 @@ class RemotePetLoaderTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
         
         XCTAssertEqual(receivedError, .connectivity)
+    }
+    
+    func test_loadWithRequest_deliversErrorOnNon200HTTPResponse() {
+        let (sut, client) = makeSUT()
+        let samples = [199, 201, 300, 400, 500]
+        
+        for (index, statusCode) in samples.enumerated() {
+            let exp = expectation(description: "Wait for completion")
+            
+            var receivedError: RemotePetLoader.Error?
+            sut.load(with: anyRequest()) { error in
+                receivedError = error
+                exp.fulfill()
+            }
+            client.completesWith(statusCode: statusCode, at: index)
+            wait(for: [exp], timeout: 1.0)
+            
+            XCTAssertEqual(receivedError, .connectivity)
+        }
     }
     
     // MARK: - Helpers
@@ -111,19 +131,28 @@ class RemotePetLoaderTests: XCTestCase {
     }
     
     private class HTTPClientSpy: HTTPClient {
-        typealias RequestCompletion = (Error) -> Void
+        typealias RequestCompletion = (HTTPClient.Result) -> Void
         private(set) var receivedURLs = [URL]()
         
         private var receivedMessages = [(request: URLRequest, completion: RequestCompletion)]()
         
-        func dispatch(_ request: URLRequest, completion: @escaping (Error) -> Void) {
+        func dispatch(_ request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
             receivedURLs.append(request.url!)
             receivedMessages.append((request, completion))
         }
         
         func completesWithError(at index: Int = 0) {
             let error = NSError(domain: "any error", code: 0)
-            receivedMessages[index].completion(error)
+            receivedMessages[index].completion(.failure(error))
+        }
+        
+        func completesWith(statusCode: Int = 200, data: Data = Data(), at index: Int = 0) {
+            let response = HTTPURLResponse(
+                url: receivedURLs[index],
+                statusCode: statusCode,
+                httpVersion: nil,
+                headerFields: nil)!
+            receivedMessages[index].completion(.success((data, response)))
         }
     }
 }
