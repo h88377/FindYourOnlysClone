@@ -14,6 +14,8 @@ protocol HTTPClient {
 }
 
 final class RemotePetLoader {
+    typealias Result = Swift.Result<[Pet], Error>
+    
     enum Error: Swift.Error {
         case connectivity
         case invalidData
@@ -27,15 +29,19 @@ final class RemotePetLoader {
         self.client = client
     }
     
-    func load(with request: AdoptListRequest, completion: @escaping (Error) -> Void) {
+    func load(with request: AdoptListRequest, completion: @escaping (Result) -> Void) {
         let url = enrich(baseURL, with: request)
         client.dispatch(URLRequest(url: url)) { result in
             switch result {
-            case .success:
-                completion(.invalidData)
+            case let .success((data, response)):
+                guard response.statusCode == 200, let pets = try? JSONDecoder().decode([Pet].self, from: data) else {
+                    return completion(.failure(.invalidData))
+                }
+                
+                completion(.success(pets))
                 
             case .failure:
-                completion(.connectivity)
+                completion(.failure(.connectivity))
             }
         }
     }
@@ -85,7 +91,7 @@ class RemotePetLoaderTests: XCTestCase {
     
     func test_loadWithRequest_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
-        expect(sut, toCompleteWithError: .connectivity, when: {
+        expect(sut, toCompleteWith: .failure(.connectivity), when: {
             client.completesWithError()
         })
     }
@@ -95,7 +101,7 @@ class RemotePetLoaderTests: XCTestCase {
         let samples = [199, 201, 300, 400, 500]
         
         for (index, statusCode) in samples.enumerated() {
-            expect(sut, toCompleteWithError: .invalidData, when: {
+            expect(sut, toCompleteWith: .failure(.invalidData), when: {
                 client.completesWith(statusCode: statusCode, at: index)
             })
         }
@@ -103,9 +109,17 @@ class RemotePetLoaderTests: XCTestCase {
     
     func test_loadWithRequest_deliversErrorOn200HTTPResponseWithInvalidData() {
         let (sut, client) = makeSUT()
-        expect(sut, toCompleteWithError: .invalidData, when: {
+        expect(sut, toCompleteWith: .failure(.invalidData), when: {
             let invalidData = Data("invalid data".utf8)
             client.completesWith(statusCode: 200, data: invalidData)
+        })
+    }
+    
+    func test_loadWithRequest_deliversEmptyResultOn200HTTPResponseWithEmptyJSON() {
+        let (sut, client) = makeSUT()
+        expect(sut, toCompleteWith: .success([]), when: {
+            let emptyData = try! JSONSerialization.data(withJSONObject: [])
+            client.completesWith(statusCode: 200, data: emptyData)
         })
     }
     
@@ -125,7 +139,7 @@ class RemotePetLoaderTests: XCTestCase {
         return expectedURL
     }
     
-    private func expect(_ sut: RemotePetLoader, toCompleteWithError expectedResult: RemotePetLoader.Error, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(_ sut: RemotePetLoader, toCompleteWith expectedResult: RemotePetLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         let exp = expectation(description: "Wait for completion")
         
         sut.load(with: anyRequest()) { receivedResult in
