@@ -47,12 +47,12 @@ class RemotePetLoaderTests: XCTestCase {
     }
     
     func test_loadWithRequest_requestsDataFromRequest() {
-        let page = 0
+        let request = AdoptListRequest(page: 0)
         let url = URL(string: "https://any-url.com")!
-        let expectedURL = URL(string: "https://any-url.com?UnitId=QcbUEzN6E6DL&$top=20&$skip=\(20 * page)")!
+        let expectedURL = makeExpectedURL(url, with: request)
         let (sut, client) = makeSUT(baseURL: url)
         
-        sut.load(with: AdoptListRequest(page: page))
+        sut.load(with: request)
         
         XCTAssertEqual(client.receivedURLs, [expectedURL])
     }
@@ -65,6 +65,12 @@ class RemotePetLoaderTests: XCTestCase {
         trackForMemoryLeak(sut, file: file, line: line)
         trackForMemoryLeak(client, file: file, line: line)
         return (sut, client)
+    }
+    
+    private func makeExpectedURL(_ url: URL, with request: AdoptListRequest) -> URL {
+        let urlString = url.absoluteString
+        let expectedURL = URL(string: "\(urlString)?UnitId=QcbUEzN6E6DL&$top=20&$skip=\(20 * request.page)")!
+        return expectedURL
     }
     
     private class HTTPClientSpy: HTTPClient {
