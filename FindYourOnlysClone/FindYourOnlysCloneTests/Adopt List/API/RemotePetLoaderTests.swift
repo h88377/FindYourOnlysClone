@@ -16,6 +16,7 @@ protocol HTTPClient {
 final class RemotePetLoader {
     enum Error: Swift.Error {
         case connectivity
+        case invalidData
     }
     
     private let baseURL: URL
@@ -28,8 +29,14 @@ final class RemotePetLoader {
     
     func load(with request: AdoptListRequest, completion: @escaping (Error) -> Void) {
         let url = enrich(baseURL, with: request)
-        client.dispatch(URLRequest(url: url)) { _ in
-            completion(.connectivity)
+        client.dispatch(URLRequest(url: url)) { result in
+            switch result {
+            case .success:
+                completion(.invalidData)
+                
+            case .failure:
+                completion(.connectivity)
+            }
         }
     }
     
@@ -88,10 +95,18 @@ class RemotePetLoaderTests: XCTestCase {
         let samples = [199, 201, 300, 400, 500]
         
         for (index, statusCode) in samples.enumerated() {
-            expect(sut, toCompleteWithError: .connectivity, when: {
+            expect(sut, toCompleteWithError: .invalidData, when: {
                 client.completesWith(statusCode: statusCode, at: index)
             })
         }
+    }
+    
+    func test_loadWithRequest_deliversErrorOn200HTTPResponseWithInvalidData() {
+        let (sut, client) = makeSUT()
+        expect(sut, toCompleteWithError: .invalidData, when: {
+            let invalidData = Data("invalid data".utf8)
+            client.completesWith(statusCode: 200, data: invalidData)
+        })
     }
     
     // MARK: - Helpers
@@ -130,6 +145,7 @@ class RemotePetLoaderTests: XCTestCase {
     
     private class HTTPClientSpy: HTTPClient {
         typealias RequestCompletion = (HTTPClient.Result) -> Void
+        
         private(set) var receivedURLs = [URL]()
         
         private var receivedMessages = [(request: URLRequest, completion: RequestCompletion)]()
