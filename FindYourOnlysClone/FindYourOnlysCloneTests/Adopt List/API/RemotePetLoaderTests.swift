@@ -9,10 +9,14 @@ import XCTest
 @testable import FindYourOnlysClone
 
 protocol HTTPClient {
-    func dispatch(_ request: URLRequest)
+    func dispatch(_ request: URLRequest, completion: @escaping (Error) -> Void)
 }
 
 final class RemotePetLoader {
+    enum Error: Swift.Error {
+        case connectivity
+    }
+    
     private let baseURL: URL
     private let client: HTTPClient
     
@@ -21,9 +25,11 @@ final class RemotePetLoader {
         self.client = client
     }
     
-    func load(with request: AdoptListRequest) {
+    func load(with request: AdoptListRequest, completion: @escaping (Error) -> Void) {
         let url = enrich(baseURL, with: request)
-        client.dispatch(URLRequest(url: url))
+        client.dispatch(URLRequest(url: url)) { _ in
+            completion(.connectivity)
+        }
     }
     
     private func enrich(_ baseURL: URL, with request: AdoptListRequest) -> URL {
@@ -52,7 +58,7 @@ class RemotePetLoaderTests: XCTestCase {
         let expectedURL = makeExpectedURL(url, with: request)
         let (sut, client) = makeSUT(baseURL: url)
         
-        sut.load(with: request)
+        sut.load(with: request) { _ in }
         
         XCTAssertEqual(client.receivedURLs, [expectedURL])
     }
@@ -63,10 +69,25 @@ class RemotePetLoaderTests: XCTestCase {
         let expectedURL = makeExpectedURL(url, with: request)
         let (sut, client) = makeSUT(baseURL: url)
         
-        sut.load(with: request)
-        sut.load(with: request)
+        sut.load(with: request) { _ in }
+        sut.load(with: request) { _ in }
         
         XCTAssertEqual(client.receivedURLs, [expectedURL, expectedURL])
+    }
+    
+    func test_loadWithRequest_deliversErrorOnClientError() {
+        let (sut, client) = makeSUT()
+        
+        let exp = expectation(description: "Wait for completion")
+        var receivedError: RemotePetLoader.Error?
+        sut.load(with: anyRequest()) { error in
+            receivedError = error
+            exp.fulfill()
+        }
+        client.completesWithError()
+        wait(for: [exp], timeout: 1.0)
+        
+        XCTAssertEqual(receivedError, .connectivity)
     }
     
     // MARK: - Helpers
@@ -85,11 +106,24 @@ class RemotePetLoaderTests: XCTestCase {
         return expectedURL
     }
     
+    private func anyRequest() -> AdoptListRequest {
+        return AdoptListRequest(page: 0)
+    }
+    
     private class HTTPClientSpy: HTTPClient {
+        typealias RequestCompletion = (Error) -> Void
         private(set) var receivedURLs = [URL]()
         
-        func dispatch(_ request: URLRequest) {
+        private var receivedMessages = [(request: URLRequest, completion: RequestCompletion)]()
+        
+        func dispatch(_ request: URLRequest, completion: @escaping (Error) -> Void) {
             receivedURLs.append(request.url!)
+            receivedMessages.append((request, completion))
+        }
+        
+        func completesWithError(at index: Int = 0) {
+            let error = NSError(domain: "any error", code: 0)
+            receivedMessages[index].completion(error)
         }
     }
 }
