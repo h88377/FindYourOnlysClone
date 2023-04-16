@@ -13,23 +13,23 @@ protocol HTTPClient {
 }
 
 final class RemotePetLoader {
-    private let url: URL
+    private let baseURL: URL
     private let client: HTTPClient
     
-    init(url: URL, client: HTTPClient) {
-        self.url = url
+    init(baseURL: URL, client: HTTPClient) {
+        self.baseURL = baseURL
         self.client = client
     }
     
     func load(with request: AdoptListRequest) {
-        var component = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        var component = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)
         component?.queryItems = [
             URLQueryItem(name: "UnitId", value: "QcbUEzN6E6DL"),
             URLQueryItem(name: "$top", value: "20"),
             URLQueryItem(name: "$skip", value: "\(20 * request.page)"),
         ]
         
-        let enrichedURL = component?.url ?? url
+        let enrichedURL = component?.url ?? baseURL
         let request = URLRequest(url: enrichedURL)
         
         client.dispatch(request)
@@ -41,7 +41,7 @@ class RemotePetLoaderTests: XCTestCase {
     func test_init_doesNotRequestDataFromURL() {
         let url = URL(string: "https://any-url.com")!
         let client = HTTPClientSpy()
-        _ = RemotePetLoader(url: url, client: client)
+        _ = RemotePetLoader(baseURL: url, client: client)
         
         XCTAssertTrue(client.receivedURLs.isEmpty)
     }
@@ -51,7 +51,7 @@ class RemotePetLoaderTests: XCTestCase {
         let url = URL(string: "https://any-url.com")!
         let expectedURL = URL(string: "https://any-url.com?UnitId=QcbUEzN6E6DL&$top=20&$skip=\(20 * page)")!
         let client = HTTPClientSpy()
-        let sut = RemotePetLoader(url: url, client: client)
+        let sut = RemotePetLoader(baseURL: url, client: client)
         
         sut.load(with: AdoptListRequest(page: page))
         
