@@ -29,6 +29,7 @@
 		9891766E29EC0AB0000002A4 /* UICollectionViewCell+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891766D29EC0AB0000002A4 /* UICollectionViewCell+Extension.swift */; };
 		9891767F29EC8566000002A4 /* RemotePetLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891767E29EC8566000002A4 /* RemotePetLoaderTests.swift */; };
 		9891768229EC945F000002A4 /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891768129EC945F000002A4 /* XCTestCase+MemoryLeakTracking.swift */; };
+		9891768729ECBAE1000002A4 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891768629ECBAE1000002A4 /* HTTPClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		9891766D29EC0AB0000002A4 /* UICollectionViewCell+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell+Extension.swift"; sourceTree = "<group>"; };
 		9891767E29EC8566000002A4 /* RemotePetLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePetLoaderTests.swift; sourceTree = "<group>"; };
 		9891768129EC945F000002A4 /* XCTestCase+MemoryLeakTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeakTracking.swift"; sourceTree = "<group>"; };
+		9891768629ECBAE1000002A4 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,6 +203,7 @@
 			children = (
 				9891765329E89B96000002A4 /* UI */,
 				9891764C29E89AE2000002A4 /* Feature */,
+				9891768529ECBAD6000002A4 /* API */,
 			);
 			path = "Adopt List";
 			sourceTree = "<group>";
@@ -236,6 +239,14 @@
 				9891768129EC945F000002A4 /* XCTestCase+MemoryLeakTracking.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		9891768529ECBAD6000002A4 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				9891768629ECBAE1000002A4 /* HTTPClient.swift */,
+			);
+			path = API;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -352,6 +363,7 @@
 				9891765229E89B55000002A4 /* PetLoader.swift in Sources */,
 				9891766E29EC0AB0000002A4 /* UICollectionViewCell+Extension.swift in Sources */,
 				9891765C29E90FB2000002A4 /* UIView+Extension.swift in Sources */,
+				9891768729ECBAE1000002A4 /* HTTPClient.swift in Sources */,
 				9891761F29E80211000002A4 /* SceneDelegate.swift in Sources */,
 				9891766A29E99C13000002A4 /* AdoptListUIComposer.swift in Sources */,
 				9891766029E98563000002A4 /* AdoptListViewModel.swift in Sources */,

@@ -8,11 +8,6 @@
 import XCTest
 @testable import FindYourOnlysClone
 
-protocol HTTPClient {
-    typealias Result = Swift.Result<(Data, HTTPURLResponse), Error>
-    func dispatch(_ request: URLRequest, completion: @escaping (Result) -> Void)
-}
-
 final class RemotePetLoader {
     typealias Result = Swift.Result<[Pet], Error>
     
