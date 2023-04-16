@@ -11,12 +11,6 @@ extension UICollectionViewCell {
     static var identifier: String { return String(describing: self) }
 }
 
-extension UICollectionView {
-    func dequeueReusableCell<T: UICollectionViewCell>(for indexPath: IndexPath) -> T {
-        return dequeueReusableCell(withReuseIdentifier: T.identifier, for: indexPath) as! T
-    }
-}
-
 class AdoptListCellViewController {
     private let id = UUID()
     private var cell: AdoptListCell?
