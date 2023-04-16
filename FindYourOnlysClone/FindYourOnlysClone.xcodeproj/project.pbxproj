@@ -107,9 +107,8 @@
 				9891761C29E80211000002A4 /* AppDelegate.swift */,
 				9891761E29E80211000002A4 /* SceneDelegate.swift */,
 				9891762029E80211000002A4 /* ViewController.swift */,
+				9891767A29EC8412000002A4 /* Adopt List */,
 				9891765829E89BEE000002A4 /* Extension */,
-				9891765329E89B96000002A4 /* AdoptList UI */,
-				9891764C29E89AE2000002A4 /* AdoptList feature */,
 				9891762529E80212000002A4 /* Assets.xcassets */,
 				9891762729E80212000002A4 /* LaunchScreen.storyboard */,
 				9891762A29E80212000002A4 /* Info.plist */,
@@ -120,23 +119,23 @@
 		9891763229E80212000002A4 /* FindYourOnlysCloneTests */ = {
 			isa = PBXGroup;
 			children = (
-				9891763329E80212000002A4 /* AdoptListUIIntegrationTests.swift */,
+				9891767B29EC84E8000002A4 /* Adopt List */,
 			);
 			path = FindYourOnlysCloneTests;
 			sourceTree = "<group>";
 		};
-		9891764C29E89AE2000002A4 /* AdoptList feature */ = {
+		9891764C29E89AE2000002A4 /* Feature */ = {
 			isa = PBXGroup;
 			children = (
+				9891765129E89B55000002A4 /* PetLoader.swift */,
 				9891764D29E89B08000002A4 /* Pet.swift */,
 				9891764F29E89B35000002A4 /* AdoptListRequest.swift */,
-				9891765129E89B55000002A4 /* PetLoader.swift */,
 				9891765D29E91C9D000002A4 /* PetImageDataLoader.swift */,
 			);
-			path = "AdoptList feature";
+			path = Feature;
 			sourceTree = "<group>";
 		};
-		9891765329E89B96000002A4 /* AdoptList UI */ = {
+		9891765329E89B96000002A4 /* UI */ = {
 			isa = PBXGroup;
 			children = (
 				9891766829E99C0B000002A4 /* Composer */,
@@ -144,7 +143,7 @@
 				9891766629E99A87000002A4 /* View */,
 				9891766529E99A7C000002A4 /* Controller */,
 			);
-			path = "AdoptList UI";
+			path = UI;
 			sourceTree = "<group>";
 		};
 		9891765829E89BEE000002A4 /* Extension */ = {
@@ -190,6 +189,31 @@
 				9891766929E99C13000002A4 /* AdoptListUIComposer.swift */,
 			);
 			path = Composer;
+			sourceTree = "<group>";
+		};
+		9891767A29EC8412000002A4 /* Adopt List */ = {
+			isa = PBXGroup;
+			children = (
+				9891765329E89B96000002A4 /* UI */,
+				9891764C29E89AE2000002A4 /* Feature */,
+			);
+			path = "Adopt List";
+			sourceTree = "<group>";
+		};
+		9891767B29EC84E8000002A4 /* Adopt List */ = {
+			isa = PBXGroup;
+			children = (
+				9891767C29EC8506000002A4 /* UI */,
+			);
+			path = "Adopt List";
+			sourceTree = "<group>";
+		};
+		9891767C29EC8506000002A4 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				9891763329E80212000002A4 /* AdoptListUIIntegrationTests.swift */,
+			);
+			path = UI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
