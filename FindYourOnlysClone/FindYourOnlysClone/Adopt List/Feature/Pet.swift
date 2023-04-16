@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Pet: Hashable, Decodable {
+struct Pet: Hashable {
     let id: Int
     let location: String
     let kind: String

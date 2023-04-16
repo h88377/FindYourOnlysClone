@@ -28,11 +28,11 @@ final class RemotePetLoader {
         client.dispatch(URLRequest(url: url)) { result in
             switch result {
             case let .success((data, response)):
-                guard response.statusCode == 200, let pets = try? JSONDecoder().decode([Pet].self, from: data) else {
+                guard response.statusCode == 200, let remotePets = try? JSONDecoder().decode([RemotePet].self, from: data) else {
                     return completion(.failure(.invalidData))
                 }
                 
-                completion(.success(pets))
+                completion(.success(remotePets.toModels()))
                 
             case .failure:
                 completion(.failure(.connectivity))
@@ -49,5 +49,11 @@ final class RemotePetLoader {
         ]
         
         return component?.url ?? baseURL
+    }
+}
+
+private extension Array where Element == RemotePet {
+    func toModels() -> [Pet] {
+        return map { Pet(id: $0.id, location: $0.location, kind: $0.kind, gender: $0.gender, bodyType: $0.bodyType, color: $0.color, age: $0.age, sterilization: $0.sterilization, bacterin: $0.bacterin, foundPlace: $0.foundPlace, status: $0.status, remark: $0.remark, openDate: $0.openDate, closedDate: $0.closedDate, updatedDate: $0.updatedDate, createdDate: $0.createdDate, photoURL: $0.photoURL, address: $0.address, telephone: $0.telephone, variety: $0.variety, shelterName: $0.shelterName) }
     }
 }
