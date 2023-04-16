@@ -30,6 +30,7 @@
 		9891767F29EC8566000002A4 /* RemotePetLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891767E29EC8566000002A4 /* RemotePetLoaderTests.swift */; };
 		9891768229EC945F000002A4 /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891768129EC945F000002A4 /* XCTestCase+MemoryLeakTracking.swift */; };
 		9891768729ECBAE1000002A4 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891768629ECBAE1000002A4 /* HTTPClient.swift */; };
+		9891768929ECBB01000002A4 /* RemotePetLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891768829ECBB01000002A4 /* RemotePetLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		9891767E29EC8566000002A4 /* RemotePetLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePetLoaderTests.swift; sourceTree = "<group>"; };
 		9891768129EC945F000002A4 /* XCTestCase+MemoryLeakTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeakTracking.swift"; sourceTree = "<group>"; };
 		9891768629ECBAE1000002A4 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
+		9891768829ECBB01000002A4 /* RemotePetLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePetLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -245,6 +247,7 @@
 			isa = PBXGroup;
 			children = (
 				9891768629ECBAE1000002A4 /* HTTPClient.swift */,
+				9891768829ECBB01000002A4 /* RemotePetLoader.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -354,6 +357,7 @@
 				9891762129E80211000002A4 /* ViewController.swift in Sources */,
 				9891765029E89B35000002A4 /* AdoptListRequest.swift in Sources */,
 				9891764E29E89B08000002A4 /* Pet.swift in Sources */,
+				9891768929ECBB01000002A4 /* RemotePetLoader.swift in Sources */,
 				9891765729E89BC6000002A4 /* AdoptListViewController.swift in Sources */,
 				9891766429E99A44000002A4 /* AdoptListCellViewController.swift in Sources */,
 				9891765529E89BA5000002A4 /* AdoptListCell.swift in Sources */,
