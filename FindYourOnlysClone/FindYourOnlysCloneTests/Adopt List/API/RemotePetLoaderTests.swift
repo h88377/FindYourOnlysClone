@@ -39,9 +39,7 @@ final class RemotePetLoader {
 class RemotePetLoaderTests: XCTestCase {
     
     func test_init_doesNotRequestDataFromURL() {
-        let url = URL(string: "https://any-url.com")!
-        let client = HTTPClientSpy()
-        _ = RemotePetLoader(baseURL: url, client: client)
+        let (_, client) = makeSUT()
         
         XCTAssertTrue(client.receivedURLs.isEmpty)
     }
@@ -50,12 +48,27 @@ class RemotePetLoaderTests: XCTestCase {
         let page = 0
         let url = URL(string: "https://any-url.com")!
         let expectedURL = URL(string: "https://any-url.com?UnitId=QcbUEzN6E6DL&$top=20&$skip=\(20 * page)")!
-        let client = HTTPClientSpy()
-        let sut = RemotePetLoader(baseURL: url, client: client)
+        let (sut, client) = makeSUT(baseURL: url)
         
         sut.load(with: AdoptListRequest(page: page))
         
         XCTAssertEqual(client.receivedURLs, [expectedURL])
+    }
+    
+    // MARK: - Helpers
+    
+    private func makeSUT(baseURL: URL = URL(string: "https://any-url.com")!, file: StaticString = #filePath, line: UInt = #line) -> (RemotePetLoader, HTTPClientSpy) {
+        let client = HTTPClientSpy()
+        let sut = RemotePetLoader(baseURL: baseURL, client: client)
+        trackForMemoryLeak(sut, file: file, line: line)
+        trackForMemoryLeak(client, file: file, line: line)
+        return (sut, client)
+    }
+    
+    private func trackForMemoryLeak(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(instance, "Instance should have been deallocated. Potential memory leak.", file: file, line: line)
+        }
     }
     
     private class HTTPClientSpy: HTTPClient {
