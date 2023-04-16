@@ -7,7 +7,7 @@
 
 import Foundation
 
-class AdoptListCellViewModel<Image> {
+final class AdoptListCellViewModel<Image> {
     typealias Observer<T> = ((T) -> Void)
     
     private let pet: Pet

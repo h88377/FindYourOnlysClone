@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AdoptListCell: UICollectionViewCell {
+final class AdoptListCell: UICollectionViewCell {
     let kindLabel = UILabel()
     let genderLabel = UILabel()
     let cityLabel = UILabel()

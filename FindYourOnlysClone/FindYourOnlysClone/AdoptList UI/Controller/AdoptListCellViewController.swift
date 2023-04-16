@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AdoptListCellViewController {
+final class AdoptListCellViewController {
     private let id = UUID()
     private var cell: AdoptListCell?
     private let viewModel: AdoptListCellViewModel<UIImage>

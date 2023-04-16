@@ -7,7 +7,7 @@
 
 import Foundation
 
-class AdoptListViewModel {
+final class AdoptListViewModel {
     typealias Observer<T> = ((T) -> Void)
     
     private var petLoader: PetLoader

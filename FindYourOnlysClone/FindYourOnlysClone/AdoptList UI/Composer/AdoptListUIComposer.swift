@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AdoptListUIComposer {
+final class AdoptListUIComposer {
     private init() {}
     
     static func adoptListComposedWith(petLoader: PetLoader, imageLoader: PetImageDataLoader) -> AdoptListViewController {

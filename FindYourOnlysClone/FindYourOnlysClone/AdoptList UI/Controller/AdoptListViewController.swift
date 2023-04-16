@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AdoptListViewController: UICollectionViewController {
+final class AdoptListViewController: UICollectionViewController {
     private var petsSection: Int { return 0 }
     
     private lazy var dataSource: UICollectionViewDiffableDataSource<Int, AdoptListCellViewController> = {
