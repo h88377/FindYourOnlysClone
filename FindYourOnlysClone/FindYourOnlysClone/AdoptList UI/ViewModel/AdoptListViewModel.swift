@@ -27,7 +27,7 @@ class AdoptListViewModel {
         loadPets()
     }
     
-    func loadNextPagePets() {
+    func loadNextPage() {
         currentPage += 1
         loadPets()
     }

@@ -90,7 +90,7 @@ extension AdoptListViewController {
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
         if (offsetY > contentHeight - scrollView.frame.height) {
-            viewModel?.loadNextPagePets()
+            viewModel?.loadNextPage()
         }
     }
 }
