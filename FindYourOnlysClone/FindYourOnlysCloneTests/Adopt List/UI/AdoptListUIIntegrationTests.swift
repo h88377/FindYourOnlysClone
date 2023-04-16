@@ -326,12 +326,6 @@ class AdoptListUIIntegrationTests: XCTestCase {
         return (sut, loader)
     }
     
-    private func trackForMemoryLeak(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
-        addTeardownBlock { [weak instance] in
-            XCTAssertNil(instance, "Instance should have been deallocated. Potential memory leak.", file: file, line: line)
-        }
-    }
-    
     private func assertThat(_ sut: AdoptListViewController, isRendering pets: [Pet], file: StaticString = #filePath, line: UInt = #line) {
         guard pets.count == sut.numberOfPets else {
             return XCTFail("Expected \(pets.count), got \(sut.numberOfPets) instead")
