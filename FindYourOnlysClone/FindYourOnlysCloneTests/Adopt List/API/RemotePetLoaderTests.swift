@@ -38,7 +38,7 @@ final class RemotePetLoader {
 
 class RemotePetLoaderTests: XCTestCase {
     
-    func test_init_doesNotRequestDataFromURL() {
+    func test_init_doesNotRequestDataFromRequest() {
         let (_, client) = makeSUT()
         
         XCTAssertTrue(client.receivedURLs.isEmpty)
