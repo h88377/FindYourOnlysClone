@@ -29,11 +29,15 @@ class AdoptListViewController: UICollectionViewController {
         dataSource.apply(snapshot, animatingDifferences: true)
     }
     
-    private var viewModel: AdoptListViewModel?
+    private let viewModel: AdoptListViewModel
     
-    convenience init(viewModel: AdoptListViewModel) {
-        self.init(collectionViewLayout: UICollectionViewLayout())
+    init(viewModel: AdoptListViewModel) {
         self.viewModel = viewModel
+        super.init(collectionViewLayout: UICollectionViewLayout())
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
@@ -47,11 +51,11 @@ class AdoptListViewController: UICollectionViewController {
     }
     
     @objc private func loadPets() {
-        viewModel?.refreshPets()
+        viewModel.refreshPets()
     }
     
     private func binded(refreshView: UIRefreshControl) -> UIRefreshControl {
-        viewModel?.isPetLoadingStateOnChange = { [weak self] isLoading in
+        viewModel.isPetLoadingStateOnChange = { [weak self] isLoading in
             if isLoading {
                 self?.collectionView.refreshControl?.beginRefreshing()
             } else {
@@ -92,7 +96,7 @@ extension AdoptListViewController {
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
         if (offsetY > contentHeight - scrollView.frame.height) {
-            viewModel?.loadNextPage()
+            viewModel.loadNextPage()
         }
     }
 }
