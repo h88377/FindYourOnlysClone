@@ -82,6 +82,22 @@ class RemotePetLoaderTests: XCTestCase {
         })
     }
     
+    func test_loadWithRequest_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
+        let url = anyURL()
+        let client = HTTPClientSpy()
+        var sut: RemotePetLoader? = RemotePetLoader(baseURL: url, client: client)
+        
+        var receivedResult: RemotePetLoader.Result?
+        sut?.load(with: anyRequest()) { result in
+            receivedResult = result
+        }
+        
+        sut = nil
+        client.completesWithError()
+        
+        XCTAssertNil(receivedResult)
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(baseURL: URL = URL(string: "https://any-url.com")!, file: StaticString = #filePath, line: UInt = #line) -> (RemotePetLoader, HTTPClientSpy) {
@@ -114,6 +130,10 @@ class RemotePetLoaderTests: XCTestCase {
     
     private func anyRequest() -> AdoptListRequest {
         return AdoptListRequest(page: 0)
+    }
+    
+    private func anyURL() -> URL {
+        return URL(string: "https://any-url.com")!
     }
     
     private func makePet(id: Int = 0, location: String = "any location", kind: String = "any kind", gender: String = "M", bodyType: String = "any body", color: String = "any color", age: String = "any age", sterilization: String = "NA", bacterin: String = "NA", foundPlace: String = "any place", status: String = "any status", remark: String = "NA", openDate: String = "2023-04-22", closedDate: String = "2023-04-22", updatedDate: String = "2023-04-22", createdDate: String = "2023-04-22", photoURL: URL = URL(string:"https://any-url.com")!, address: String = "any place", telephone: String = "02", variety: String = "any variety", shelterName: String = "any shelter") -> (model: Pet, json: [String: Any]) {
