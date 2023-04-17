@@ -201,10 +201,7 @@ class RemotePetLoaderTests: XCTestCase {
     }
     
     private func makeDate(from dateString: String) -> Date {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        let date = dateFormatter.date(from: dateString)
-        return date!
+        return XCTestCase.YYMMDDDateFormatter.date(from: dateString)!
     }
     
     private class HTTPClientSpy: HTTPClient {
@@ -234,4 +231,12 @@ class RemotePetLoaderTests: XCTestCase {
             receivedMessages[index].completion(.success((data, response)))
         }
     }
+}
+
+private extension XCTestCase {
+    static let YYMMDDDateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        return dateFormatter
+    }()
 }
