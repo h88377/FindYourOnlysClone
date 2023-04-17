@@ -73,6 +73,15 @@ class RemotePetLoaderTests: XCTestCase {
         })
     }
     
+    func test_loadWithRequest_deliversPetsOn200HTTPResponseWithValidJSON() {
+        let (sut, client) = makeSUT()
+        let pet = makePet()
+        
+        expect(sut, toCompleteWith: .success([pet.model]), when: {
+            client.completesWith(statusCode: 200, data: makePetsJSONData([pet.json]))
+        })
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(baseURL: URL = URL(string: "https://any-url.com")!, file: StaticString = #filePath, line: UInt = #line) -> (RemotePetLoader, HTTPClientSpy) {
@@ -105,6 +114,68 @@ class RemotePetLoaderTests: XCTestCase {
     
     private func anyRequest() -> AdoptListRequest {
         return AdoptListRequest(page: 0)
+    }
+    
+    private func makePet(id: Int = 0, location: String = "any location", kind: String = "any kind", gender: String = "M", bodyType: String = "any body", color: String = "any color", age: String = "any age", sterilization: String = "NA", bacterin: String = "NA", foundPlace: String = "any place", status: String = "any status", remark: String = "NA", openDate: String = "2023-04-22", closedDate: String = "2023-04-22", updatedDate: String = "2023-04-22", createdDate: String = "2023-04-22", photoURL: URL = URL(string:"https://any-url.com")!, address: String = "any place", telephone: String = "02", variety: String = "any variety", shelterName: String = "any shelter") -> (model: Pet, json: [String: Any]) {
+        
+        let pet = Pet(
+            id: id,
+            location: location,
+            kind: kind,
+            gender: gender,
+            bodyType: bodyType,
+            color: color,
+            age: age,
+            sterilization: sterilization,
+            bacterin: bacterin,
+            foundPlace: foundPlace,
+            status: status,
+            remark: remark,
+            openDate: makeDate(from: openDate),
+            closedDate: makeDate(from: closedDate),
+            updatedDate: makeDate(from: updatedDate),
+            createdDate: makeDate(from: createdDate),
+            photoURL: photoURL,
+            address: address,
+            telephone: telephone,
+            variety: variety,
+            shelterName: shelterName)
+        
+        let json: [String : Any] = [
+            "animal_id": id,
+            "animal_place": location,
+            "animal_kind": kind,
+            "animal_sex": gender,
+            "animal_bodytype": bodyType,
+            "animal_colour": color,
+            "animal_age": age,
+            "animal_sterilization": sterilization,
+            "animal_bacterin": bacterin,
+            "animal_foundplace": foundPlace,
+            "animal_status": status,
+            "animal_remark": remark,
+            "animal_opendate": openDate,
+            "animal_closeddate": closedDate,
+            "animal_update": updatedDate,
+            "animal_createtime": createdDate,
+            "album_file": photoURL.absoluteString,
+            "shelter_address": address,
+            "shelter_tel": telephone,
+            "animal_Variety": variety,
+            "shelter_name": shelterName
+        ]
+        return (pet, json)
+    }
+    
+    private func makePetsJSONData(_ pets: [[String: Any]]) -> Data {
+        return try! JSONSerialization.data(withJSONObject: pets)
+    }
+    
+    private func makeDate(from dateString: String) -> Date {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let date = dateFormatter.date(from: dateString)
+        return date!
     }
     
     private class HTTPClientSpy: HTTPClient {

@@ -18,6 +18,12 @@ final class RemotePetLoader {
     private let baseURL: URL
     private let client: HTTPClient
     
+    private lazy var formatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter
+    }()
+    
     init(baseURL: URL, client: HTTPClient) {
         self.baseURL = baseURL
         self.client = client
@@ -25,10 +31,15 @@ final class RemotePetLoader {
     
     func load(with request: AdoptListRequest, completion: @escaping (Result) -> Void) {
         let url = enrich(baseURL, with: request)
-        client.dispatch(URLRequest(url: url)) { result in
+        client.dispatch(URLRequest(url: url)) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case let .success((data, response)):
-                guard response.statusCode == 200, let remotePets = try? JSONDecoder().decode([RemotePet].self, from: data) else {
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .formatted(self.formatter)
+                
+                guard response.statusCode == 200, let remotePets = try? decoder.decode([RemotePet].self, from: data) else {
                     return completion(.failure(.invalidData))
                 }
                 
