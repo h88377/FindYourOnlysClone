@@ -33,6 +33,7 @@
 		9891768929ECBB01000002A4 /* RemotePetLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891768829ECBB01000002A4 /* RemotePetLoader.swift */; };
 		9891768B29ECBB4C000002A4 /* RemotePet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891768A29ECBB4C000002A4 /* RemotePet.swift */; };
 		9891768D29ED3BED000002A4 /* PetsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891768C29ED3BED000002A4 /* PetsMapper.swift */; };
+		9891769129ED42A9000002A4 /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891769029ED42A9000002A4 /* URLSessionHTTPClientTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +76,7 @@
 		9891768829ECBB01000002A4 /* RemotePetLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePetLoader.swift; sourceTree = "<group>"; };
 		9891768A29ECBB4C000002A4 /* RemotePet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePet.swift; sourceTree = "<group>"; };
 		9891768C29ED3BED000002A4 /* PetsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetsMapper.swift; sourceTree = "<group>"; };
+		9891769029ED42A9000002A4 /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -235,6 +237,7 @@
 			isa = PBXGroup;
 			children = (
 				9891767E29EC8566000002A4 /* RemotePetLoaderTests.swift */,
+				9891769029ED42A9000002A4 /* URLSessionHTTPClientTests.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -389,6 +392,7 @@
 				9891767F29EC8566000002A4 /* RemotePetLoaderTests.swift in Sources */,
 				9891763429E80212000002A4 /* AdoptListUIIntegrationTests.swift in Sources */,
 				9891768229EC945F000002A4 /* XCTestCase+MemoryLeakTracking.swift in Sources */,
+				9891769129ED42A9000002A4 /* URLSessionHTTPClientTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
