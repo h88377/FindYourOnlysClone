@@ -32,6 +32,7 @@
 		9891768729ECBAE1000002A4 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891768629ECBAE1000002A4 /* HTTPClient.swift */; };
 		9891768929ECBB01000002A4 /* RemotePetLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891768829ECBB01000002A4 /* RemotePetLoader.swift */; };
 		9891768B29ECBB4C000002A4 /* RemotePet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891768A29ECBB4C000002A4 /* RemotePet.swift */; };
+		9891768D29ED3BED000002A4 /* PetsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891768C29ED3BED000002A4 /* PetsMapper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,7 @@
 		9891768629ECBAE1000002A4 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		9891768829ECBB01000002A4 /* RemotePetLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePetLoader.swift; sourceTree = "<group>"; };
 		9891768A29ECBB4C000002A4 /* RemotePet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePet.swift; sourceTree = "<group>"; };
+		9891768C29ED3BED000002A4 /* PetsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetsMapper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -250,6 +252,7 @@
 			children = (
 				9891768629ECBAE1000002A4 /* HTTPClient.swift */,
 				9891768829ECBB01000002A4 /* RemotePetLoader.swift */,
+				9891768C29ED3BED000002A4 /* PetsMapper.swift */,
 				9891768A29ECBB4C000002A4 /* RemotePet.swift */,
 			);
 			path = API;
@@ -358,6 +361,7 @@
 				9891766C29EC0A60000002A4 /* UICollectionView+Extension.swift in Sources */,
 				9891766229E99A20000002A4 /* AdoptListCellViewModel.swift in Sources */,
 				9891762129E80211000002A4 /* ViewController.swift in Sources */,
+				9891768D29ED3BED000002A4 /* PetsMapper.swift in Sources */,
 				9891765029E89B35000002A4 /* AdoptListRequest.swift in Sources */,
 				9891764E29E89B08000002A4 /* Pet.swift in Sources */,
 				9891768929ECBB01000002A4 /* RemotePetLoader.swift in Sources */,
