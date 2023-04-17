@@ -41,7 +41,7 @@ class RemotePetLoaderTests: XCTestCase {
     
     func test_loadWithRequest_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
-        expect(sut, toCompleteWith: .failure(.connectivity), when: {
+        expect(sut, toCompleteWith: failure(.connectivity), when: {
             client.completesWithError()
         })
     }
@@ -51,7 +51,7 @@ class RemotePetLoaderTests: XCTestCase {
         let samples = [199, 201, 300, 400, 500]
         
         for (index, statusCode) in samples.enumerated() {
-            expect(sut, toCompleteWith: .failure(.invalidData), when: {
+            expect(sut, toCompleteWith: failure(.invalidData), when: {
                 client.completesWith(statusCode: statusCode, at: index)
             })
         }
@@ -59,7 +59,7 @@ class RemotePetLoaderTests: XCTestCase {
     
     func test_loadWithRequest_deliversErrorOn200HTTPResponseWithInvalidData() {
         let (sut, client) = makeSUT()
-        expect(sut, toCompleteWith: .failure(.invalidData), when: {
+        expect(sut, toCompleteWith: failure(.invalidData), when: {
             let invalidData = Data("invalid data".utf8)
             client.completesWith(statusCode: 200, data: invalidData)
         })
@@ -123,7 +123,7 @@ class RemotePetLoaderTests: XCTestCase {
                 XCTAssertEqual(receivedPets, expectedPets, "Expected pets: \(expectedPets), got \(receivedPets) instead", file: file, line: line)
                 
             case let (.failure(receivedError), .failure(expectedError)):
-                XCTAssertEqual(receivedError, expectedError, "Expected error: \(expectedError), got \(receivedError) instead", file: file, line: line)
+                XCTAssertEqual(receivedError as? RemotePetLoader.Error, expectedError as? RemotePetLoader.Error, "Expected error: \(expectedError), got \(receivedError) instead", file: file, line: line)
                 
             default:
                 XCTFail("Expected result \(expectedResult), got \(receivedResult) instead", file: file, line: line)
@@ -135,6 +135,10 @@ class RemotePetLoaderTests: XCTestCase {
         action()
         
         wait(for: [exp], timeout: 1.0)
+    }
+    
+    private func failure(_ error: RemotePetLoader.Error) -> RemotePetLoader.Result {
+        return .failure(error)
     }
     
     private func anyRequest() -> AdoptListRequest {

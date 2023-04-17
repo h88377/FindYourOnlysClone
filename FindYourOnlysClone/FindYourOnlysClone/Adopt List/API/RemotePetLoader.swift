@@ -8,7 +8,7 @@
 import Foundation
 
 final class RemotePetLoader {
-    typealias Result = Swift.Result<[Pet], Error>
+    typealias Result = PetLoader.Result
     
     enum Error: Swift.Error {
         case connectivity
@@ -33,7 +33,7 @@ final class RemotePetLoader {
                 completion(RemotePetLoader.map(with: data, response))
                 
             case .failure:
-                completion(.failure(.connectivity))
+                completion(.failure(RemotePetLoader.Error.connectivity))
             }
         }
     }
@@ -54,7 +54,7 @@ final class RemotePetLoader {
             let remotePets = try PetsMapper.map(with: data, response)
             return .success(remotePets.toModels())
         } catch {
-            return .failure(.invalidData)
+            return .failure(error)
         }
     }
 }
