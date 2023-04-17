@@ -68,7 +68,7 @@ class RemotePetLoaderTests: XCTestCase {
     func test_loadWithRequest_deliversEmptyResultOn200HTTPResponseWithEmptyJSON() {
         let (sut, client) = makeSUT()
         expect(sut, toCompleteWith: .success([]), when: {
-            let emptyData = try! JSONSerialization.data(withJSONObject: [])
+            let emptyData = makePetsJSONData([])
             client.completesWith(statusCode: 200, data: emptyData)
         })
     }
