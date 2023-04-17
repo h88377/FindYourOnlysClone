@@ -118,7 +118,16 @@ class RemotePetLoaderTests: XCTestCase {
         let exp = expectation(description: "Wait for completion")
         
         sut.load(with: anyRequest()) { receivedResult in
-            XCTAssertEqual(receivedResult, expectedResult, "Expected \(expectedResult), got \(receivedResult) instead", file: file, line: line)
+            switch (receivedResult, expectedResult) {
+            case let (.success(receivedPets), .success(expectedPets)):
+                XCTAssertEqual(receivedPets, expectedPets, "Expected pets: \(expectedPets), got \(receivedPets) instead", file: file, line: line)
+                
+            case let (.failure(receivedError), .failure(expectedError)):
+                XCTAssertEqual(receivedError, expectedError, "Expected error: \(expectedError), got \(receivedError) instead", file: file, line: line)
+                
+            default:
+                XCTFail("Expected result \(expectedResult), got \(receivedResult) instead", file: file, line: line)
+            }
             
             exp.fulfill()
         }
