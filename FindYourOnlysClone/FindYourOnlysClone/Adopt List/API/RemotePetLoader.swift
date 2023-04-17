@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class RemotePetLoader {
+final class RemotePetLoader: PetLoader {
     typealias Result = PetLoader.Result
     
     enum Error: Swift.Error {
