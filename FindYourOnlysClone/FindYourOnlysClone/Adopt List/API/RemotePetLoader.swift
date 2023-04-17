@@ -18,12 +18,6 @@ final class RemotePetLoader {
     private let baseURL: URL
     private let client: HTTPClient
     
-    private lazy var formatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        return formatter
-    }()
-    
     init(baseURL: URL, client: HTTPClient) {
         self.baseURL = baseURL
         self.client = client
@@ -32,18 +26,11 @@ final class RemotePetLoader {
     func load(with request: AdoptListRequest, completion: @escaping (Result) -> Void) {
         let url = enrich(baseURL, with: request)
         client.dispatch(URLRequest(url: url)) { [weak self] result in
-            guard let self = self else { return }
+            guard self != nil else { return }
             
             switch result {
             case let .success((data, response)):
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .formatted(self.formatter)
-                
-                guard response.statusCode == 200, let remotePets = try? decoder.decode([RemotePet].self, from: data) else {
-                    return completion(.failure(.invalidData))
-                }
-                
-                completion(.success(remotePets.toModels()))
+                completion(RemotePetLoader.map(with: data, response))
                 
             case .failure:
                 completion(.failure(.connectivity))
@@ -60,6 +47,38 @@ final class RemotePetLoader {
         ]
         
         return component?.url ?? baseURL
+    }
+    
+    private static func map(with data: Data, _ response: HTTPURLResponse) -> Result {
+        do {
+            let remotePets = try PetsMapper.map(with: data, response)
+            return .success(remotePets.toModels())
+        } catch {
+            return .failure(.invalidData)
+        }
+    }
+}
+
+private final class PetsMapper {
+    private init() {}
+    
+    private static var OK_200: Int { return 200 }
+    
+    private static let formatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter
+    }()
+    
+    static func map(with data: Data, _ response: HTTPURLResponse) throws -> [RemotePet] {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .formatted(formatter)
+        
+        guard response.statusCode == OK_200, let remotePets = try? decoder.decode([RemotePet].self, from: data) else {
+            throw RemotePetLoader.Error.invalidData
+        }
+        
+        return remotePets
     }
 }
 
