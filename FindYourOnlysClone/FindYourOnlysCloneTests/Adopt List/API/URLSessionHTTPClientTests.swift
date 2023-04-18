@@ -8,7 +8,7 @@
 import XCTest
 @testable import FindYourOnlysClone
 
-final class URLSessionHTTPClient {
+final class URLSessionHTTPClient: HTTPClient {
     typealias Result = HTTPClient.Result
     
     private let session: URLSession
@@ -117,7 +117,7 @@ class URLSessionHTTPClientTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> URLSessionHTTPClient {
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> HTTPClient {
         let sut = URLSessionHTTPClient()
         trackForMemoryLeak(sut, file: file, line: line)
         return sut
