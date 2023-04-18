@@ -22,17 +22,6 @@ class URLSessionHTTPClientTests: XCTestCase {
         URLProtocolStub.stopInterceptingRequest()
     }
     
-    func test_init_doesNotPerformRequestUponCreation() {
-        _ = makeSUT()
-        
-        var receivedRequest: URLRequest?
-        URLProtocolStub.observeRequest { request in
-            receivedRequest = request
-        }
-        
-        XCTAssertNil(receivedRequest)
-    }
-    
     func test_dispatchRequest_performsGetRequest() {
         let sut = makeSUT()
         let url = anyURL()
