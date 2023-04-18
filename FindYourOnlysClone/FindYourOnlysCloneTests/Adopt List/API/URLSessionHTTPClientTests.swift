@@ -43,7 +43,12 @@ class URLSessionHTTPClientTests: XCTestCase {
     func test_init_doesNotPerformRequestUponCreation() {
         _ = makeSUT()
         
-        XCTAssertEqual(URLProtocolStub.receivedURLs, [])
+        var receivedRequest: URLRequest?
+        URLProtocolStub.observeRequest { request in
+            receivedRequest = request
+        }
+        
+        XCTAssertNil(receivedRequest)
     }
     
     func test_dispatchRequest_failsOnRequestError() {
@@ -85,10 +90,14 @@ class URLSessionHTTPClientTests: XCTestCase {
             let error: Error?
         }
         
-        private(set) static var receivedURLs = [URL]()
+        private static var requestObserverHandler: ((URLRequest) -> Void)?
         
         private static var stub: Stub?
 
+        static func observeRequest(_ observer: @escaping (URLRequest) -> Void) {
+            requestObserverHandler = observer
+        }
+        
         static func stub(url: URL, data: Data?, response: URLResponse?, error: Error?) {
             stub = Stub(data: data, response: response, error: error)
         }
@@ -98,12 +107,13 @@ class URLSessionHTTPClientTests: XCTestCase {
         }
         
         static func stopInterceptingRequest() {
-            receivedURLs = []
             stub = nil
+            requestObserverHandler = nil
             URLProtocol.unregisterClass(URLProtocolStub.self)
         }
         
         override class func canInit(with request: URLRequest) -> Bool {
+            requestObserverHandler?(request)
             return true
         }
         
