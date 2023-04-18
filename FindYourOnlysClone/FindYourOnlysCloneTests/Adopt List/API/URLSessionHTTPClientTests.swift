@@ -18,10 +18,13 @@ final class URLSessionHTTPClient {
     }
     
     func dispatch(_ request: URLRequest, completion: @escaping (Result) -> Void) {
-        session.dataTask(with: request) { _, _, error in
-            if let error = error {
+        session.dataTask(with: request) { data, response, error in
+            if let data = data, let response = response as? HTTPURLResponse {
+                completion(.success((data, response)))
+            } else if let error = error {
                 completion(.failure(error))
             }
+            
         }.resume()
     }
 }
@@ -90,6 +93,25 @@ class URLSessionHTTPClientTests: XCTestCase {
         
         XCTAssertEqual((receivedError! as NSError).domain, error.domain)
         XCTAssertEqual((receivedError! as NSError).code, error.code)
+    }
+    
+    func test_dispatchRequest_failsOnCompletionWithDataAndErrorValueButWithOutReponse() {
+        let request = anyURLRequest()
+        let sut = makeSUT()
+        let exp = expectation(description: "Wait for completion")
+         
+        URLProtocolStub.stub(url: request.url!, data: Data(), response: nil, error: anyNSError())
+        sut.dispatch(request) { result in
+            switch result {
+            case .failure:
+                break
+            
+            default:
+                XCTFail("Expected failure, got \(result) instead")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
     }
     
     // MARK: - Helpers
