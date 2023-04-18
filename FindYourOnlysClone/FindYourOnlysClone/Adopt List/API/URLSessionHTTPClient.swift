@@ -8,8 +8,6 @@
 import Foundation
 
 final class URLSessionHTTPClient: HTTPClient {
-    typealias Result = HTTPClient.Result
-    
     private let session: URLSession
     
     init(session: URLSession = .shared) {
@@ -18,7 +16,7 @@ final class URLSessionHTTPClient: HTTPClient {
     
     private struct UnexpectedCompletionError: Error {}
     
-    func dispatch(_ request: URLRequest, completion: @escaping (Result) -> Void) {
+    func dispatch(_ request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
         session.dataTask(with: request) { data, response, error in
             if let data = data, let response = response as? HTTPURLResponse {
                 completion(.success((data, response)))
