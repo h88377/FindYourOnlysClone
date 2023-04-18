@@ -50,6 +50,17 @@
                ReferencedContainer = "container:FindYourOnlysClone.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            testExecutionOrdering = "random">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "989176A429EE9E94000002A4"
+               BuildableName = "FindYourOnlysCloneAPIEndToEndTests.xctest"
+               BlueprintName = "FindYourOnlysCloneAPIEndToEndTests"
+               ReferencedContainer = "container:FindYourOnlysClone.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
