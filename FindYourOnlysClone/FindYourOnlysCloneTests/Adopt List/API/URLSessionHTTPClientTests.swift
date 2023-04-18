@@ -21,7 +21,7 @@ final class URLSessionHTTPClient {
     
     func dispatch(_ request: URLRequest, completion: @escaping (Result) -> Void) {
         session.dataTask(with: request) { data, response, error in
-            if let data = data, data.count > 0, let response = response as? HTTPURLResponse {
+            if let data = data, let response = response as? HTTPURLResponse {
                 completion(.success((data, response)))
             } else if let error = error {
                 completion(.failure(error))
@@ -93,7 +93,16 @@ class URLSessionHTTPClientTests: XCTestCase {
         XCTAssertNotNil(resultErrorFor(data: anyData(), response: anyURLResponse(), error: anyNSError()))
         XCTAssertNotNil(resultErrorFor(data: anyData(), response: anyHTTPURLResponse(), error: anyNSError()))
         XCTAssertNotNil(resultErrorFor(data: anyData(), response: anyURLResponse(), error: nil))
-        XCTAssertNotNil(resultErrorFor(data: nil, response: anyHTTPURLResponse(), error: nil))
+    }
+    
+    func test_dispatchRequest_succeedsOnEmptyDataWithHTTPURLResponseWithNilError() {
+        let emptyData = Data()
+        let response = anyHTTPURLResponse()
+        let receivedValues = resultValuesFor(data: emptyData, response: response, error: nil)
+        
+        XCTAssertEqual(receivedValues?.data, emptyData)
+        XCTAssertEqual(receivedValues?.response.url, response.url)
+        XCTAssertEqual(receivedValues?.response.statusCode, response.statusCode)
     }
     
     // MARK: - Helpers
@@ -102,6 +111,28 @@ class URLSessionHTTPClientTests: XCTestCase {
         let sut = URLSessionHTTPClient()
         trackForMemoryLeak(sut, file: file, line: line)
         return sut
+    }
+    
+    private func resultValuesFor(data: Data?, response: URLResponse?, error: Error?, file: StaticString = #filePath, line: UInt = #line) -> (data: Data, response: HTTPURLResponse)? {
+        let request = anyURLRequest()
+        let exp = expectation(description: "Wait for completion")
+         
+        URLProtocolStub.stub(data: data, response: response, error: error)
+        var receivedValues: (data: Data, response: HTTPURLResponse)?
+        makeSUT(file: file, line: line).dispatch(request) { result in
+            switch result {
+            case let .success((data, response)):
+                receivedValues = (data, response)
+                
+            default:
+                XCTFail("Expected success, got \(result) instead", file: file, line: line)
+            }
+            
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+        
+        return receivedValues
     }
     
     private func resultErrorFor(data: Data?, response: URLResponse?, error: Error?, file: StaticString = #filePath, line: UInt = #line) -> Error? {
