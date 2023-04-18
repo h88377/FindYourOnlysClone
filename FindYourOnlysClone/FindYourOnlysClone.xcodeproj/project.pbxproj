@@ -35,10 +35,18 @@
 		9891768D29ED3BED000002A4 /* PetsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891768C29ED3BED000002A4 /* PetsMapper.swift */; };
 		9891769129ED42A9000002A4 /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891769029ED42A9000002A4 /* URLSessionHTTPClientTests.swift */; };
 		9891769329EE84B4000002A4 /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891769229EE84B4000002A4 /* URLSessionHTTPClient.swift */; };
+		989176A829EE9E94000002A4 /* FindYourOnlysCloneAPIEndToEndTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176A729EE9E94000002A4 /* FindYourOnlysCloneAPIEndToEndTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		9891763029E80212000002A4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9891761129E80211000002A4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9891761829E80211000002A4;
+			remoteInfo = FindYourOnlysClone;
+		};
+		989176A929EE9E94000002A4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9891761129E80211000002A4 /* Project object */;
 			proxyType = 1;
@@ -79,6 +87,8 @@
 		9891768C29ED3BED000002A4 /* PetsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetsMapper.swift; sourceTree = "<group>"; };
 		9891769029ED42A9000002A4 /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
 		9891769229EE84B4000002A4 /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
+		989176A529EE9E94000002A4 /* FindYourOnlysCloneAPIEndToEndTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FindYourOnlysCloneAPIEndToEndTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		989176A729EE9E94000002A4 /* FindYourOnlysCloneAPIEndToEndTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindYourOnlysCloneAPIEndToEndTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +106,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		989176A229EE9E94000002A4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -104,6 +121,7 @@
 			children = (
 				9891761B29E80211000002A4 /* FindYourOnlysClone */,
 				9891763229E80212000002A4 /* FindYourOnlysCloneTests */,
+				989176A629EE9E94000002A4 /* FindYourOnlysCloneAPIEndToEndTests */,
 				9891761A29E80211000002A4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -113,6 +131,7 @@
 			children = (
 				9891761929E80211000002A4 /* FindYourOnlysClone.app */,
 				9891762F29E80212000002A4 /* FindYourOnlysCloneTests.xctest */,
+				989176A529EE9E94000002A4 /* FindYourOnlysCloneAPIEndToEndTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -264,6 +283,14 @@
 			path = API;
 			sourceTree = "<group>";
 		};
+		989176A629EE9E94000002A4 /* FindYourOnlysCloneAPIEndToEndTests */ = {
+			isa = PBXGroup;
+			children = (
+				989176A729EE9E94000002A4 /* FindYourOnlysCloneAPIEndToEndTests.swift */,
+			);
+			path = FindYourOnlysCloneAPIEndToEndTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -302,6 +329,24 @@
 			productReference = 9891762F29E80212000002A4 /* FindYourOnlysCloneTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		989176A429EE9E94000002A4 /* FindYourOnlysCloneAPIEndToEndTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 989176AD29EE9E94000002A4 /* Build configuration list for PBXNativeTarget "FindYourOnlysCloneAPIEndToEndTests" */;
+			buildPhases = (
+				989176A129EE9E94000002A4 /* Sources */,
+				989176A229EE9E94000002A4 /* Frameworks */,
+				989176A329EE9E94000002A4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				989176AA29EE9E94000002A4 /* PBXTargetDependency */,
+			);
+			name = FindYourOnlysCloneAPIEndToEndTests;
+			productName = FindYourOnlysCloneAPIEndToEndTests;
+			productReference = 989176A529EE9E94000002A4 /* FindYourOnlysCloneAPIEndToEndTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -316,6 +361,10 @@
 						CreatedOnToolsVersion = 14.2;
 					};
 					9891762E29E80212000002A4 = {
+						CreatedOnToolsVersion = 14.2;
+						TestTargetID = 9891761829E80211000002A4;
+					};
+					989176A429EE9E94000002A4 = {
 						CreatedOnToolsVersion = 14.2;
 						TestTargetID = 9891761829E80211000002A4;
 					};
@@ -336,6 +385,7 @@
 			targets = (
 				9891761829E80211000002A4 /* FindYourOnlysClone */,
 				9891762E29E80212000002A4 /* FindYourOnlysCloneTests */,
+				989176A429EE9E94000002A4 /* FindYourOnlysCloneAPIEndToEndTests */,
 			);
 		};
 /* End PBXProject section */
@@ -351,6 +401,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		9891762D29E80212000002A4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		989176A329EE9E94000002A4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -400,6 +457,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		989176A129EE9E94000002A4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				989176A829EE9E94000002A4 /* FindYourOnlysCloneAPIEndToEndTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -407,6 +472,11 @@
 			isa = PBXTargetDependency;
 			target = 9891761829E80211000002A4 /* FindYourOnlysClone */;
 			targetProxy = 9891763029E80212000002A4 /* PBXContainerItemProxy */;
+		};
+		989176AA29EE9E94000002A4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9891761829E80211000002A4 /* FindYourOnlysClone */;
+			targetProxy = 989176A929EE9E94000002A4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -630,6 +700,44 @@
 			};
 			name = Release;
 		};
+		989176AB29EE9E94000002A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6D8CRTN6K7;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.waynecheng.FindYourOnlysCloneAPIEndToEndTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FindYourOnlysClone.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FindYourOnlysClone";
+			};
+			name = Debug;
+		};
+		989176AC29EE9E94000002A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6D8CRTN6K7;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.waynecheng.FindYourOnlysCloneAPIEndToEndTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FindYourOnlysClone.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FindYourOnlysClone";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -656,6 +764,15 @@
 			buildConfigurations = (
 				9891764729E80212000002A4 /* Debug */,
 				9891764829E80212000002A4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		989176AD29EE9E94000002A4 /* Build configuration list for PBXNativeTarget "FindYourOnlysCloneAPIEndToEndTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				989176AB29EE9E94000002A4 /* Debug */,
+				989176AC29EE9E94000002A4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
