@@ -69,8 +69,8 @@ class URLSessionHTTPClientTests: XCTestCase {
     }
     
     func test_dispatchRequest_failsOnRequestError() {
-        let request = URLRequest(url: URL(string: "https://any-url.com")!)
-        let error = NSError(domain: "any error", code: 0)
+        let request = anyURLRequest()
+        let error = anyNSError()
         let sut = makeSUT()
         let exp = expectation(description: "Wait for completion")
          
@@ -100,8 +100,16 @@ class URLSessionHTTPClientTests: XCTestCase {
         return sut
     }
     
+    private func anyURLRequest(from url: URL = URL(string: "https://any-url.com")!) -> URLRequest {
+        return URLRequest(url: url)
+    }
+    
     private func anyURL() -> URL {
         return URL(string: "https://any-url.com")!
+    }
+    
+    private func anyNSError() -> NSError {
+        return NSError(domain: "any error", code: 0)
     }
     
     private class URLProtocolStub: URLProtocol {
