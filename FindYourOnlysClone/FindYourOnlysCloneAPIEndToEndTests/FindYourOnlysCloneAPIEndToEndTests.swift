@@ -27,6 +27,6 @@ final class FindYourOnlysCloneAPIEndToEndTests: XCTestCase {
             exp.fulfill()
         }
         
-        wait(for: [exp], timeout: 3.0)
+        wait(for: [exp], timeout: 5.0)
     }
 }
