@@ -34,6 +34,7 @@
 		9891768B29ECBB4C000002A4 /* RemotePet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891768A29ECBB4C000002A4 /* RemotePet.swift */; };
 		9891768D29ED3BED000002A4 /* PetsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891768C29ED3BED000002A4 /* PetsMapper.swift */; };
 		9891769129ED42A9000002A4 /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891769029ED42A9000002A4 /* URLSessionHTTPClientTests.swift */; };
+		9891769329EE84B4000002A4 /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891769229EE84B4000002A4 /* URLSessionHTTPClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,7 @@
 		9891768A29ECBB4C000002A4 /* RemotePet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePet.swift; sourceTree = "<group>"; };
 		9891768C29ED3BED000002A4 /* PetsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetsMapper.swift; sourceTree = "<group>"; };
 		9891769029ED42A9000002A4 /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
+		9891769229EE84B4000002A4 /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -254,6 +256,7 @@
 			isa = PBXGroup;
 			children = (
 				9891768629ECBAE1000002A4 /* HTTPClient.swift */,
+				9891769229EE84B4000002A4 /* URLSessionHTTPClient.swift */,
 				9891768829ECBB01000002A4 /* RemotePetLoader.swift */,
 				9891768C29ED3BED000002A4 /* PetsMapper.swift */,
 				9891768A29ECBB4C000002A4 /* RemotePet.swift */,
@@ -378,6 +381,7 @@
 				9891766E29EC0AB0000002A4 /* UICollectionViewCell+Extension.swift in Sources */,
 				9891765C29E90FB2000002A4 /* UIView+Extension.swift in Sources */,
 				9891768B29ECBB4C000002A4 /* RemotePet.swift in Sources */,
+				9891769329EE84B4000002A4 /* URLSessionHTTPClient.swift in Sources */,
 				9891768729ECBAE1000002A4 /* HTTPClient.swift in Sources */,
 				9891761F29E80211000002A4 /* SceneDelegate.swift in Sources */,
 				9891766A29E99C13000002A4 /* AdoptListUIComposer.swift in Sources */,
