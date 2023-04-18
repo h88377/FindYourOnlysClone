@@ -77,7 +77,7 @@ class URLSessionHTTPClientTests: XCTestCase {
         let sut = makeSUT()
         let exp = expectation(description: "Wait for completion")
          
-        URLProtocolStub.stub(url: request.url!, data: nil, response: nil, error: error)
+        URLProtocolStub.stub(data: nil, response: nil, error: error)
         var receivedError: Error?
         sut.dispatch(request) { result in
             switch result {
@@ -100,7 +100,7 @@ class URLSessionHTTPClientTests: XCTestCase {
         let sut = makeSUT()
         let exp = expectation(description: "Wait for completion")
          
-        URLProtocolStub.stub(url: request.url!, data: Data(), response: nil, error: anyNSError())
+        URLProtocolStub.stub(data: Data(), response: nil, error: anyNSError())
         sut.dispatch(request) { result in
             switch result {
             case .failure:
@@ -149,7 +149,7 @@ class URLSessionHTTPClientTests: XCTestCase {
             requestObserverHandler = observer
         }
         
-        static func stub(url: URL, data: Data?, response: URLResponse?, error: Error?) {
+        static func stub(data: Data?, response: URLResponse?, error: Error?) {
             stub = Stub(data: data, response: response, error: error)
         }
         
