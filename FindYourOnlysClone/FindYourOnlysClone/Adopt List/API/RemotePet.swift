@@ -20,10 +20,10 @@ struct RemotePet: Decodable {
     let foundPlace: String
     let status: String
     let remark: String
-    let openDate: Date
-    let closedDate: Date
-    let updatedDate: Date
-    let createdDate: Date
+    let openDate: String
+    let closedDate: String
+    let updatedDate: String
+    let createdDate: String
     let photoURL: URL
     let address: String
     let telephone: String

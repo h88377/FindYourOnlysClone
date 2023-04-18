@@ -164,10 +164,10 @@ class RemotePetLoaderTests: XCTestCase {
             foundPlace: foundPlace,
             status: status,
             remark: remark,
-            openDate: makeDate(from: openDate),
-            closedDate: makeDate(from: closedDate),
-            updatedDate: makeDate(from: updatedDate),
-            createdDate: makeDate(from: createdDate),
+            openDate: openDate,
+            closedDate: closedDate,
+            updatedDate: updatedDate,
+            createdDate: createdDate,
             photoURL: photoURL,
             address: address,
             telephone: telephone,
@@ -204,10 +204,6 @@ class RemotePetLoaderTests: XCTestCase {
         return try! JSONSerialization.data(withJSONObject: pets)
     }
     
-    private func makeDate(from dateString: String) -> Date {
-        return XCTestCase.YYMMDDDateFormatter.date(from: dateString)!
-    }
-    
     private class HTTPClientSpy: HTTPClient {
         typealias RequestCompletion = (HTTPClient.Result) -> Void
         
@@ -235,12 +231,4 @@ class RemotePetLoaderTests: XCTestCase {
             receivedMessages[index].completion(.success((data, response)))
         }
     }
-}
-
-private extension XCTestCase {
-    static let YYMMDDDateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        return dateFormatter
-    }()
 }
