@@ -19,35 +19,48 @@ final class RemotePetImageDataLoader {
         self.client = client
     }
     
-    private struct RemotePetImageDataLoaderTask: PetImageDataLoaderTask {
-        private let task: HTTPClientTask
+    private final class RemotePetImageDataLoaderTask: PetImageDataLoaderTask {
+        private var completion: ((PetImageDataLoader.Result) -> Void)?
+        var clientTask: HTTPClientTask?
         
-        init(wrapped task: HTTPClientTask) {
-            self.task = task
+        init(_ completion: @escaping (PetImageDataLoader.Result) -> Void) {
+            self.completion = completion
+        }
+        
+        func complete(_ result: PetImageDataLoader.Result) {
+            completion?(result)
         }
         
         func cancel() {
-            task.cancel()
+            preventFurtherCompletions()
+            clientTask?.cancel()
+        }
+        
+        private func preventFurtherCompletions() {
+            completion = nil
         }
     }
     
     @discardableResult
     func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) -> PetImageDataLoaderTask {
-        return RemotePetImageDataLoaderTask(wrapped: client.dispatch(URLRequest(url: url)) { [weak self] result in
+        let loaderTask = RemotePetImageDataLoaderTask(completion)
+        loaderTask.clientTask = client.dispatch(URLRequest(url: url)) { [weak self] result in
             guard self != nil else { return }
             
             switch result {
             case let .success((data, response)):
                 guard response.statusCode == 200, !data.isEmpty else {
-                    return completion(.failure(RemotePetImageDataLoader.Error.invalidData))
+                    return loaderTask.complete(.failure(Error.invalidData))
                 }
                 
-                completion(.success(data))
+                loaderTask.complete(.success(data))
                 
             case let .failure(error):
-                completion(.failure(error))
+                loaderTask.complete(.failure(error))
             }
-        })
+        }
+        
+        return loaderTask
     }
 }
 
@@ -126,6 +139,21 @@ class RemotePetImageDataLoaderTests: XCTestCase {
         XCTAssertEqual(client.cancelledURLs, [url], "Expected cancelled URL after task is cancelled")
     }
     
+    func test_loadImageData_doesNotDeliversResultsAfterTasksAreCancelled() {
+        let nonEmptyData = Data("non-empty data".utf8)
+        let (sut, client) = makeSUT()
+        
+        var receivedResults = [PetImageDataLoader.Result]()
+        let task = sut.loadImageData(from: anyURL()) { receivedResults.append($0) }
+        task.cancel()
+        
+        client.completesWith(error: anyNSError())
+        client.completesWith(statusCode: 200, data: nonEmptyData)
+        client.completesWith(statusCode: 404, data: anyData())
+        
+        XCTAssertTrue(receivedResults.isEmpty)
+    }
+    
     func test_loadImageData_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
         let client = HTTPClientSpy()
         var sut: RemotePetImageDataLoader? = RemotePetImageDataLoader(client: client)
@@ -179,6 +207,10 @@ class RemotePetImageDataLoaderTests: XCTestCase {
     
     private func failure(_ error: RemotePetImageDataLoader.Error) -> PetImageDataLoader.Result {
         return .failure(error)
+    }
+    
+    private func anyData() -> Data {
+        return Data("anyData".utf8)
     }
     
     private class HTTPClientSpy: HTTPClient {
