@@ -24,7 +24,7 @@ struct Pet: Hashable {
     let closedDate: String
     let updatedDate: String
     let createdDate: String
-    let photoURL: URL
+    let photoURL: URL?
     let address: String
     let telephone: String
     let variety: String

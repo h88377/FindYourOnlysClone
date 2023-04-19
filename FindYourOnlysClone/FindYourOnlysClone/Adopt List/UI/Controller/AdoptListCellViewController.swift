@@ -22,6 +22,7 @@ final class AdoptListCellViewController {
         cell?.genderLabel.text = viewModel.genderText
         cell?.cityLabel.text = viewModel.cityText
         cell?.kindLabel.text = viewModel.kindText
+        cell?.retryButton.isHidden = true
         cell?.retryImageLoadHandler = viewModel.loadPetImageData
         
         viewModel.isPetImageLoadingStateOnChange = { [weak cell] isLoading in
