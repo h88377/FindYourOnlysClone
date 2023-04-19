@@ -16,26 +16,43 @@ final class RemotePetImageDataLoader {
     }
     
     func loadImageData(from url: URL) {
-        
+        client.dispatch(URLRequest(url: url)) { _ in
+            
+        }
     }
 }
 
 class RemotePetImageDataLoaderTests: XCTestCase {
     
     func test_init_doesNotRequestImageDataFromURL() {
-        let client = HTTPClientSpy()
-        _ = RemotePetImageDataLoader(client: client)
+        let (_, client) = makeSUT()
         
         XCTAssertEqual(client.receivedURLs, [])
     }
     
+    func test_loadImageData_requestsImageDataFromURL() {
+        let url = URL(string: "https://any-url.com")!
+        let (sut, client) = makeSUT()
+        
+        sut.loadImageData(from: url)
+        XCTAssertEqual(client.receivedURLs, [url])
+    }
+    
     // MARK: - Helpers
+    
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (RemotePetImageDataLoader, HTTPClientSpy) {
+        let client = HTTPClientSpy()
+        let sut = RemotePetImageDataLoader(client: client)
+        trackForMemoryLeak(client, file: file, line: line)
+        trackForMemoryLeak(sut, file: file, line: line)
+        return (sut, client)
+    }
     
     private class HTTPClientSpy: HTTPClient {
         private(set) var receivedURLs = [URL]()
         
         func dispatch(_ request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
-            
+            receivedURLs.append(request.url!)
         }
         
     }
