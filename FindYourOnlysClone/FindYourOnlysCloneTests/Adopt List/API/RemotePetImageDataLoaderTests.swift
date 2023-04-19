@@ -27,6 +27,8 @@ final class RemotePetImageDataLoader {
                     return completion(.failure(RemotePetImageDataLoader.Error.invalidData))
                 }
                 
+                completion(.success(data))
+                
             case let .failure(error):
                 completion(.failure(error))
             }
@@ -89,6 +91,15 @@ class RemotePetImageDataLoaderTests: XCTestCase {
         })
     }
     
+    func test_loadImageData_deliversReceivedNonEmptyDAtaOn200HTTPURLResponse() {
+        let (sut, client) = makeSUT()
+        let nonEmptyata = Data("non-empty data".utf8)
+        
+        expect(sut, toComplete: .success(nonEmptyata), when: {
+            client.completesWith(statusCode: 200, data: nonEmptyata)
+        })
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (RemotePetImageDataLoader, HTTPClientSpy) {
@@ -104,6 +115,9 @@ class RemotePetImageDataLoaderTests: XCTestCase {
         
         sut.loadImageData(from: anyURL()) { receivedResult in
             switch (receivedResult, expectedResult) {
+            case let (.success(receivedData), .success(expectedData)):
+                XCTAssertEqual(receivedData, expectedData, file: file, line: line)
+                
             case let (.failure(receivedError as NSError), .failure(expectedError as NSError)):
                 XCTAssertEqual(receivedError.domain, expectedError.domain, file: file, line: line)
                 XCTAssertEqual(receivedError.code, expectedError.code, file: file, line: line)
