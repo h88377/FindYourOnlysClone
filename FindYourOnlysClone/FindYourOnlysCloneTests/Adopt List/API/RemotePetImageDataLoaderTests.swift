@@ -63,45 +63,18 @@ class RemotePetImageDataLoaderTests: XCTestCase {
     func test_loadImageData_deliversErrorOnClientError() {
         let clientError = anyNSError()
         let (sut, client) = makeSUT()
-        let exp = expectation(description: "Wait for completion")
         
-        var receivedError: Error?
-        sut.loadImageData(from: anyURL()) { result in
-            switch result {
-            case let .failure(error):
-                receivedError = error
-            default:
-                XCTFail("Expected failure, got \(result) instead")
-            }
-            exp.fulfill()
-        }
-        
-        client.completesWith(error: clientError)
-        wait(for: [exp], timeout: 1.0)
-        
-        XCTAssertEqual((receivedError! as NSError).domain, clientError.domain)
-        XCTAssertEqual((receivedError! as NSError).code, clientError.code)
+        expect(sut, toComplete: .failure(clientError), when: {
+            client.completesWith(error: clientError)
+        })
     }
     
     func test_loadImageData_deliversInvalidDataErrorOnNon200HTTPURLResponse() {
         let (sut, client) = makeSUT()
-        let exp = expectation(description: "Wait for completion")
         
-        var receivedError: RemotePetImageDataLoader.Error?
-        sut.loadImageData(from: anyURL()) { result in
-            switch result {
-            case let .failure(error as RemotePetImageDataLoader.Error):
-                receivedError = error
-            default:
-                XCTFail("Expected failure, got \(result) instead")
-            }
-            exp.fulfill()
-        }
-        
-        client.completesWith(statusCode: 299)
-        wait(for: [exp], timeout: 1.0)
-        
-        XCTAssertEqual(receivedError, .invalidData)
+        expect(sut, toComplete: .failure(RemotePetImageDataLoader.Error.invalidData), when: {
+            client.completesWith(statusCode: 299)
+        })
     }
     
     // MARK: - Helpers
@@ -112,6 +85,29 @@ class RemotePetImageDataLoaderTests: XCTestCase {
         trackForMemoryLeak(client, file: file, line: line)
         trackForMemoryLeak(sut, file: file, line: line)
         return (sut, client)
+    }
+    
+    private func expect(_ sut: RemotePetImageDataLoader, toComplete expectedResult: PetImageDataLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
+        let exp = expectation(description: "Wait for completion")
+        
+        sut.loadImageData(from: anyURL()) { receivedResult in
+            switch (receivedResult, expectedResult) {
+            case let (.failure(receivedError as NSError), .failure(expectedError as NSError)):
+                XCTAssertEqual(receivedError.domain, expectedError.domain, file: file, line: line)
+                XCTAssertEqual(receivedError.code, expectedError.code, file: file, line: line)
+                
+            case let (.failure(receivedError as RemotePetImageDataLoader.Error), .failure(expectedError as RemotePetImageDataLoader.Error)):
+                XCTAssertEqual(receivedError, expectedError, file: file, line: line)
+                
+            default:
+                XCTFail("Expected \(expectedResult), got \(receivedResult) instead", file: file, line: line)
+            }
+            exp.fulfill()
+        }
+        
+        action()
+        
+        wait(for: [exp], timeout: 1.0)
     }
     
     private class HTTPClientSpy: HTTPClient {
