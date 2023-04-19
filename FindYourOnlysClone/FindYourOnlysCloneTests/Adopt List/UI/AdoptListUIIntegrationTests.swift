@@ -316,6 +316,18 @@ class AdoptListUIIntegrationTests: XCTestCase {
         XCTAssertTrue(view1.isShowingImageLoadingIndicator, "Expected not to alter image loading state")
     }
     
+    func test_loadPetsCompletion_dispatchesFromBackgroundToMainThread() {
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        
+        let exp = expectation(description: "Wait for background queue")
+        DispatchQueue.global().async {
+            loader.completesPetsLoading()
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (AdoptListViewController, PetLoaderSpy) {
