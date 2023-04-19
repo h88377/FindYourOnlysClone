@@ -11,6 +11,7 @@ import XCTest
 final class RemotePetImageDataLoader {
     enum Error: Swift.Error {
         case invalidData
+        case connectivity
     }
     
     private let client: HTTPClient
@@ -55,8 +56,8 @@ final class RemotePetImageDataLoader {
                 
                 loaderTask.complete(.success(data))
                 
-            case let .failure(error):
-                loaderTask.complete(.failure(error))
+            case .failure:
+                loaderTask.complete(.failure(Error.connectivity))
             }
         }
         
@@ -90,11 +91,11 @@ class RemotePetImageDataLoaderTests: XCTestCase {
         XCTAssertEqual(client.receivedURLs, [url, url])
     }
     
-    func test_loadImageData_deliversErrorOnClientError() {
+    func test_loadImageData_deliversConnectivityErrorOnClientError() {
         let clientError = anyNSError()
         let (sut, client) = makeSUT()
         
-        expect(sut, toComplete: .failure(clientError), when: {
+        expect(sut, toComplete: failure(.connectivity), when: {
             client.completesWith(error: clientError)
         })
     }
