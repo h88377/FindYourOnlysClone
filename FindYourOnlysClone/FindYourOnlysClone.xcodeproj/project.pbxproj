@@ -38,6 +38,7 @@
 		989176A829EE9E94000002A4 /* FindYourOnlysCloneAPIEndToEndTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176A729EE9E94000002A4 /* FindYourOnlysCloneAPIEndToEndTests.swift */; };
 		989176AF29EFCBFE000002A4 /* RemotePetImageDataLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176AE29EFCBFE000002A4 /* RemotePetImageDataLoaderTests.swift */; };
 		989176B129EFEC95000002A4 /* SharedTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176B029EFEC95000002A4 /* SharedTestHelpers.swift */; };
+		989176B329F092F2000002A4 /* HTTPClientSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176B229F092F2000002A4 /* HTTPClientSpy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +94,7 @@
 		989176A729EE9E94000002A4 /* FindYourOnlysCloneAPIEndToEndTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindYourOnlysCloneAPIEndToEndTests.swift; sourceTree = "<group>"; };
 		989176AE29EFCBFE000002A4 /* RemotePetImageDataLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePetImageDataLoaderTests.swift; sourceTree = "<group>"; };
 		989176B029EFEC95000002A4 /* SharedTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedTestHelpers.swift; sourceTree = "<group>"; };
+		989176B229F092F2000002A4 /* HTTPClientSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClientSpy.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -265,6 +267,7 @@
 			children = (
 				9891768129EC945F000002A4 /* XCTestCase+MemoryLeakTracking.swift */,
 				989176B029EFEC95000002A4 /* SharedTestHelpers.swift */,
+				989176B229F092F2000002A4 /* HTTPClientSpy.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -453,6 +456,7 @@
 				989176B129EFEC95000002A4 /* SharedTestHelpers.swift in Sources */,
 				9891763429E80212000002A4 /* AdoptListUIIntegrationTests.swift in Sources */,
 				9891768229EC945F000002A4 /* XCTestCase+MemoryLeakTracking.swift in Sources */,
+				989176B329F092F2000002A4 /* HTTPClientSpy.swift in Sources */,
 				9891769129ED42A9000002A4 /* URLSessionHTTPClientTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -42,7 +42,7 @@ class RemotePetLoaderTests: XCTestCase {
     func test_loadWithRequest_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
         expect(sut, toCompleteWith: failure(.connectivity), when: {
-            client.completesWithError()
+            client.completesWith(error: anyNSError())
         })
     }
     
@@ -93,7 +93,7 @@ class RemotePetLoaderTests: XCTestCase {
         }
         
         sut = nil
-        client.completesWithError()
+        client.completesWith(error: anyNSError())
         
         XCTAssertNil(receivedResult)
     }
@@ -198,38 +198,5 @@ class RemotePetLoaderTests: XCTestCase {
     
     private func makePetsJSONData(_ pets: [[String: Any]]) -> Data {
         return try! JSONSerialization.data(withJSONObject: pets)
-    }
-    
-    private class HTTPClientSpy: HTTPClient {
-        private struct Task: HTTPClientTask {
-            func cancel() {}
-        }
-        
-        typealias RequestCompletion = (HTTPClient.Result) -> Void
-        
-        private var receivedMessages = [(request: URLRequest, completion: RequestCompletion)]()
-        
-        var receivedURLs: [URL] {
-            return receivedMessages.map { $0.request.url! }
-        }
-        
-        func dispatch(_ request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
-            receivedMessages.append((request, completion))
-            return Task()
-        }
-        
-        func completesWithError(at index: Int = 0) {
-            let error = NSError(domain: "any error", code: 0)
-            receivedMessages[index].completion(.failure(error))
-        }
-        
-        func completesWith(statusCode: Int = 200, data: Data = Data(), at index: Int = 0) {
-            let response = HTTPURLResponse(
-                url: receivedURLs[index],
-                statusCode: statusCode,
-                httpVersion: nil,
-                headerFields: nil)!
-            receivedMessages[index].completion(.success((data, response)))
-        }
     }
 }
