@@ -15,9 +15,14 @@ final class RemotePetImageDataLoader {
         self.client = client
     }
     
-    func loadImageData(from url: URL) {
-        client.dispatch(URLRequest(url: url)) { _ in
-            
+    func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) {
+        client.dispatch(URLRequest(url: url)) { result in
+            switch result {
+            case let .failure(error):
+                completion(.failure(error))
+                
+            default: break
+            }
         }
     }
 }
@@ -34,7 +39,7 @@ class RemotePetImageDataLoaderTests: XCTestCase {
         let url = URL(string: "https://any-url.com")!
         let (sut, client) = makeSUT()
         
-        sut.loadImageData(from: url)
+        sut.loadImageData(from: url) { _ in }
         XCTAssertEqual(client.receivedURLs, [url])
     }
     
@@ -42,10 +47,33 @@ class RemotePetImageDataLoaderTests: XCTestCase {
         let url = URL(string: "https://any-url.com")!
         let (sut, client) = makeSUT()
         
-        sut.loadImageData(from: url)
-        sut.loadImageData(from: url)
+        sut.loadImageData(from: url) { _ in }
+        sut.loadImageData(from: url) { _ in }
         
         XCTAssertEqual(client.receivedURLs, [url, url])
+    }
+    
+    func test_loadImageData_deliversErrorOnClientError() {
+        let clientError = anyNSError()
+        let (sut, client) = makeSUT()
+        let exp = expectation(description: "Wait for completion")
+        
+        var receivedError: Error?
+        sut.loadImageData(from: anyURL()) { result in
+            switch result {
+            case let .failure(error):
+                receivedError = error
+            default:
+                XCTFail("Expected failure, got \(result) instead")
+            }
+            exp.fulfill()
+        }
+        
+        client.completesWith(error: clientError)
+        wait(for: [exp], timeout: 1.0)
+        
+        XCTAssertEqual((receivedError! as NSError).domain, clientError.domain)
+        XCTAssertEqual((receivedError! as NSError).code, clientError.code)
     }
     
     // MARK: - Helpers
@@ -60,10 +88,15 @@ class RemotePetImageDataLoaderTests: XCTestCase {
     
     private class HTTPClientSpy: HTTPClient {
         private(set) var receivedURLs = [URL]()
+        private var receivedCompletions = [(HTTPClient.Result) -> Void]()
         
         func dispatch(_ request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
             receivedURLs.append(request.url!)
+            receivedCompletions.append(completion)
         }
         
+        func completesWith(error: Error, at index: Int = 0) {
+            receivedCompletions[index](.failure(error))
+        }
     }
 }
