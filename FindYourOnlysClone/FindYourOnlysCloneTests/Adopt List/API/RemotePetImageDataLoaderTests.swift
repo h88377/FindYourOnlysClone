@@ -20,7 +20,9 @@ final class RemotePetImageDataLoader {
     }
     
     func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) {
-        client.dispatch(URLRequest(url: url)) { result in
+        client.dispatch(URLRequest(url: url)) { [weak self] result in
+            guard self != nil else { return }
+            
             switch result {
             case let .success((data, response)):
                 guard response.statusCode == 200, !data.isEmpty else {
@@ -98,6 +100,21 @@ class RemotePetImageDataLoaderTests: XCTestCase {
         expect(sut, toComplete: .success(nonEmptyata), when: {
             client.completesWith(statusCode: 200, data: nonEmptyata)
         })
+    }
+    
+    func test_loadImageData_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
+        let client = HTTPClientSpy()
+        var sut: RemotePetImageDataLoader? = RemotePetImageDataLoader(client: client)
+        
+        var receivedResult: PetImageDataLoader.Result?
+        sut?.loadImageData(from: anyURL()) { result in
+            receivedResult = result
+        }
+        
+        sut = nil
+        client.completesWith(error: anyNSError())
+        
+        XCTAssertNil(receivedResult)
     }
     
     // MARK: - Helpers
