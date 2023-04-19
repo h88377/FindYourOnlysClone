@@ -36,22 +36,26 @@ final class AdoptListUIComposer {
     }
 }
 
-private final class MainThreadDispatchDecorator: PetLoader {
-    private let decoratee: PetLoader
+private final class MainThreadDispatchDecorator<T> {
+    private let decoratee: T
     
-    init(decoratee: PetLoader) {
+    init(decoratee: T) {
         self.decoratee = decoratee
     }
     
+    func dispatch(completion: @escaping () -> Void) {
+        guard Thread.isMainThread else {
+            return DispatchQueue.main.async { completion() }
+        }
+        
+        completion()
+    }
+}
+
+extension MainThreadDispatchDecorator: PetLoader where T == PetLoader {
     func load(with request: AdoptListRequest, completion: @escaping (PetLoader.Result) -> Void) {
-        decoratee.load(with: request) { result in
-            if Thread.isMainThread {
-                completion(result)
-            } else {
-                DispatchQueue.main.async {
-                    completion(result)
-                }
-            }
+        decoratee.load(with: request) { [weak self] result in
+            self?.dispatch { completion(result) }
         }
     }
 }
