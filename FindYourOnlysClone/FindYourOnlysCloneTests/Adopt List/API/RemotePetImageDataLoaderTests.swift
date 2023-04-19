@@ -87,16 +87,20 @@ class RemotePetImageDataLoaderTests: XCTestCase {
     }
     
     private class HTTPClientSpy: HTTPClient {
-        private(set) var receivedURLs = [URL]()
-        private var receivedCompletions = [(HTTPClient.Result) -> Void]()
+        typealias ReceivedCompletion = (HTTPClient.Result) -> Void
+        
+        private var receivedMessages = [(url: URL, completion: ReceivedCompletion)]()
+        
+        var receivedURLs: [URL] {
+            return receivedMessages.map { $0.url }
+        }
         
         func dispatch(_ request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
-            receivedURLs.append(request.url!)
-            receivedCompletions.append(completion)
+            receivedMessages.append((request.url!, completion))
         }
         
         func completesWith(error: Error, at index: Int = 0) {
-            receivedCompletions[index](.failure(error))
+            receivedMessages[index].completion(.failure(error))
         }
     }
 }
