@@ -209,10 +209,6 @@ class RemotePetImageDataLoaderTests: XCTestCase {
         return .failure(error)
     }
     
-    private func anyData() -> Data {
-        return Data("anyData".utf8)
-    }
-    
     private class HTTPClientSpy: HTTPClient {
         private struct Task: HTTPClientTask {
             let cancelCallback: () -> Void
