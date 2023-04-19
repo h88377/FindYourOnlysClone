@@ -19,8 +19,21 @@ final class RemotePetImageDataLoader {
         self.client = client
     }
     
-    func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) {
-        client.dispatch(URLRequest(url: url)) { [weak self] result in
+    private struct RemotePetImageDataLoaderTask: PetImageDataLoaderTask {
+        private let task: HTTPClientTask
+        
+        init(wrapped task: HTTPClientTask) {
+            self.task = task
+        }
+        
+        func cancel() {
+            task.cancel()
+        }
+    }
+    
+    @discardableResult
+    func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) -> PetImageDataLoaderTask {
+        return RemotePetImageDataLoaderTask(wrapped: client.dispatch(URLRequest(url: url)) { [weak self] result in
             guard self != nil else { return }
             
             switch result {
@@ -34,7 +47,7 @@ final class RemotePetImageDataLoader {
             case let .failure(error):
                 completion(.failure(error))
             }
-        }
+        })
     }
 }
 
@@ -158,6 +171,10 @@ class RemotePetImageDataLoaderTests: XCTestCase {
     }
     
     private class HTTPClientSpy: HTTPClient {
+        private struct Task: HTTPClientTask {
+            func cancel() {}
+        }
+        
         typealias ReceivedCompletion = (HTTPClient.Result) -> Void
         
         private var receivedMessages = [(url: URL, completion: ReceivedCompletion)]()
@@ -166,8 +183,9 @@ class RemotePetImageDataLoaderTests: XCTestCase {
             return receivedMessages.map { $0.url }
         }
         
-        func dispatch(_ request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
+        func dispatch(_ request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
             receivedMessages.append((request.url!, completion))
+            return Task()
         }
         
         func completesWith(error: Error, at index: Int = 0) {

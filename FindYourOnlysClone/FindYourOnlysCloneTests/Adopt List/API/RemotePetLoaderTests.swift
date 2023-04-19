@@ -201,6 +201,10 @@ class RemotePetLoaderTests: XCTestCase {
     }
     
     private class HTTPClientSpy: HTTPClient {
+        private struct Task: HTTPClientTask {
+            func cancel() {}
+        }
+        
         typealias RequestCompletion = (HTTPClient.Result) -> Void
         
         private var receivedMessages = [(request: URLRequest, completion: RequestCompletion)]()
@@ -209,8 +213,9 @@ class RemotePetLoaderTests: XCTestCase {
             return receivedMessages.map { $0.request.url! }
         }
         
-        func dispatch(_ request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
+        func dispatch(_ request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
             receivedMessages.append((request, completion))
+            return Task()
         }
         
         func completesWithError(at index: Int = 0) {
