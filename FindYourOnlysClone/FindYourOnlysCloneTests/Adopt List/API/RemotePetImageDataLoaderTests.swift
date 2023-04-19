@@ -22,8 +22,8 @@ final class RemotePetImageDataLoader {
     func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) {
         client.dispatch(URLRequest(url: url)) { result in
             switch result {
-            case let .success((_, response)):
-                guard response.statusCode == 200 else {
+            case let .success((data, response)):
+                guard response.statusCode == 200, !data.isEmpty else {
                     return completion(.failure(RemotePetImageDataLoader.Error.invalidData))
                 }
                 
@@ -74,10 +74,19 @@ class RemotePetImageDataLoaderTests: XCTestCase {
         let samples = [199, 201, 300, 400, 500]
         
         samples.enumerated().forEach { (index, statusCode) in
-            expect(sut, toComplete: .failure(RemotePetImageDataLoader.Error.invalidData), when: {
+            expect(sut, toComplete: failure(.invalidData), when: {
                 client.completesWith(statusCode: statusCode, at: index)
             })
         }
+    }
+    
+    func test_loadImageData_deliversInvalidDataErrorOn200HTTPURLResponseWithEmptyData() {
+        let (sut, client) = makeSUT()
+        let emptyData = Data()
+        
+        expect(sut, toComplete: failure(.invalidData), when: {
+            client.completesWith(statusCode: 200, data: emptyData)
+        })
     }
     
     // MARK: - Helpers
@@ -111,6 +120,10 @@ class RemotePetImageDataLoaderTests: XCTestCase {
         action()
         
         wait(for: [exp], timeout: 1.0)
+    }
+    
+    private func failure(_ error: RemotePetImageDataLoader.Error) -> PetImageDataLoader.Result {
+        return .failure(error)
     }
     
     private class HTTPClientSpy: HTTPClient {
