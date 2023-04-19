@@ -106,13 +106,24 @@ class RemotePetImageDataLoaderTests: XCTestCase {
         })
     }
     
-    func test_loadImageData_deliversReceivedNonEmptyDAtaOn200HTTPURLResponse() {
+    func test_loadImageData_deliversReceivedNonEmptyDataOn200HTTPURLResponse() {
         let (sut, client) = makeSUT()
         let nonEmptyata = Data("non-empty data".utf8)
         
         expect(sut, toComplete: .success(nonEmptyata), when: {
             client.completesWith(statusCode: 200, data: nonEmptyata)
         })
+    }
+    
+    func test_cancelLoadImageDataURLTask_cancelsClientURLRequest() {
+        let url = anyURL()
+        let (sut, client) = makeSUT()
+        
+        let task = sut.loadImageData(from: url) { _ in }
+        XCTAssertEqual(client.cancelledURLs, [], "Expected no cancelled URL until task is cancelled")
+        
+        task.cancel()
+        XCTAssertEqual(client.cancelledURLs, [url], "Expected cancelled URL after task is cancelled")
     }
     
     func test_loadImageData_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
@@ -172,7 +183,11 @@ class RemotePetImageDataLoaderTests: XCTestCase {
     
     private class HTTPClientSpy: HTTPClient {
         private struct Task: HTTPClientTask {
-            func cancel() {}
+            let cancelCallback: () -> Void
+            
+            func cancel() {
+                cancelCallback()
+            }
         }
         
         typealias ReceivedCompletion = (HTTPClient.Result) -> Void
@@ -183,9 +198,11 @@ class RemotePetImageDataLoaderTests: XCTestCase {
             return receivedMessages.map { $0.url }
         }
         
+        private(set) var cancelledURLs = [URL]()
+        
         func dispatch(_ request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
             receivedMessages.append((request.url!, completion))
-            return Task()
+            return Task { [weak self] in self?.cancelledURLs.append(request.url!) }
         }
         
         func completesWith(error: Error, at index: Int = 0) {
