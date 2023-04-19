@@ -26,9 +26,11 @@ final class AdoptListCellViewModel<Image> {
     var isPetImageRetryStateOnChange: Observer<Bool>?
     
     func loadPetImageData() {
+        guard let photoURL = pet.photoURL else { return }
+        
         isPetImageLoadingStateOnChange?(true)
         isPetImageRetryStateOnChange?(false)
-        task = imageLoader.loadImageData(from: pet.photoURL) { [weak self] result in
+        task = imageLoader.loadImageData(from: photoURL) { [weak self] result in
             if let data = try? result.get(), let image = self?.imageTransformer(data) {
                 self?.isPetImageStateOnChange?(image)
             } else {
