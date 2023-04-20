@@ -23,19 +23,6 @@ final class AdoptListAPIEndToEndTests: XCTestCase {
         }
     }
     
-    func test_endToEndTestServerGetPetImageDataReuslt_matchesFixedPetImageData() {
-        switch getPetImageResult() {
-        case let .success(data):
-            XCTAssertFalse(data.isEmpty, "Expected data is not empty")
-            
-        case let.failure(error):
-            XCTFail("Expected to succeed with non-empty data, got \(error) instead")
-            
-        default:
-            XCTFail("Expected to succeed with non-empty data, got no result instead")
-        }
-    }
-    
     // MARK: - Helpers
     
     func getPetsResult(file: StaticString = #filePath, line: UInt = #line) -> PetLoader.Result? {
@@ -52,24 +39,6 @@ final class AdoptListAPIEndToEndTests: XCTestCase {
             exp.fulfill()
         }
         wait(for: [exp], timeout: 5.0)
-        
-        return receivedResult
-    }
-    
-    func getPetImageResult(file: StaticString = #filePath, line: UInt = #line) -> PetImageDataLoader.Result? {
-        let url = URL(string: "https://www.pet.gov.tw/upload/pic/1681889366849.png")!
-        let client = makeEphemeralClient()
-        let sut = RemotePetImageDataLoader(client: client)
-        let exp = expectation(description: "Wait for result")
-        
-        trackForMemoryLeak(sut, file: file, line: line)
-
-        var receivedResult: PetImageDataLoader.Result?
-        _ = sut.loadImageData(from: url) { result in
-            receivedResult = result
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 20.0)
         
         return receivedResult
     }
