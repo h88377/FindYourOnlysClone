@@ -42,6 +42,13 @@
 		989176B529F10505000002A4 /* RemotePetImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176B429F10505000002A4 /* RemotePetImageDataLoader.swift */; };
 		989176B629F11C03000002A4 /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891768129EC945F000002A4 /* XCTestCase+MemoryLeakTracking.swift */; };
 		989176B929F1214C000002A4 /* URLProtocolStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176B829F1214C000002A4 /* URLProtocolStub.swift */; };
+		989176BC29F121B4000002A4 /* PetLoaderSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176BB29F121B4000002A4 /* PetLoaderSpy.swift */; };
+		989176BE29F1220B000002A4 /* AdoptListViewController+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176BD29F1220B000002A4 /* AdoptListViewController+TestHelpers.swift */; };
+		989176C029F1228A000002A4 /* AdoptListCell+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176BF29F1228A000002A4 /* AdoptListCell+TestHelpers.swift */; };
+		989176C229F122C1000002A4 /* UIRefreshControl+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176C129F122C1000002A4 /* UIRefreshControl+TestHelpers.swift */; };
+		989176C429F122D3000002A4 /* UIButton+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176C329F122D3000002A4 /* UIButton+TestHelpers.swift */; };
+		989176C629F122E8000002A4 /* UIImage+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176C529F122E8000002A4 /* UIImage+TestHelpers.swift */; };
+		989176C829F122FF000002A4 /* UIScrollView+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176C729F122FF000002A4 /* UIScrollView+TestHelpers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,6 +107,13 @@
 		989176B229F092F2000002A4 /* HTTPClientSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClientSpy.swift; sourceTree = "<group>"; };
 		989176B429F10505000002A4 /* RemotePetImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePetImageDataLoader.swift; sourceTree = "<group>"; };
 		989176B829F1214C000002A4 /* URLProtocolStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLProtocolStub.swift; sourceTree = "<group>"; };
+		989176BB29F121B4000002A4 /* PetLoaderSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetLoaderSpy.swift; sourceTree = "<group>"; };
+		989176BD29F1220B000002A4 /* AdoptListViewController+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AdoptListViewController+TestHelpers.swift"; sourceTree = "<group>"; };
+		989176BF29F1228A000002A4 /* AdoptListCell+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AdoptListCell+TestHelpers.swift"; sourceTree = "<group>"; };
+		989176C129F122C1000002A4 /* UIRefreshControl+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIRefreshControl+TestHelpers.swift"; sourceTree = "<group>"; };
+		989176C329F122D3000002A4 /* UIButton+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+TestHelpers.swift"; sourceTree = "<group>"; };
+		989176C529F122E8000002A4 /* UIImage+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TestHelpers.swift"; sourceTree = "<group>"; };
+		989176C729F122FF000002A4 /* UIScrollView+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+TestHelpers.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -252,6 +266,7 @@
 		9891767C29EC8506000002A4 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				989176BA29F121AD000002A4 /* Helpers */,
 				9891763329E80212000002A4 /* AdoptListUIIntegrationTests.swift */,
 			);
 			path = UI;
@@ -303,6 +318,20 @@
 			children = (
 				989176B229F092F2000002A4 /* HTTPClientSpy.swift */,
 				989176B829F1214C000002A4 /* URLProtocolStub.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		989176BA29F121AD000002A4 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				989176BB29F121B4000002A4 /* PetLoaderSpy.swift */,
+				989176BD29F1220B000002A4 /* AdoptListViewController+TestHelpers.swift */,
+				989176BF29F1228A000002A4 /* AdoptListCell+TestHelpers.swift */,
+				989176C129F122C1000002A4 /* UIRefreshControl+TestHelpers.swift */,
+				989176C329F122D3000002A4 /* UIButton+TestHelpers.swift */,
+				989176C529F122E8000002A4 /* UIImage+TestHelpers.swift */,
+				989176C729F122FF000002A4 /* UIScrollView+TestHelpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -467,14 +496,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				989176C829F122FF000002A4 /* UIScrollView+TestHelpers.swift in Sources */,
 				9891767F29EC8566000002A4 /* RemotePetLoaderTests.swift in Sources */,
+				989176C229F122C1000002A4 /* UIRefreshControl+TestHelpers.swift in Sources */,
 				989176AF29EFCBFE000002A4 /* RemotePetImageDataLoaderTests.swift in Sources */,
+				989176C629F122E8000002A4 /* UIImage+TestHelpers.swift in Sources */,
 				989176B129EFEC95000002A4 /* SharedTestHelpers.swift in Sources */,
+				989176BC29F121B4000002A4 /* PetLoaderSpy.swift in Sources */,
 				989176B929F1214C000002A4 /* URLProtocolStub.swift in Sources */,
 				9891763429E80212000002A4 /* AdoptListUIIntegrationTests.swift in Sources */,
+				989176C029F1228A000002A4 /* AdoptListCell+TestHelpers.swift in Sources */,
 				9891768229EC945F000002A4 /* XCTestCase+MemoryLeakTracking.swift in Sources */,
+				989176BE29F1220B000002A4 /* AdoptListViewController+TestHelpers.swift in Sources */,
 				989176B329F092F2000002A4 /* HTTPClientSpy.swift in Sources */,
 				9891769129ED42A9000002A4 /* URLSessionHTTPClientTests.swift in Sources */,
+				989176C429F122D3000002A4 /* UIButton+TestHelpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
