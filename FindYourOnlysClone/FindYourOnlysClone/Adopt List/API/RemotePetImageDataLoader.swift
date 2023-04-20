@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class RemotePetImageDataLoader {
+final class RemotePetImageDataLoader: PetImageDataLoader {
     enum Error: Swift.Error {
         case invalidData
         case connectivity
@@ -41,7 +41,6 @@ final class RemotePetImageDataLoader {
         }
     }
     
-    @discardableResult
     func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) -> PetImageDataLoaderTask {
         let loaderTask = RemotePetImageDataLoaderTask(completion)
         loaderTask.clientTask = client.dispatch(URLRequest(url: url)) { [weak self] result in
