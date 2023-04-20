@@ -41,7 +41,7 @@ extension AdoptListViewController {
     }
     
     func simulatePaginationScrolling() {
-        let scrollView = UIScrollView()
+        let scrollView = DraggingScrollView()
         scrollView.contentOffset.y = 1000
         scrollViewDidScroll(scrollView)
     }
