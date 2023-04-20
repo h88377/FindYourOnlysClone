@@ -24,7 +24,7 @@ struct RemotePet: Decodable {
     let closedDate: String
     let updatedDate: String
     let createdDate: String
-    let photoURL: URL?
+    let photoURLString: String
     let address: String
     let telephone: String
     let variety: String
@@ -47,7 +47,7 @@ struct RemotePet: Decodable {
         case closedDate = "animal_closeddate"
         case updatedDate = "animal_update"
         case createdDate = "animal_createtime"
-        case photoURL = "album_file"
+        case photoURLString = "album_file"
         case address = "shelter_address"
         case telephone = "shelter_tel"
         case variety = "animal_Variety"

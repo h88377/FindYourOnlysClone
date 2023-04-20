@@ -39,6 +39,25 @@ class URLSessionHTTPClientTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    func test_cancelDispatchRequestTask_cancelsURLRequest() {
+        let url = anyURL()
+        let exp = expectation(description: "Wait for completion")
+        
+        let task = makeSUT().dispatch(URLRequest(url: url)) { result in
+            switch result {
+            case let .failure(error as NSError) where error.code == URLError.cancelled.rawValue:
+                break
+                
+            default:
+                XCTFail("Expected cancelled result, got \(result) instead")
+            }
+            exp.fulfill()
+        }
+        
+        task.cancel()
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     func test_dispatchRequest_failsOnRequestError() {
         let requestError = anyNSError()
         let receivedError = resultErrorFor(data: nil, response: nil, error: requestError)
@@ -137,84 +156,11 @@ class URLSessionHTTPClientTests: XCTestCase {
         return URLRequest(url: url)
     }
     
-    private func anyURL() -> URL {
-        return URL(string: "https://any-url.com")!
-    }
-    
-    private func anyNSError() -> NSError {
-        return NSError(domain: "any error", code: 0)
-    }
-    
-    private func anyData() -> Data {
-        return Data("anyData".utf8)
-    }
-    
     private func anyURLResponse() -> URLResponse {
         return URLResponse(url: anyURL(), mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
     }
     
     private func anyHTTPURLResponse() -> HTTPURLResponse {
         return HTTPURLResponse(url: anyURL(), statusCode: 0, httpVersion: nil, headerFields: nil)!
-    }
-    
-    private class URLProtocolStub: URLProtocol {
-        private struct Stub {
-            let data: Data?
-            let response: URLResponse?
-            let error: Error?
-            let requestObserverHandler: ((URLRequest) -> Void)?
-        }
-        
-        private static var _stub: Stub?
-        private static var stub: Stub? {
-            get { queue.sync { return _stub } }
-            set { queue.sync { _stub = newValue } }
-        }
-        
-        private static let queue = DispatchQueue(label: "URLProtocolStub.queue")
-
-        static func observeRequest(_ observer: @escaping (URLRequest) -> Void) {
-            stub = Stub(data: nil, response: nil, error: nil, requestObserverHandler: observer)
-        }
-        
-        static func stub(data: Data?, response: URLResponse?, error: Error?) {
-            stub = Stub(data: data, response: response, error: error, requestObserverHandler: nil)
-        }
-        
-        static func startInterceptingRequest() {
-            URLProtocol.registerClass(URLProtocolStub.self)
-        }
-        
-        static func stopInterceptingRequest() {
-            stub = nil
-            URLProtocol.unregisterClass(URLProtocolStub.self)
-        }
-        
-        override class func canInit(with request: URLRequest) -> Bool {
-            return true
-        }
-        
-        override class func canonicalRequest(for request: URLRequest) -> URLRequest {
-            return request
-        }
-        
-        override func startLoading() {
-            if let data = URLProtocolStub.stub?.data {
-                client?.urlProtocol(self, didLoad: data)
-            }
-            
-            if let response = URLProtocolStub.stub?.response {
-                client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
-            }
-            
-            if let error = URLProtocolStub.stub?.error {
-                client?.urlProtocol(self, didFailWithError: error)
-            }
-            
-            client?.urlProtocolDidFinishLoading(self)
-            URLProtocolStub.stub?.requestObserverHandler?(request)
-        }
-        
-        override func stopLoading() {}
     }
 }

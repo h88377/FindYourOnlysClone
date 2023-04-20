@@ -42,7 +42,7 @@ class RemotePetLoaderTests: XCTestCase {
     func test_loadWithRequest_deliversErrorOnClientError() {
         let (sut, client) = makeSUT()
         expect(sut, toCompleteWith: failure(.connectivity), when: {
-            client.completesWithError()
+            client.completesWith(error: anyNSError())
         })
     }
     
@@ -75,10 +75,12 @@ class RemotePetLoaderTests: XCTestCase {
     
     func test_loadWithRequest_deliversPetsOn200HTTPResponseWithValidJSON() {
         let (sut, client) = makeSUT()
-        let pet = makePet()
+        let pet0 = makePet()
+        let pet1 = makePet(photoURLString: "")
+        let pets = [pet0, pet1]
         
-        expect(sut, toCompleteWith: .success([pet.model]), when: {
-            client.completesWith(statusCode: 200, data: makePetsJSONData([pet.json]))
+        expect(sut, toCompleteWith: .success(pets.map { $0.model }), when: {
+            client.completesWith(statusCode: 200, data: makePetsJSONData(pets.map { $0.json }))
         })
     }
     
@@ -93,7 +95,7 @@ class RemotePetLoaderTests: XCTestCase {
         }
         
         sut = nil
-        client.completesWithError()
+        client.completesWith(error: anyNSError())
         
         XCTAssertNil(receivedResult)
     }
@@ -145,11 +147,7 @@ class RemotePetLoaderTests: XCTestCase {
         return AdoptListRequest(page: 0)
     }
     
-    private func anyURL() -> URL {
-        return URL(string: "https://any-url.com")!
-    }
-    
-    private func makePet(id: Int = 0, location: String = "any location", kind: String = "any kind", gender: String = "M", bodyType: String = "any body", color: String = "any color", age: String = "any age", sterilization: String = "NA", bacterin: String = "NA", foundPlace: String = "any place", status: String = "any status", remark: String = "NA", openDate: String = "2023-04-22", closedDate: String = "2023-04-22", updatedDate: String = "2023-04-22", createdDate: String = "2023-04-22", photoURL: URL = URL(string:"https://any-url.com")!, address: String = "any place", telephone: String = "02", variety: String = "any variety", shelterName: String = "any shelter") -> (model: Pet, json: [String: Any]) {
+    private func makePet(id: Int = 0, location: String = "any location", kind: String = "any kind", gender: String = "M", bodyType: String = "any body", color: String = "any color", age: String = "any age", sterilization: String = "NA", bacterin: String = "NA", foundPlace: String = "any place", status: String = "any status", remark: String = "NA", openDate: String = "2023-04-22", closedDate: String = "2023-04-22", updatedDate: String = "2023-04-22", createdDate: String = "2023-04-22", photoURLString: String = "https://any-url.com", address: String = "any place", telephone: String = "02", variety: String = "any variety", shelterName: String = "any shelter") -> (model: Pet, json: [String: Any]) {
         
         let pet = Pet(
             id: id,
@@ -168,7 +166,7 @@ class RemotePetLoaderTests: XCTestCase {
             closedDate: closedDate,
             updatedDate: updatedDate,
             createdDate: createdDate,
-            photoURL: photoURL,
+            photoURL: URL(string: photoURLString),
             address: address,
             telephone: telephone,
             variety: variety,
@@ -191,7 +189,7 @@ class RemotePetLoaderTests: XCTestCase {
             "animal_closeddate": closedDate,
             "animal_update": updatedDate,
             "animal_createtime": createdDate,
-            "album_file": photoURL.absoluteString,
+            "album_file": photoURLString,
             "shelter_address": address,
             "shelter_tel": telephone,
             "animal_Variety": variety,
@@ -202,33 +200,5 @@ class RemotePetLoaderTests: XCTestCase {
     
     private func makePetsJSONData(_ pets: [[String: Any]]) -> Data {
         return try! JSONSerialization.data(withJSONObject: pets)
-    }
-    
-    private class HTTPClientSpy: HTTPClient {
-        typealias RequestCompletion = (HTTPClient.Result) -> Void
-        
-        private var receivedMessages = [(request: URLRequest, completion: RequestCompletion)]()
-        
-        var receivedURLs: [URL] {
-            return receivedMessages.map { $0.request.url! }
-        }
-        
-        func dispatch(_ request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
-            receivedMessages.append((request, completion))
-        }
-        
-        func completesWithError(at index: Int = 0) {
-            let error = NSError(domain: "any error", code: 0)
-            receivedMessages[index].completion(.failure(error))
-        }
-        
-        func completesWith(statusCode: Int = 200, data: Data = Data(), at index: Int = 0) {
-            let response = HTTPURLResponse(
-                url: receivedURLs[index],
-                statusCode: statusCode,
-                httpVersion: nil,
-                headerFields: nil)!
-            receivedMessages[index].completion(.success((data, response)))
-        }
     }
 }

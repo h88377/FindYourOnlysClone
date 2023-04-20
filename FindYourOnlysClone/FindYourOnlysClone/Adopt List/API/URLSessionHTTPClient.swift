@@ -14,10 +14,23 @@ final class URLSessionHTTPClient: HTTPClient {
         self.session = session
     }
     
+    private struct URLSessionHTTPClientTask: HTTPClientTask {
+        private let task: URLSessionTask
+        
+        init(wrapped task: URLSessionTask) {
+            self.task = task
+        }
+        
+        func cancel() {
+            task.cancel()
+        }
+    }
+    
     private struct UnexpectedCompletionError: Error {}
     
-    func dispatch(_ request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) {
-        session.dataTask(with: request) { data, response, error in
+    func dispatch(_ request: URLRequest, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
+        
+        let task = session.dataTask(with: request) { data, response, error in
             if let data = data, let response = response as? HTTPURLResponse {
                 completion(.success((data, response)))
             } else if let error = error {
@@ -25,7 +38,9 @@ final class URLSessionHTTPClient: HTTPClient {
             } else {
                 completion(.failure(UnexpectedCompletionError()))
             }
-            
-        }.resume()
+        }
+        task.resume()
+        
+        return URLSessionHTTPClientTask(wrapped: task)
     }
 }
