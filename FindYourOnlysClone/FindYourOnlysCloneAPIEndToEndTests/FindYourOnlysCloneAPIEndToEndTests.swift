@@ -49,4 +49,27 @@ final class FindYourOnlysCloneAPIEndToEndTests: XCTestCase {
 
         wait(for: [exp], timeout: 20.0)
     }
+    
+    // MARK: - Helpers
+    
+    func getPetsResult() {
+        let url = URL(string: "https://data.coa.gov.tw/Service/OpenData/TransService.aspx")!
+        let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
+        let sut = RemotePetLoader(baseURL: url, client: client)
+        trackfor
+        let exp = expectation(description: "Wait for result")
+        
+        sut.load(with: AdoptListRequest(page: 0)) { result in
+            switch result {
+            case let .success(pets):
+                XCTAssertEqual(pets.count, 20)
+                
+            default:
+                XCTFail("Expected to succeed with 20 pets data, got \(result) instead")
+            }
+            exp.fulfill()
+        }
+        
+        wait(for: [exp], timeout: 5.0)
+    }
 }
