@@ -258,6 +258,7 @@
 		9891767D29EC8547000002A4 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				989176B729F12126000002A4 /* Helpers */,
 				9891767E29EC8566000002A4 /* RemotePetLoaderTests.swift */,
 				989176AE29EFCBFE000002A4 /* RemotePetImageDataLoaderTests.swift */,
 				9891769029ED42A9000002A4 /* URLSessionHTTPClientTests.swift */,
@@ -270,7 +271,6 @@
 			children = (
 				9891768129EC945F000002A4 /* XCTestCase+MemoryLeakTracking.swift */,
 				989176B029EFEC95000002A4 /* SharedTestHelpers.swift */,
-				989176B229F092F2000002A4 /* HTTPClientSpy.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -294,6 +294,14 @@
 				989176A729EE9E94000002A4 /* FindYourOnlysCloneAPIEndToEndTests.swift */,
 			);
 			path = FindYourOnlysCloneAPIEndToEndTests;
+			sourceTree = "<group>";
+		};
+		989176B729F12126000002A4 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				989176B229F092F2000002A4 /* HTTPClientSpy.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

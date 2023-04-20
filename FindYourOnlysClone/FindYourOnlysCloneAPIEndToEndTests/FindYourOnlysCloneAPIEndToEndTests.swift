@@ -45,7 +45,6 @@ final class FindYourOnlysCloneAPIEndToEndTests: XCTestCase {
         let exp = expectation(description: "Wait for result")
         
         trackForMemoryLeak(sut, file: file, line: line)
-        trackForMemoryLeak(client, file: file, line: line)
         
         var receivedResult: PetLoader.Result?
         sut.load(with: AdoptListRequest(page: 0)) { result in
@@ -64,7 +63,6 @@ final class FindYourOnlysCloneAPIEndToEndTests: XCTestCase {
         let exp = expectation(description: "Wait for result")
         
         trackForMemoryLeak(sut, file: file, line: line)
-        trackForMemoryLeak(client, file: file, line: line)
 
         var receivedResult: PetImageDataLoader.Result?
         _ = sut.loadImageData(from: url) { result in
@@ -76,7 +74,9 @@ final class FindYourOnlysCloneAPIEndToEndTests: XCTestCase {
         return receivedResult
     }
     
-    private func makeEphemeralClient() -> URLSessionHTTPClient {
-        return URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
+    private func makeEphemeralClient(file: StaticString = #filePath, line: UInt = #line) -> URLSessionHTTPClient {
+        let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
+        trackForMemoryLeak(client, file: file, line: line)
+        return client
     }
 }
