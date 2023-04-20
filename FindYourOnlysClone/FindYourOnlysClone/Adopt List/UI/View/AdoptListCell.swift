@@ -8,6 +8,9 @@
 import UIKit
 
 final class AdoptListCell: UICollectionViewCell {
+    
+    // MARK: - Property
+    
     let baseView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -74,6 +77,8 @@ final class AdoptListCell: UICollectionViewCell {
     
     var retryImageLoadHandler: (() -> Void)?
     
+    // MARK: - Life cycle
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -90,6 +95,8 @@ final class AdoptListCell: UICollectionViewCell {
         baseView.layer.cornerRadius = 12
         petImageContainer.layer.cornerRadius = 12
     }
+    
+    // MARK: - Method
     
     private func setUpUI() {
         contentView.backgroundColor = .systemGray6
