@@ -13,14 +13,15 @@ final class AdoptListUIComposer {
     static func adoptListComposedWith(petLoader: PetLoader, imageLoader: PetImageDataLoader) -> AdoptListViewController {
         let viewModel = AdoptListViewModel(petLoader: MainThreadDispatchDecorator(decoratee: petLoader))
         let controller = AdoptListViewController(viewModel: viewModel)
+        let decoratedImageLoader = MainThreadDispatchDecorator(decoratee: imageLoader)
         
         viewModel.isPetsRefreshingStateOnChange = { [weak controller] pets in
-            let cellControllers = adaptPetsToCellControllersWith(pets, imageLoader: imageLoader)
+            let cellControllers = adaptPetsToCellControllersWith(pets, imageLoader: decoratedImageLoader)
             controller?.set(cellControllers)
         }
         
         viewModel.isPetsAppendingStateOnChange = { [weak controller] pets in
-            let cellControllers = adaptPetsToCellControllersWith(pets, imageLoader: imageLoader)
+            let cellControllers = adaptPetsToCellControllersWith(pets, imageLoader: decoratedImageLoader)
             controller?.append(cellControllers)
         }
         
@@ -55,6 +56,14 @@ private final class MainThreadDispatchDecorator<T> {
 extension MainThreadDispatchDecorator: PetLoader where T == PetLoader {
     func load(with request: AdoptListRequest, completion: @escaping (PetLoader.Result) -> Void) {
         decoratee.load(with: request) { [weak self] result in
+            self?.dispatch { completion(result) }
+        }
+    }
+}
+
+extension MainThreadDispatchDecorator: PetImageDataLoader where T == PetImageDataLoader {
+    func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) -> PetImageDataLoaderTask {
+        decoratee.loadImageData(from: url) { [weak self] result in
             self?.dispatch { completion(result) }
         }
     }

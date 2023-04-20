@@ -363,6 +363,22 @@ class AdoptListUIIntegrationTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    func test_loadPetImageDataCompletion_dispatchesFromBackgroundToMainThread() {
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.completesPetsLoading(with: [makePet()], at: 0)
+        
+        sut.simulatePetImageViewIsVisible(at: 0)
+        
+        let imageData0 = UIImage.make(withColor: .red).pngData()!
+        let exp = expectation(description: "Wait for background queue")
+        DispatchQueue.global().async {
+            loader.completesImageLoading(with: imageData0, at: 0)
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (AdoptListViewController, PetLoaderSpy) {
