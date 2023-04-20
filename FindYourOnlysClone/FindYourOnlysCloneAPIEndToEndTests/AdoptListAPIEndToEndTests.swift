@@ -8,7 +8,7 @@
 import XCTest
 @testable import FindYourOnlysClone
 
-final class FindYourOnlysCloneAPIEndToEndTests: XCTestCase {
+final class AdoptListAPIEndToEndTests: XCTestCase {
     
     func test_endToEndTestServerGetPetsReuslt_matchesFixedPetsCount() {
         switch getPetsResult() {
