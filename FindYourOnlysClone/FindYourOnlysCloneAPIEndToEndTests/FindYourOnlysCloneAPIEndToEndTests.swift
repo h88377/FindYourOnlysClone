@@ -12,7 +12,7 @@ final class FindYourOnlysCloneAPIEndToEndTests: XCTestCase {
     
     func test_endToEndTestServerGetPetsReuslt_matchesFixedPetsCount() {
         let url = URL(string: "https://data.coa.gov.tw/Service/OpenData/TransService.aspx")!
-        let client = URLSessionHTTPClient()
+        let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
         let sut = RemotePetLoader(baseURL: url, client: client)
         let exp = expectation(description: "Wait for result")
         
