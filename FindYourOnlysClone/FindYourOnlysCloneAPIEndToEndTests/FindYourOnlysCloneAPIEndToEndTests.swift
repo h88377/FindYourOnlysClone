@@ -11,65 +11,72 @@ import XCTest
 final class FindYourOnlysCloneAPIEndToEndTests: XCTestCase {
     
     func test_endToEndTestServerGetPetsReuslt_matchesFixedPetsCount() {
-        let url = URL(string: "https://data.coa.gov.tw/Service/OpenData/TransService.aspx")!
-        let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
-        let sut = RemotePetLoader(baseURL: url, client: client)
-        let exp = expectation(description: "Wait for result")
-        
-        sut.load(with: AdoptListRequest(page: 0)) { result in
-            switch result {
-            case let .success(pets):
-                XCTAssertEqual(pets.count, 20)
-                
-            default:
-                XCTFail("Expected to succeed with 20 pets data, got \(result) instead")
-            }
-            exp.fulfill()
+        switch getPetsResult() {
+        case let .success(pets):
+            XCTAssertEqual(pets.count, 20)
+            
+        case let .failure(error):
+            XCTFail("Expected to succeed with 20 pets data, got \(error)) instead")
+            
+        default:
+            XCTFail("Expected to succeed with 20 pets data, got no result instead")
         }
-        
-        wait(for: [exp], timeout: 5.0)
     }
     
     func test_endToEndTestServerGetPetImageDataReuslt_matchesFixedPetImageData() {
-        let url = URL(string: "https://www.pet.gov.tw/upload/pic/1681889366849.png")!
-        let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
-        let sut = RemotePetImageDataLoader(client: client)
-        let exp = expectation(description: "Wait for result")
-
-        _ = sut.loadImageData(from: url) { result in
-            switch result {
-            case let .success(data):
-                XCTAssertFalse(data.isEmpty, "Expected data is not empty")
-
-            default:
-                XCTFail("Expected to succeed with non-empty data, got \(result) instead")
-            }
-            exp.fulfill()
+        switch getPetImageResult() {
+        case let .success(data):
+            XCTAssertFalse(data.isEmpty, "Expected data is not empty")
+            
+        case let.failure(error):
+            XCTFail("Expected to succeed with non-empty data, got \(error) instead")
+            
+        default:
+            XCTFail("Expected to succeed with non-empty data, got no result instead")
         }
-
-        wait(for: [exp], timeout: 20.0)
     }
     
     // MARK: - Helpers
     
-    func getPetsResult() {
+    func getPetsResult(file: StaticString = #filePath, line: UInt = #line) -> PetLoader.Result? {
         let url = URL(string: "https://data.coa.gov.tw/Service/OpenData/TransService.aspx")!
-        let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
+        let client = makeEphemeralClient()
         let sut = RemotePetLoader(baseURL: url, client: client)
-        trackfor
         let exp = expectation(description: "Wait for result")
         
+        trackForMemoryLeak(sut, file: file, line: line)
+        trackForMemoryLeak(client, file: file, line: line)
+        
+        var receivedResult: PetLoader.Result?
         sut.load(with: AdoptListRequest(page: 0)) { result in
-            switch result {
-            case let .success(pets):
-                XCTAssertEqual(pets.count, 20)
-                
-            default:
-                XCTFail("Expected to succeed with 20 pets data, got \(result) instead")
-            }
+            receivedResult = result
             exp.fulfill()
         }
-        
         wait(for: [exp], timeout: 5.0)
+        
+        return receivedResult
+    }
+    
+    func getPetImageResult(file: StaticString = #filePath, line: UInt = #line) -> PetImageDataLoader.Result? {
+        let url = URL(string: "https://www.pet.gov.tw/upload/pic/1681889366849.png")!
+        let client = makeEphemeralClient()
+        let sut = RemotePetImageDataLoader(client: client)
+        let exp = expectation(description: "Wait for result")
+        
+        trackForMemoryLeak(sut, file: file, line: line)
+        trackForMemoryLeak(client, file: file, line: line)
+
+        var receivedResult: PetImageDataLoader.Result?
+        _ = sut.loadImageData(from: url) { result in
+            receivedResult = result
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 20.0)
+        
+        return receivedResult
+    }
+    
+    private func makeEphemeralClient() -> URLSessionHTTPClient {
+        return URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
     }
 }
