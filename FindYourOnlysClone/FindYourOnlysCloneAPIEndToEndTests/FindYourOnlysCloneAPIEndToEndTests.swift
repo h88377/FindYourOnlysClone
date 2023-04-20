@@ -29,4 +29,24 @@ final class FindYourOnlysCloneAPIEndToEndTests: XCTestCase {
         
         wait(for: [exp], timeout: 5.0)
     }
+    
+    func test_endToEndTestServerGetPetImageDataReuslt_matchesFixedPetImageData() {
+        let url = URL(string: "https://www.pet.gov.tw/upload/pic/1681889366849.png")!
+        let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
+        let sut = RemotePetImageDataLoader(client: client)
+        let exp = expectation(description: "Wait for result")
+
+        _ = sut.loadImageData(from: url) { result in
+            switch result {
+            case let .success(data):
+                XCTAssertFalse(data.isEmpty, "Expected data is not empty")
+
+            default:
+                XCTFail("Expected to succeed with non-empty data, got \(result) instead")
+            }
+            exp.fulfill()
+        }
+
+        wait(for: [exp], timeout: 20.0)
+    }
 }
