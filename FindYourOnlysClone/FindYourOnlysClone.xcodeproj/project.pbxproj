@@ -39,6 +39,7 @@
 		989176AF29EFCBFE000002A4 /* RemotePetImageDataLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176AE29EFCBFE000002A4 /* RemotePetImageDataLoaderTests.swift */; };
 		989176B129EFEC95000002A4 /* SharedTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176B029EFEC95000002A4 /* SharedTestHelpers.swift */; };
 		989176B329F092F2000002A4 /* HTTPClientSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176B229F092F2000002A4 /* HTTPClientSpy.swift */; };
+		989176B529F10505000002A4 /* RemotePetImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176B429F10505000002A4 /* RemotePetImageDataLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +96,7 @@
 		989176AE29EFCBFE000002A4 /* RemotePetImageDataLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePetImageDataLoaderTests.swift; sourceTree = "<group>"; };
 		989176B029EFEC95000002A4 /* SharedTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedTestHelpers.swift; sourceTree = "<group>"; };
 		989176B229F092F2000002A4 /* HTTPClientSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClientSpy.swift; sourceTree = "<group>"; };
+		989176B429F10505000002A4 /* RemotePetImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePetImageDataLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -280,6 +282,7 @@
 				9891768829ECBB01000002A4 /* RemotePetLoader.swift */,
 				9891768C29ED3BED000002A4 /* PetsMapper.swift */,
 				9891768A29ECBB4C000002A4 /* RemotePet.swift */,
+				989176B429F10505000002A4 /* RemotePetImageDataLoader.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -437,6 +440,7 @@
 				9891761D29E80211000002A4 /* AppDelegate.swift in Sources */,
 				9891765229E89B55000002A4 /* PetLoader.swift in Sources */,
 				9891766E29EC0AB0000002A4 /* UICollectionViewCell+Extension.swift in Sources */,
+				989176B529F10505000002A4 /* RemotePetImageDataLoader.swift in Sources */,
 				9891765C29E90FB2000002A4 /* UIView+Extension.swift in Sources */,
 				9891768B29ECBB4C000002A4 /* RemotePet.swift in Sources */,
 				9891769329EE84B4000002A4 /* URLSessionHTTPClient.swift in Sources */,
