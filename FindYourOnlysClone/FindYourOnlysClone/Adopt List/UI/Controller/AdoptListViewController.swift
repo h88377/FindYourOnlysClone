@@ -48,6 +48,7 @@ final class AdoptListViewController: UICollectionViewController {
     }
     
     private func configureCollectionView() {
+        collectionView.backgroundColor = .systemGray6
         collectionView.collectionViewLayout = configureCollectionViewLayout()
         collectionView.dataSource = self.dataSource
         collectionView.prefetchDataSource = self
