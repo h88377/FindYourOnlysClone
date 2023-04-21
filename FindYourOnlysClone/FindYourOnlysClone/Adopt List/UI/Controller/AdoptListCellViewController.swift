@@ -25,6 +25,12 @@ final class AdoptListCellViewController {
         cell?.retryButton.isHidden = true
         cell?.retryImageLoadHandler = viewModel.loadPetImageData
         
+        return cell!
+    }
+    
+    func requestPetImageData() {
+        cell?.petImageView.image = nil
+        
         viewModel.isPetImageLoadingStateOnChange = { [weak cell] isLoading in
             cell?.petImageContainer.isShimmering = isLoading
         }
@@ -36,12 +42,6 @@ final class AdoptListCellViewController {
         viewModel.isPetImageStateOnChange = { [weak cell] image in
             cell?.petImageView.image = image
         }
-        
-        return cell!
-    }
-    
-    func requestPetImageData() {
-        cell?.petImageView.image = nil
         
         viewModel.loadPetImageData()
     }
