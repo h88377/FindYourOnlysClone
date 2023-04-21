@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		9891761D29E80211000002A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761C29E80211000002A4 /* AppDelegate.swift */; };
 		9891761F29E80211000002A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761E29E80211000002A4 /* SceneDelegate.swift */; };
-		9891762129E80211000002A4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891762029E80211000002A4 /* ViewController.swift */; };
 		9891762629E80212000002A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9891762529E80212000002A4 /* Assets.xcassets */; };
 		9891762929E80212000002A4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9891762729E80212000002A4 /* LaunchScreen.storyboard */; };
 		9891763429E80212000002A4 /* AdoptListUIIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891763329E80212000002A4 /* AdoptListUIIntegrationTests.swift */; };
@@ -72,7 +71,6 @@
 		9891761929E80211000002A4 /* FindYourOnlysClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FindYourOnlysClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9891761C29E80211000002A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9891761E29E80211000002A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		9891762029E80211000002A4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		9891762529E80212000002A4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9891762829E80212000002A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9891762A29E80212000002A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -166,7 +164,6 @@
 			children = (
 				9891761C29E80211000002A4 /* AppDelegate.swift */,
 				9891761E29E80211000002A4 /* SceneDelegate.swift */,
-				9891762029E80211000002A4 /* ViewController.swift */,
 				9891766929E99C13000002A4 /* AdoptListUIComposer.swift */,
 				9891767A29EC8412000002A4 /* Adopt List */,
 				9891765829E89BEE000002A4 /* Extension */,
@@ -468,7 +465,6 @@
 			files = (
 				9891766C29EC0A60000002A4 /* UICollectionView+Extension.swift in Sources */,
 				9891766229E99A20000002A4 /* AdoptListCellViewModel.swift in Sources */,
-				9891762129E80211000002A4 /* ViewController.swift in Sources */,
 				9891768D29ED3BED000002A4 /* PetsMapper.swift in Sources */,
 				9891765029E89B35000002A4 /* AdoptListRequest.swift in Sources */,
 				9891764E29E89B08000002A4 /* Pet.swift in Sources */,
