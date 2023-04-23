@@ -368,11 +368,7 @@ class AdoptListUIIntegrationTests: XCTestCase {
         let view0 = try XCTUnwrap(sut.simulatePetImageViewIsVisible(at: 0))
         loader.completesImageLoading(with: image0, at: 0)
         
-        let delegate = sut.collectionView.delegate
-        let indexPath = IndexPath(item: 0, section: 0)
-        delegate?.collectionView?(sut.collectionView, didEndDisplaying: view0, forItemAt: indexPath)
-        
-        delegate?.collectionView?(sut.collectionView, willDisplay: view0, forItemAt: indexPath)
+        sut.simulateIsNotVisibleAndVisibleAgain(with: view0)
         XCTAssertNil(view0.renderedImageData)
     }
     
