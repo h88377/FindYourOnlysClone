@@ -63,6 +63,7 @@ final class AdoptListCell: UICollectionViewCell {
     let petImageContainer: UIView = {
         let view = UIView()
         view.clipsToBounds = true
+        view.backgroundColor = .systemGray4
         
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
