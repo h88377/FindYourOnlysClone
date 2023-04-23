@@ -25,7 +25,8 @@ final class AdoptListCellViewController {
         cell?.retryButton.isHidden = true
         
         cell?.retryImageLoadHandler = viewModel.loadPetImageData
-        cell?.prepareForReuseHandler = { [weak self] in
+        cell?.prepareForReuseHandler = { [weak self, weak cell] in
+            cell?.petImageView.image = nil
             self?.releaseCallBacksForCellReuse()
         }
         

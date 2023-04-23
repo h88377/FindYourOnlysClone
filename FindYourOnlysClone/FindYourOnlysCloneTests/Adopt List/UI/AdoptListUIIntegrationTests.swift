@@ -330,20 +330,35 @@ class AdoptListUIIntegrationTests: XCTestCase {
         assertThat(sut, isRendering: firstPage)
     }
     
-    func test_petImageView_doesNotDeliverImageFromPreviousRequestWhenCellIsReused() throws {
+    func test_petImageView_doesNotDeliverImageFromPreviousRequestWhenCellIsReused() {
         let (sut, loader) = makeSUT()
         
         sut.loadViewIfNeeded()
         loader.completesPetsLoading(with: [makePet(), makePet()])
         
-        let view0 = try XCTUnwrap(sut.simulatePetImageViewIsVisible(at: 0))
-        view0.prepareForReuse()
+        let view0 = sut.simulatePetImageViewIsVisible(at: 0)
+        view0?.prepareForReuse()
         
         let imageData0 = UIImage.make(withColor: .red).pngData()!
         loader.completesImageLoading(with: imageData0, at: 0)
         
-        XCTAssertEqual(view0.renderedImageData, .none, "Expected no image state change for reused view once image loading completes successfully")
+        XCTAssertEqual(view0?.renderedImageData, .none, "Expected no image state change for reused view once image loading completes successfully")
     }
+    
+    func test_petImageView_imageIsNilWhenCellIsReused() {
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completesPetsLoading(with: [makePet(), makePet()])
+        
+        let view0 = sut.simulatePetImageViewIsVisible(at: 0)
+        let imageData0 = UIImage.make(withColor: .red).pngData()!
+        loader.completesImageLoading(with: imageData0, at: 0)
+        view0?.prepareForReuse()
+        
+        XCTAssertEqual(view0?.renderedImageData, .none, "Expected no image for reused view after image loading completes successfully")
+    }
+
     
     func test_petImageView_doesNotAlterStatesAfterNotVisible() {
         let (sut, loader) = makeSUT()
