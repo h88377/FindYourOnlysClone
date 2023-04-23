@@ -309,6 +309,16 @@ class AdoptListUIIntegrationTests: XCTestCase {
             .load(AdoptListRequest(page: 0)),
             .load(AdoptListRequest(page: 1))
         ], "Expected another pagination loading request once user scrolling the view")
+        
+        loader.completesPetsLoadingWithError(at: 3)
+        sut.simulatePaginationScrolling()
+        XCTAssertEqual(loader.loadPetsRequests, [
+            .load(AdoptListRequest(page: 0)),
+            .load(AdoptListRequest(page: 1)),
+            .load(AdoptListRequest(page: 0)),
+            .load(AdoptListRequest(page: 1)),
+            .load(AdoptListRequest(page: 1))
+        ], "Expected another pagination loading request once user scrolling the view")
     }
     
     func test_refresh_afterPaginationRequest_rendersOnlyTheFirstPage() {

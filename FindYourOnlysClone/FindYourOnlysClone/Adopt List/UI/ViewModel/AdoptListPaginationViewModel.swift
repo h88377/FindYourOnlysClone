@@ -30,6 +30,8 @@ final class AdoptListPaginationViewModel {
         petLoader.load(with: AdoptListRequest(page: currentPage)) { [weak self] result in
             if let pets = try? result.get() {
                 self?.isPetsPaginationStateOnChange?(pets)
+            } else {
+                self?.currentPage -= 1
             }
             self?.isPetPaginationLoadingStateOnChange?(false)
         }
