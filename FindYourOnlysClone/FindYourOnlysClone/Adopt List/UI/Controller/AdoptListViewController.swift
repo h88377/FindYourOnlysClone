@@ -30,6 +30,7 @@ final class AdoptListViewController: UICollectionViewController {
     }
     
     private let viewModel: AdoptListViewModel
+    private var isPaginating: Bool = false
     
     init(viewModel: AdoptListViewModel) {
         self.viewModel = viewModel
@@ -44,6 +45,7 @@ final class AdoptListViewController: UICollectionViewController {
         super.viewDidLoad()
         
         configureCollectionView()
+        setUpBinding()
         loadPets()
     }
     
@@ -72,7 +74,7 @@ final class AdoptListViewController: UICollectionViewController {
     }
     
     private func binded(refreshView: UIRefreshControl) -> UIRefreshControl {
-        viewModel.isPetLoadingStateOnChange = { [weak self] isLoading in
+        viewModel.isPetRefreshLoadingStateOnChange = { [weak self] isLoading in
             if isLoading {
                 self?.collectionView.refreshControl?.beginRefreshing()
             } else {
@@ -82,6 +84,12 @@ final class AdoptListViewController: UICollectionViewController {
         refreshView.addTarget(self, action: #selector(loadPets), for: .valueChanged)
         
         return refreshView
+    }
+    
+    private func setUpBinding() {
+        viewModel.isPetPaginationLoadingStateOnChange = { [weak self] isPaginating in
+            self?.isPaginating = isPaginating
+        }
     }
     
     @objc private func loadPets() {
@@ -114,11 +122,13 @@ extension AdoptListViewController {
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard scrollView.isDragging else { return }
+        guard scrollView.isDragging, !isPaginating else { return }
         
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
-        if (offsetY > contentHeight - scrollView.frame.height) {
+        let frameHeight = scrollView.frame.height
+        
+        if offsetY > (contentHeight - frameHeight) {
             viewModel.loadNextPage()
         }
     }

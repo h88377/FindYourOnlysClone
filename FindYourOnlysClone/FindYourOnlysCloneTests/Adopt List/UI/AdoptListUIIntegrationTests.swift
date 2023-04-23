@@ -302,6 +302,7 @@ class AdoptListUIIntegrationTests: XCTestCase {
         
         loader.completesPetsLoading(with: [makePet(id: 2)], at: 2)
         sut.simulatePaginationScrolling()
+        sut.simulatePaginationScrolling()
         XCTAssertEqual(loader.loadPetsRequests, [
             .load(AdoptListRequest(page: 0)),
             .load(AdoptListRequest(page: 1)),

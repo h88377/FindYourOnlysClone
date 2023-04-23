@@ -18,7 +18,8 @@ final class AdoptListViewModel {
     
     private var currentPage = 0
     
-    var isPetLoadingStateOnChange: Observer<Bool>?
+    var isPetRefreshLoadingStateOnChange: Observer<Bool>?
+    var isPetPaginationLoadingStateOnChange: Observer<Bool>?
     var isPetsAppendingStateOnChange: Observer<[Pet]>?
     var isPetsRefreshingStateOnChange: Observer<[Pet]>?
     
@@ -33,7 +34,10 @@ final class AdoptListViewModel {
     }
     
     private func loadPets() {
-        isPetLoadingStateOnChange?(true)
+        currentPage == 0
+            ? isPetRefreshLoadingStateOnChange?(true)
+            : isPetPaginationLoadingStateOnChange?(true)
+        
         petLoader.load(with: AdoptListRequest(page: currentPage)) { [weak self] result in
             if let pets = try? result.get() {
                 if self?.currentPage == 0 {
@@ -42,7 +46,9 @@ final class AdoptListViewModel {
                     self?.isPetsAppendingStateOnChange?(pets)
                 }
             }
-            self?.isPetLoadingStateOnChange?(false)
+            self?.currentPage == 0
+                ? self?.isPetRefreshLoadingStateOnChange?(false)
+                : self?.isPetPaginationLoadingStateOnChange?(false)
         }
     }
 }
