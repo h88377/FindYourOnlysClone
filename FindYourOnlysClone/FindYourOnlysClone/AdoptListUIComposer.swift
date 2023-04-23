@@ -20,7 +20,7 @@ final class AdoptListUIComposer {
             controller?.set(cellControllers)
         }
         
-        viewModel.isPetsAppendingStateOnChange = { [weak controller] pets in
+        viewModel.isPetsPaginationStateOnChange = { [weak controller] pets in
             let cellControllers = adaptPetsToCellControllersWith(pets, imageLoader: decoratedImageLoader)
             controller?.append(cellControllers)
         }

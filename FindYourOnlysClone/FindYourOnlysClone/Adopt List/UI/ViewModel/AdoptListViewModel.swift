@@ -20,7 +20,7 @@ final class AdoptListViewModel {
     
     var isPetRefreshLoadingStateOnChange: Observer<Bool>?
     var isPetPaginationLoadingStateOnChange: Observer<Bool>?
-    var isPetsAppendingStateOnChange: Observer<[Pet]>?
+    var isPetsPaginationStateOnChange: Observer<[Pet]>?
     var isPetsRefreshingStateOnChange: Observer<[Pet]>?
     
     func refreshPets() {
@@ -43,7 +43,7 @@ final class AdoptListViewModel {
                 if self?.currentPage == 0 {
                     self?.isPetsRefreshingStateOnChange?(pets)
                 } else {
-                    self?.isPetsAppendingStateOnChange?(pets)
+                    self?.isPetsPaginationStateOnChange?(pets)
                 }
             }
             self?.currentPage == 0
