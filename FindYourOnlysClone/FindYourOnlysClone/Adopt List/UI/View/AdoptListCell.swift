@@ -76,6 +76,7 @@ final class AdoptListCell: UICollectionViewCell {
     }()
     
     var retryImageLoadHandler: (() -> Void)?
+    var prepareForReuseHandler: (() -> Void)?
     
     // MARK: - Life cycle
     
@@ -94,6 +95,12 @@ final class AdoptListCell: UICollectionViewCell {
         
         baseView.layer.cornerRadius = 12
         petImageContainer.layer.cornerRadius = 12
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        prepareForReuseHandler?()
     }
     
     // MARK: - Method
@@ -135,6 +142,7 @@ final class AdoptListCell: UICollectionViewCell {
             petImageView.topAnchor.constraint(equalTo: petImageContainer.topAnchor),
             petImageView.bottomAnchor.constraint(equalTo: petImageContainer.bottomAnchor),
         ])
+        
     }
     
     @objc private func retryImageLoad() {

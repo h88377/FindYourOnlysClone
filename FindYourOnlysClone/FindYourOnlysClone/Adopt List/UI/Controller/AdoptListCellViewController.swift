@@ -23,7 +23,11 @@ final class AdoptListCellViewController {
         cell?.cityLabel.text = viewModel.cityText
         cell?.kindLabel.text = viewModel.kindText
         cell?.retryButton.isHidden = true
+        
         cell?.retryImageLoadHandler = viewModel.loadPetImageData
+        cell?.prepareForReuseHandler = { [weak self] in
+            self?.releaseCallBacksForCellReuse()
+        }
         
         return cell!
     }
