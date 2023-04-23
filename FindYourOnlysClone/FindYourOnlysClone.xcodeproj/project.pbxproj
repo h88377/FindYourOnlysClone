@@ -48,6 +48,7 @@
 		989176C429F122D3000002A4 /* UIButton+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176C329F122D3000002A4 /* UIButton+TestHelpers.swift */; };
 		989176C629F122E8000002A4 /* UIImage+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176C529F122E8000002A4 /* UIImage+TestHelpers.swift */; };
 		989176C829F122FF000002A4 /* UIScrollView+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176C729F122FF000002A4 /* UIScrollView+TestHelpers.swift */; };
+		98F23B1C29F5A81C00E7FCB0 /* AdoptListPaginationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98F23B1B29F5A81C00E7FCB0 /* AdoptListPaginationViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +113,7 @@
 		989176C329F122D3000002A4 /* UIButton+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+TestHelpers.swift"; sourceTree = "<group>"; };
 		989176C529F122E8000002A4 /* UIImage+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TestHelpers.swift"; sourceTree = "<group>"; };
 		989176C729F122FF000002A4 /* UIScrollView+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+TestHelpers.swift"; sourceTree = "<group>"; };
+		98F23B1B29F5A81C00E7FCB0 /* AdoptListPaginationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptListPaginationViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,6 +221,7 @@
 			isa = PBXGroup;
 			children = (
 				9891765629E89BC6000002A4 /* AdoptListViewController.swift */,
+				98F23B1B29F5A81C00E7FCB0 /* AdoptListPaginationViewController.swift */,
 				9891766329E99A44000002A4 /* AdoptListCellViewController.swift */,
 			);
 			path = Controller;
@@ -475,6 +478,7 @@
 				9891765E29E91C9D000002A4 /* PetImageDataLoader.swift in Sources */,
 				9891765A29E89BFD000002A4 /* StringProtocol+Extension.swift in Sources */,
 				9891761D29E80211000002A4 /* AppDelegate.swift in Sources */,
+				98F23B1C29F5A81C00E7FCB0 /* AdoptListPaginationViewController.swift in Sources */,
 				9891765229E89B55000002A4 /* PetLoader.swift in Sources */,
 				9891766E29EC0AB0000002A4 /* UICollectionViewCell+Extension.swift in Sources */,
 				989176B529F10505000002A4 /* RemotePetImageDataLoader.swift in Sources */,
