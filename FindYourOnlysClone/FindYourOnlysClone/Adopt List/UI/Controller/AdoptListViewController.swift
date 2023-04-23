@@ -7,6 +7,69 @@
 
 import UIKit
 
+final class AdoptListPaginationViewModel {
+    typealias Observer<T> = ((T) -> Void)
+    
+    private let petLoader: PetLoader
+    
+    init(petLoader: PetLoader) {
+        self.petLoader = petLoader
+    }
+    
+    private var currentPage = 0
+    var isPetPaginationLoadingStateOnChange: Observer<Bool>?
+    var isPetsPaginationStateOnChange: Observer<[Pet]>?
+    
+    func resetPage() {
+        currentPage = 0
+    }
+    
+    func loadNextPage() {
+        currentPage += 1
+        isPetPaginationLoadingStateOnChange?(true)
+        petLoader.load(with: AdoptListRequest(page: currentPage)) { [weak self] result in
+            if let pets = try? result.get() {
+                self?.isPetsPaginationStateOnChange?(pets)
+            }
+            self?.isPetPaginationLoadingStateOnChange?(false)
+        }
+    }
+    
+}
+
+final class AdoptListPaginationViewController {
+    private let viewModel: AdoptListPaginationViewModel
+    
+    init(viewModel: AdoptListPaginationViewModel) {
+        self.viewModel = viewModel
+        self.setUpBinding()
+    }
+    
+    private var isPaginating = false
+    
+    func resetPage() {
+        viewModel.resetPage()
+    }
+     
+    func paginate(on scrollView: UIScrollView) {
+        guard scrollView.isDragging, !isPaginating else { return }
+        
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let frameHeight = scrollView.frame.height
+        
+        if offsetY > (contentHeight - frameHeight) {
+            viewModel.loadNextPage()
+        }
+    }
+    
+    private func setUpBinding() {
+        viewModel.isPetPaginationLoadingStateOnChange = { [weak self] isPaginating in
+            self?.isPaginating = isPaginating
+        }
+    }
+}
+
 final class AdoptListViewController: UICollectionViewController {
     private lazy var dataSource: UICollectionViewDiffableDataSource<Int, AdoptListCellViewController> = {
         .init(collectionView: collectionView) { [weak self] collectionView, indexPath, controller in
@@ -30,10 +93,11 @@ final class AdoptListViewController: UICollectionViewController {
     }
     
     private let viewModel: AdoptListViewModel
-    private var isPaginating: Bool = false
+    private let paginationController: AdoptListPaginationViewController
     
-    init(viewModel: AdoptListViewModel) {
+    init(viewModel: AdoptListViewModel, paginationController: AdoptListPaginationViewController) {
         self.viewModel = viewModel
+        self.paginationController = paginationController
         super.init(collectionViewLayout: UICollectionViewLayout())
     }
     
@@ -45,7 +109,6 @@ final class AdoptListViewController: UICollectionViewController {
         super.viewDidLoad()
         
         configureCollectionView()
-        setUpBinding()
         loadPets()
     }
     
@@ -86,13 +149,8 @@ final class AdoptListViewController: UICollectionViewController {
         return refreshView
     }
     
-    private func setUpBinding() {
-        viewModel.isPetPaginationLoadingStateOnChange = { [weak self] isPaginating in
-            self?.isPaginating = isPaginating
-        }
-    }
-    
     @objc private func loadPets() {
+        paginationController.resetPage()
         viewModel.refreshPets()
     }
     
@@ -122,15 +180,7 @@ extension AdoptListViewController {
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard scrollView.isDragging, !isPaginating else { return }
-        
-        let offsetY = scrollView.contentOffset.y
-        let contentHeight = scrollView.contentSize.height
-        let frameHeight = scrollView.frame.height
-        
-        if offsetY > (contentHeight - frameHeight) {
-            viewModel.loadNextPage()
-        }
+        paginationController.paginate(on: scrollView)
     }
 }
 

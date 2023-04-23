@@ -11,21 +11,26 @@ final class AdoptListUIComposer {
     private init() {}
     
     static func adoptListComposedWith(petLoader: PetLoader, imageLoader: PetImageDataLoader) -> AdoptListViewController {
-        let viewModel = AdoptListViewModel(petLoader: MainThreadDispatchDecorator(decoratee: petLoader))
-        let controller = AdoptListViewController(viewModel: viewModel)
+        let decoratedPetLoader = MainThreadDispatchDecorator(decoratee: petLoader)
         let decoratedImageLoader = MainThreadDispatchDecorator(decoratee: imageLoader)
         
-        viewModel.isPetsRefreshingStateOnChange = { [weak controller] pets in
+        let paginationViewModel = AdoptListPaginationViewModel(petLoader: decoratedPetLoader)
+        let paginationController = AdoptListPaginationViewController(viewModel: paginationViewModel)
+        
+        let adoptListViewModel = AdoptListViewModel(petLoader: MainThreadDispatchDecorator(decoratee: petLoader))
+        let adoptListController = AdoptListViewController(viewModel: adoptListViewModel, paginationController: paginationController)
+        
+        adoptListViewModel.isPetsRefreshingStateOnChange = { [weak adoptListController] pets in
             let cellControllers = adaptPetsToCellControllersWith(pets, imageLoader: decoratedImageLoader)
-            controller?.set(cellControllers)
+            adoptListController?.set(cellControllers)
         }
         
-        viewModel.isPetsPaginationStateOnChange = { [weak controller] pets in
+        paginationViewModel.isPetsPaginationStateOnChange = { [weak adoptListController] pets in
             let cellControllers = adaptPetsToCellControllersWith(pets, imageLoader: decoratedImageLoader)
-            controller?.append(cellControllers)
+            adoptListController?.append(cellControllers)
         }
         
-        return controller
+        return adoptListController
     }
     
     private static func adaptPetsToCellControllersWith(_ pets: [Pet], imageLoader: PetImageDataLoader) -> [AdoptListCellViewController] {
