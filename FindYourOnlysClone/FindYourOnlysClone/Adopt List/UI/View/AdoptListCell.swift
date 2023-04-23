@@ -11,7 +11,7 @@ final class AdoptListCell: UICollectionViewCell {
     
     // MARK: - Property
     
-    let baseView: UIView = {
+    private let baseView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         
@@ -51,7 +51,7 @@ final class AdoptListCell: UICollectionViewCell {
         return imageView
     }()
     
-    let locationIconView: UIImageView = {
+    private let locationIconView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.image = UIImage(systemName: "mappin.and.ellipse") 
@@ -72,7 +72,11 @@ final class AdoptListCell: UICollectionViewCell {
     private(set) lazy var retryButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(retryImageLoad), for: .touchUpInside)
+        button.setTitle("↻", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 60)
+        button.setTitleColor(.white, for: .normal)
         
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -111,8 +115,9 @@ final class AdoptListCell: UICollectionViewCell {
         
         contentView.addSubview(baseView)
         baseView.addSubviews([kindLabel, genderLabel, cityLabel, locationIconView, petImageContainer])
-        petImageContainer.addSubview(petImageView)
+        petImageContainer.addSubviews([petImageView, retryButton])
         
+        kindLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
         NSLayoutConstraint.activate([
             baseView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             baseView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
@@ -142,6 +147,11 @@ final class AdoptListCell: UICollectionViewCell {
             petImageView.trailingAnchor.constraint(equalTo: petImageContainer.trailingAnchor),
             petImageView.topAnchor.constraint(equalTo: petImageContainer.topAnchor),
             petImageView.bottomAnchor.constraint(equalTo: petImageContainer.bottomAnchor),
+            
+            retryButton.leadingAnchor.constraint(equalTo: petImageContainer.leadingAnchor),
+            retryButton.trailingAnchor.constraint(equalTo: petImageContainer.trailingAnchor),
+            retryButton.topAnchor.constraint(equalTo: petImageContainer.topAnchor),
+            retryButton.bottomAnchor.constraint(equalTo: petImageContainer.bottomAnchor)
         ])
         
     }
