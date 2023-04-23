@@ -160,9 +160,3 @@ final class AdoptListCell: UICollectionViewCell {
         retryImageLoadHandler?()
     }
 }
-
-private extension UIView {
-    func addSubviews(_ views: [UIView]) {
-        views.forEach { addSubview($0) }
-    }
-}
