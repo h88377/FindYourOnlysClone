@@ -27,7 +27,7 @@ final class AdoptListCellViewController {
         cell?.retryImageLoadHandler = viewModel.loadPetImageData
         cell?.prepareForReuseHandler = { [weak self, weak cell] in
             cell?.petImageView.image = nil
-            self?.releaseCallBacksForCellReuse()
+            self?.releaseBindings()
         }
         
         return cell!
@@ -36,6 +36,16 @@ final class AdoptListCellViewController {
     func requestPetImageData() {
         cell?.petImageView.image = nil
         
+        setUpBindings()
+        viewModel.loadPetImageData()
+    }
+    
+    func cancelTask() {
+        viewModel.cancelTask()
+        releaseBindings()
+    }
+    
+    private func setUpBindings() {
         viewModel.isPetImageLoadingStateOnChange = { [weak cell] isLoading in
             cell?.petImageContainer.isShimmering = isLoading
         }
@@ -47,16 +57,9 @@ final class AdoptListCellViewController {
         viewModel.isPetImageStateOnChange = { [weak cell] image in
             cell?.petImageView.image = image
         }
-        
-        viewModel.loadPetImageData()
     }
     
-    func cancelTask() {
-        viewModel.cancelTask()
-        releaseCallBacksForCellReuse()
-    }
-    
-    private func releaseCallBacksForCellReuse() {
+    private func releaseBindings() {
         viewModel.isPetImageStateOnChange = nil
         viewModel.isPetImageRetryStateOnChange = nil
         viewModel.isPetImageLoadingStateOnChange = nil
