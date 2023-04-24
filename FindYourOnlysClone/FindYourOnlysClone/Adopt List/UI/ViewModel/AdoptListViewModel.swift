@@ -19,10 +19,6 @@ final class AdoptListViewModel {
     var isPetRefreshLoadingStateOnChange: Observer<Bool>?
     var isPetsRefreshingStateOnChange: Observer<[Pet]>?
     var isPetsRefreshingErrorStateOnChange: Observer<String?>?
-    
-    private var errorMessage: String {
-        return "無法連接至伺服器"
-    }
 
     func refreshPets() {
         loadPets()
@@ -34,7 +30,7 @@ final class AdoptListViewModel {
             if let pets = try? result.get() {
                 self?.isPetsRefreshingStateOnChange?(pets)
             } else {
-                self?.isPetsRefreshingErrorStateOnChange?(self?.errorMessage)
+                self?.isPetsRefreshingErrorStateOnChange?(ErrorMessage.loadPets.rawValue)
             }
             self?.isPetRefreshLoadingStateOnChange?(false)
         }
