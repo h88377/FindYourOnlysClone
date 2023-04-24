@@ -47,7 +47,6 @@
 		989176C229F122C1000002A4 /* UIRefreshControl+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176C129F122C1000002A4 /* UIRefreshControl+TestHelpers.swift */; };
 		989176C429F122D3000002A4 /* UIButton+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176C329F122D3000002A4 /* UIButton+TestHelpers.swift */; };
 		989176C629F122E8000002A4 /* UIImage+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176C529F122E8000002A4 /* UIImage+TestHelpers.swift */; };
-		989176C829F122FF000002A4 /* UIScrollView+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176C729F122FF000002A4 /* UIScrollView+TestHelpers.swift */; };
 		98F23B1C29F5A81C00E7FCB0 /* AdoptListPaginationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98F23B1B29F5A81C00E7FCB0 /* AdoptListPaginationViewController.swift */; };
 		98F23B1E29F5A85A00E7FCB0 /* AdoptListPaginationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98F23B1D29F5A85A00E7FCB0 /* AdoptListPaginationViewModel.swift */; };
 		98F23B2029F64A5D00E7FCB0 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98F23B1F29F64A5D00E7FCB0 /* UIColor+Extension.swift */; };
@@ -115,7 +114,6 @@
 		989176C129F122C1000002A4 /* UIRefreshControl+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIRefreshControl+TestHelpers.swift"; sourceTree = "<group>"; };
 		989176C329F122D3000002A4 /* UIButton+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+TestHelpers.swift"; sourceTree = "<group>"; };
 		989176C529F122E8000002A4 /* UIImage+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TestHelpers.swift"; sourceTree = "<group>"; };
-		989176C729F122FF000002A4 /* UIScrollView+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+TestHelpers.swift"; sourceTree = "<group>"; };
 		98F23B1B29F5A81C00E7FCB0 /* AdoptListPaginationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptListPaginationViewController.swift; sourceTree = "<group>"; };
 		98F23B1D29F5A85A00E7FCB0 /* AdoptListPaginationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptListPaginationViewModel.swift; sourceTree = "<group>"; };
 		98F23B1F29F64A5D00E7FCB0 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
@@ -340,7 +338,6 @@
 				989176C129F122C1000002A4 /* UIRefreshControl+TestHelpers.swift */,
 				989176C329F122D3000002A4 /* UIButton+TestHelpers.swift */,
 				989176C529F122E8000002A4 /* UIImage+TestHelpers.swift */,
-				989176C729F122FF000002A4 /* UIScrollView+TestHelpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -508,7 +505,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				989176C829F122FF000002A4 /* UIScrollView+TestHelpers.swift in Sources */,
 				9891767F29EC8566000002A4 /* RemotePetLoaderTests.swift in Sources */,
 				989176C229F122C1000002A4 /* UIRefreshControl+TestHelpers.swift in Sources */,
 				989176AF29EFCBFE000002A4 /* RemotePetImageDataLoaderTests.swift in Sources */,
