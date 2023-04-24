@@ -66,6 +66,10 @@ extension AdoptListViewController {
         return errorView.isVisible == true && errorView.messageLabel.text == ErrorMessage.loadPets.rawValue
     }
     
+    var isShowingNoResultReminder: Bool {
+        return !noResultReminder.isHidden
+    }
+    
     var numberOfPets: Int {
         return collectionView.numberOfSections == 0 ? 0 : collectionView.numberOfItems(inSection: petsSection)
     }

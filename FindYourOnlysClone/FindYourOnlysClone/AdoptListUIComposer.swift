@@ -23,6 +23,7 @@ final class AdoptListUIComposer {
         adoptListViewModel.isPetsRefreshingStateOnChange = { [weak adoptListController] pets in
             let cellControllers = adaptPetsToCellControllersWith(pets, imageLoader: decoratedImageLoader)
             adoptListController?.set(cellControllers)
+            adoptListController?.noResultReminder.isHidden = !pets.isEmpty
         }
         
         paginationViewModel.isPetsPaginationStateOnChange = { [weak adoptListController] pets in

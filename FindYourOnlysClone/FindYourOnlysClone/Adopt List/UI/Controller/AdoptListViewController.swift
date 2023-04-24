@@ -20,6 +20,17 @@ final class AdoptListViewController: UICollectionViewController {
         super.init(collectionViewLayout: UICollectionViewLayout())
     }
     
+    let noResultReminder: UILabel = {
+        let label = UILabel()
+        label.text = ErrorMessage.loadPetsNoResultReminder.rawValue
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.isHidden = true
+        
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     let errorView: ErrorView = {
         let view = ErrorView()
         
@@ -45,6 +56,7 @@ final class AdoptListViewController: UICollectionViewController {
         super.viewDidLoad()
         
         setUpBinding()
+        configureUI()
         configureCollectionView()
         loadPets()
     }
@@ -77,6 +89,17 @@ final class AdoptListViewController: UICollectionViewController {
         collectionView.prefetchDataSource = self
         collectionView.register(AdoptListCell.self, forCellWithReuseIdentifier: AdoptListCell.identifier)
         collectionView.refreshControl = binded(refreshView: UIRefreshControl())
+    }
+    
+    private func configureUI() {
+        view.addSubview(noResultReminder)
+        
+        NSLayoutConstraint.activate([
+            noResultReminder.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            noResultReminder.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            noResultReminder.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            noResultReminder.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+        ])
     }
     
     private func configureCollectionViewLayout() -> UICollectionViewCompositionalLayout {
@@ -112,6 +135,9 @@ final class AdoptListViewController: UICollectionViewController {
             guard let self = self else { return }
             
             self.errorView.show(message, on: self.view)
+            
+            let snapshot = self.dataSource.snapshot()
+            self.noResultReminder.isHidden = !snapshot.itemIdentifiers.isEmpty
         }
     }
     

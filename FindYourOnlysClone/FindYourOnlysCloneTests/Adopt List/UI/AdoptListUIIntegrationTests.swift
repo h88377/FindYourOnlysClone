@@ -93,6 +93,27 @@ class AdoptListUIIntegrationTests: XCTestCase {
         XCTAssertFalse(sut.isShowingErrorView, "Expected no error view once shows animation completes")
     }
     
+    func test_loadPetsCompletions_showsNoResultOnEmptyResult() {
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        XCTAssertFalse(sut.isShowingNoResultReminder, "Expected no reminder before pets loading completion")
+        
+        loader.completesPetsLoadingWithError()
+        XCTAssertTrue(sut.isShowingNoResultReminder, "Expected reminder after pets loading completes with error")
+        
+        sut.simulateUserInitiatedPetsReload()
+        loader.completesPetsLoading(with: [makePet()])
+        XCTAssertFalse(sut.isShowingNoResultReminder, "Expected no reminder after pets loading completes with pets")
+        
+        sut.simulateUserInitiatedPetsReload()
+        loader.completesPetsLoadingWithError()
+        XCTAssertFalse(sut.isShowingNoResultReminder, "Expected no reminder after pets loading completes with error but there are pets from previous request")
+        
+        sut.simulateUserInitiatedPetsReload()
+        loader.completesPetsLoading(with: [])
+        XCTAssertTrue(sut.isShowingNoResultReminder, "Expected no reminder after pets loading completes with empty result")
+    }
+    
     func test_petImageView_loadsImageURLWhenVisible() {
         let pet0 = makePet(photoURL: URL(string:"https://url-0.com")!)
         let pet1 = makePet(photoURL: nil)

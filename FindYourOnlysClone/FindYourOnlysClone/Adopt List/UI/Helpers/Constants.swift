@@ -9,4 +9,5 @@ import Foundation
 
 enum ErrorMessage: String {
     case loadPets = "無法連接至伺服器"
+    case loadPetsNoResultReminder = "無法連接至伺服器或無相關資料"
 }
