@@ -319,44 +319,51 @@ class AdoptListUIIntegrationTests: XCTestCase {
         let (sut, loader) = makeSUT()
 
         sut.loadViewIfNeeded()
-        XCTAssertEqual(loader.loadPetsRequests, [.load(AdoptListRequest(page: 0))], "Expected a loading request once view is loaded")
-
-        loader.completesPetsLoading(with: [makePet(id: 1)], at: 0)
-        sut.simulatePaginationScrolling()
-        sut.simulateUserInitiatedPetsReload()
         XCTAssertEqual(loader.loadPetsRequests, [
+            .load(AdoptListRequest(page: 0))
+        ], "Expected a loading request once view is loaded")
+
+        loader.completesPetsLoadingWithError(at: 0)
+        sut.simulatePaginationScrolling()
+        sut.simulatePaginationScrolling()
+        XCTAssertEqual(loader.loadPetsRequests, [
+            .load(AdoptListRequest(page: 0))
+        ], "Expected no loading request from pagination when no result on the screen")
+
+        sut.simulateUserInitiatedPetsReload()
+        sut.simulatePaginationScrolling()
+        XCTAssertEqual(loader.loadPetsRequests, [
+            .load(AdoptListRequest(page: 0)),
+            .load(AdoptListRequest(page: 0))
+        ], "Expected request only page 0 once user initiated a reload and can't trigger a pagination before completion")
+
+        loader.completesPetsLoading(with: [makePet(id: 2)], at: 1)
+        sut.simulatePaginationScrolling()
+        sut.simulatePaginationScrolling()
+        XCTAssertEqual(loader.loadPetsRequests, [
+            .load(AdoptListRequest(page: 0)),
             .load(AdoptListRequest(page: 0)),
             .load(AdoptListRequest(page: 1))
-        ], "Expected pagination loading request once user scrolling the view, and trigger a refresh before completion")
-
-        loader.completesPetsLoading(with: [makePet(id: 1)], at: 1)
-        sut.simulateUserInitiatedPetsReload()
-        sut.simulatePaginationScrolling()
-        XCTAssertEqual(loader.loadPetsRequests, [
-            .load(AdoptListRequest(page: 0)),
-            .load(AdoptListRequest(page: 1)),
-            .load(AdoptListRequest(page: 0))
-        ], "Expected request first page once user initiated a reload, and trigger a pagination before completion")
+        ], "Expected only page 1 pagination loading request once user scrolling the view and can't trigger another pagination before completion")
 
         loader.completesPetsLoading(with: [makePet(id: 2)], at: 2)
         sut.simulatePaginationScrolling()
-        sut.simulatePaginationScrolling()
         XCTAssertEqual(loader.loadPetsRequests, [
             .load(AdoptListRequest(page: 0)),
-            .load(AdoptListRequest(page: 1)),
             .load(AdoptListRequest(page: 0)),
-            .load(AdoptListRequest(page: 1))
-        ], "Expected another pagination loading request once user scrolling the view")
-
+            .load(AdoptListRequest(page: 1)),
+            .load(AdoptListRequest(page: 2))
+        ], "Expected page 2 pagination loading request once user scrolling the view and previous pagination request have completed successfully")
+        
         loader.completesPetsLoadingWithError(at: 3)
         sut.simulatePaginationScrolling()
         XCTAssertEqual(loader.loadPetsRequests, [
             .load(AdoptListRequest(page: 0)),
-            .load(AdoptListRequest(page: 1)),
             .load(AdoptListRequest(page: 0)),
             .load(AdoptListRequest(page: 1)),
-            .load(AdoptListRequest(page: 1))
-        ], "Expected another pagination loading request once user scrolling the view")
+            .load(AdoptListRequest(page: 2)),
+            .load(AdoptListRequest(page: 2))
+        ], "Expected another page 2 pagination loading request once user scrolling the view and previous pagination request have completed with error")
     }
     
     func test_paginationActions_showsErrorViewOnError() {
