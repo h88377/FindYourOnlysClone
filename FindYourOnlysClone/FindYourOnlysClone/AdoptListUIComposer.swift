@@ -30,6 +30,12 @@ final class AdoptListUIComposer {
             adoptListController?.append(cellControllers)
         }
         
+        paginationViewModel.isPetsPaginationErrorStateOnChange = { [weak adoptListController] message in
+            guard let adoptListController = adoptListController else { return }
+            
+            adoptListController.errorView.show(message, on: adoptListController.view)
+        }
+        
         return adoptListController
     }
     

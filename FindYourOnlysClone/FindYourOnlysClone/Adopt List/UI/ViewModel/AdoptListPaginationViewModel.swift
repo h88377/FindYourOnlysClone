@@ -19,6 +19,11 @@ final class AdoptListPaginationViewModel {
     private var currentPage = 0
     var isPetPaginationLoadingStateOnChange: Observer<Bool>?
     var isPetsPaginationStateOnChange: Observer<[Pet]>?
+    var isPetsPaginationErrorStateOnChange: Observer<String?>?
+    
+    private var errorMessage: String {
+        return "無法連接至伺服器"
+    }
     
     func resetPage() {
         currentPage = 0
@@ -32,6 +37,7 @@ final class AdoptListPaginationViewModel {
                 self?.isPetsPaginationStateOnChange?(pets)
             } else {
                 self?.currentPage -= 1
+                self?.isPetsPaginationErrorStateOnChange?(self?.errorMessage)
             }
             self?.isPetPaginationLoadingStateOnChange?(false)
         }
