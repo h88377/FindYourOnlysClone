@@ -44,12 +44,7 @@ final class AdoptListViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel.isPetsRefreshingErrorStateOnChange = { [weak self] message in
-            guard let self = self else { return }
-            
-            self.errorView.show(message, on: self.view)
-        }
-        
+        setUpBinding()
         configureCollectionView()
         loadPets()
     }
@@ -110,6 +105,14 @@ final class AdoptListViewController: UICollectionViewController {
         refreshView.addTarget(self, action: #selector(loadPets), for: .valueChanged)
         
         return refreshView
+    }
+    
+    private func setUpBinding() {
+        viewModel.isPetsRefreshingErrorStateOnChange = { [weak self] message in
+            guard let self = self else { return }
+            
+            self.errorView.show(message, on: self.view)
+        }
     }
     
     @objc private func loadPets() {
