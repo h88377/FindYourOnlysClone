@@ -22,7 +22,7 @@ final class AdoptListPaginationViewController {
     }
      
     func paginate(on scrollView: UIScrollView) {
-        guard scrollView.isDragging, !isPaginating else { return }
+        guard !isPaginating else { return }
         
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height

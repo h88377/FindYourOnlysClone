@@ -145,7 +145,7 @@ extension AdoptListViewController {
         cancelTask(forItemAt: indexPath)
     }
     
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         paginationController.paginate(on: scrollView)
     }
 }

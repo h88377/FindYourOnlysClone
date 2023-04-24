@@ -48,9 +48,8 @@ extension AdoptListViewController {
     }
     
     func simulatePaginationScrolling() {
-        let scrollView = DraggingScrollView()
-        scrollView.contentOffset.y = 1000
-        scrollViewDidScroll(scrollView)
+        collectionView.contentOffset.y = 1000
+        scrollViewDidEndDragging(collectionView, willDecelerate: true)
     }
     
     func itemAt(index: Int) -> UICollectionViewCell? {
