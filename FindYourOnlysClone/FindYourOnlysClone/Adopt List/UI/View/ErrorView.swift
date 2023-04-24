@@ -37,6 +37,8 @@ final class ErrorView: UIView {
     }
     
     func show(_ message: String?, on view: UIView) {
+        guard superview == nil else { return }
+        
         self.message = message
         
         view.addSubview(self)
