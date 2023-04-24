@@ -8,33 +8,8 @@
 import UIKit
 
 final class AdoptListViewController: UICollectionViewController {
-    private lazy var dataSource: UICollectionViewDiffableDataSource<Int, AdoptListCellViewController> = {
-        .init(collectionView: collectionView) { [weak self] collectionView, indexPath, controller in
-            return controller.view(in: collectionView, at: indexPath)
-        }
-    }()
     
-    private var petsSection: Int { return 0 }
-    
-    func set(_ newItems: [AdoptListCellViewController]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, AdoptListCellViewController>()
-        snapshot.appendSections([petsSection])
-        snapshot.appendItems(newItems, toSection: petsSection)
-        dataSource.apply(snapshot, animatingDifferences: false)
-    }
-    
-    func append(_ newItems: [AdoptListCellViewController]) {
-        var snapshot = dataSource.snapshot()
-        snapshot.appendItems(newItems, toSection: petsSection)
-        dataSource.apply(snapshot, animatingDifferences: true)
-    }
-    
-    let errorView: ErrorView = {
-        let view = ErrorView()
-        
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+    // MARK: - Property
     
     private let viewModel: AdoptListViewModel
     private let paginationController: AdoptListPaginationViewController
@@ -44,6 +19,23 @@ final class AdoptListViewController: UICollectionViewController {
         self.paginationController = paginationController
         super.init(collectionViewLayout: UICollectionViewLayout())
     }
+    
+    let errorView: ErrorView = {
+        let view = ErrorView()
+        
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private var petsSection: Int { return 0 }
+    
+    private lazy var dataSource: UICollectionViewDiffableDataSource<Int, AdoptListCellViewController> = {
+        .init(collectionView: collectionView) { [weak self] collectionView, indexPath, controller in
+            return controller.view(in: collectionView, at: indexPath)
+        }
+    }()
+    
+    // MARK: - Life cycle
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -66,6 +58,21 @@ final class AdoptListViewController: UICollectionViewController {
         super.viewDidLayoutSubviews()
         
         errorView.layer.cornerRadius = 20
+    }
+    
+    // MARK: - Method
+    
+    func set(_ newItems: [AdoptListCellViewController]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, AdoptListCellViewController>()
+        snapshot.appendSections([petsSection])
+        snapshot.appendItems(newItems, toSection: petsSection)
+        dataSource.apply(snapshot, animatingDifferences: false)
+    }
+    
+    func append(_ newItems: [AdoptListCellViewController]) {
+        var snapshot = dataSource.snapshot()
+        snapshot.appendItems(newItems, toSection: petsSection)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     private func configureCollectionView() {
