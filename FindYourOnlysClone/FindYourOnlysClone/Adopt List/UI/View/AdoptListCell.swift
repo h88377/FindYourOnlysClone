@@ -22,6 +22,7 @@ final class AdoptListCell: UICollectionViewCell {
     let kindLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
+        label.textColor = .darkGray
         
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -38,6 +39,7 @@ final class AdoptListCell: UICollectionViewCell {
     let cityLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 17, weight: .medium)
+        label.textColor = .darkGray
         
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -54,7 +56,8 @@ final class AdoptListCell: UICollectionViewCell {
     private let locationIconView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(systemName: "mappin.and.ellipse") 
+        imageView.image = UIImage(systemName: "mappin.and.ellipse")
+        imageView.tintColor = .projectIconColor
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -160,3 +163,5 @@ final class AdoptListCell: UICollectionViewCell {
         retryImageLoadHandler?()
     }
 }
+
+

@@ -20,6 +20,7 @@ final class AdoptListCellViewController {
         cell = collectionView.dequeueReusableCell(for: indexPath)
         
         cell?.genderLabel.text = viewModel.genderText
+        cell?.genderLabel.textColor = viewModel.genderText == "♂" ? .maleColor : .femaleColor
         cell?.cityLabel.text = viewModel.cityText
         cell?.kindLabel.text = viewModel.kindText
         cell?.retryButton.isHidden = true
@@ -73,5 +74,32 @@ extension AdoptListCellViewController: Hashable {
     
     func hash(into hasher: inout Hasher) {
       hasher.combine(id)
+    }
+}
+
+extension UIColor {
+    static let maleColor = hexStringToUIColor(hex: "398AB9")
+    static let femaleColor = hexStringToUIColor(hex: "ffcb65")
+    static let projectIconColor = hexStringToUIColor(hex: "578c93")
+    
+    static func hexStringToUIColor(hex: String) -> UIColor {
+        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
+        }
+        
+        if ((cString.count) != 6) {
+            return UIColor.gray
+        }
+        
+        var rgbValue:UInt64 = 0
+        Scanner(string: cString).scanHexInt64(&rgbValue)
+        
+        return UIColor(
+            red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+            green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+            blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+            alpha: CGFloat(1.0))
     }
 }
