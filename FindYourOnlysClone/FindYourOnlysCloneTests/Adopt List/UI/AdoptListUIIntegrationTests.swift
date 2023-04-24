@@ -302,10 +302,21 @@ class AdoptListUIIntegrationTests: XCTestCase {
         
         loader.completesPetsLoading(with: [makePet(id: 2)], at: 2)
         sut.simulatePaginationScrolling()
+        sut.simulatePaginationScrolling()
         XCTAssertEqual(loader.loadPetsRequests, [
             .load(AdoptListRequest(page: 0)),
             .load(AdoptListRequest(page: 1)),
             .load(AdoptListRequest(page: 0)),
+            .load(AdoptListRequest(page: 1))
+        ], "Expected another pagination loading request once user scrolling the view")
+        
+        loader.completesPetsLoadingWithError(at: 3)
+        sut.simulatePaginationScrolling()
+        XCTAssertEqual(loader.loadPetsRequests, [
+            .load(AdoptListRequest(page: 0)),
+            .load(AdoptListRequest(page: 1)),
+            .load(AdoptListRequest(page: 0)),
+            .load(AdoptListRequest(page: 1)),
             .load(AdoptListRequest(page: 1))
         ], "Expected another pagination loading request once user scrolling the view")
     }
@@ -328,6 +339,48 @@ class AdoptListUIIntegrationTests: XCTestCase {
         sut.simulateUserInitiatedPetsReload()
         loader.completesPetsLoading(with: firstPage, at: 2)
         assertThat(sut, isRendering: firstPage)
+    }
+    
+    func test_petImageView_doesNotDeliverImageFromPreviousRequestWhenCellIsReused() {
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completesPetsLoading(with: [makePet(), makePet()])
+        
+        let view0 = sut.simulatePetImageViewIsVisible(at: 0)
+        view0?.prepareForReuse()
+        
+        let imageData0 = UIImage.make(withColor: .red).pngData()!
+        loader.completesImageLoading(with: imageData0, at: 0)
+        
+        XCTAssertEqual(view0?.renderedImageData, .none, "Expected no image state change for reused view once image loading completes successfully")
+    }
+    
+    func test_petImageView_imageIsNilWhenCellIsReused() {
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.completesPetsLoading(with: [makePet(), makePet()])
+        
+        let view0 = sut.simulatePetImageViewIsVisible(at: 0)
+        let imageData0 = UIImage.make(withColor: .red).pngData()!
+        loader.completesImageLoading(with: imageData0, at: 0)
+        view0?.prepareForReuse()
+        
+        XCTAssertEqual(view0?.renderedImageData, .none, "Expected no image for reused view after image loading completes successfully")
+    }
+
+    func test_petImageView_imageIsNilWhenViewIsVisibleAgain() throws {
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.completesPetsLoading(with: [makePet()])
+        
+        let image0 = UIImage.make(withColor: .red).pngData()!
+        let view0 = try XCTUnwrap(sut.simulatePetImageViewIsVisible(at: 0))
+        loader.completesImageLoading(with: image0, at: 0)
+        
+        sut.simulateIsNotVisibleAndVisibleAgain(with: view0)
+        XCTAssertNil(view0.renderedImageData)
     }
     
     func test_petImageView_doesNotAlterStatesAfterNotVisible() {
@@ -358,6 +411,22 @@ class AdoptListUIIntegrationTests: XCTestCase {
         let exp = expectation(description: "Wait for background queue")
         DispatchQueue.global().async {
             loader.completesPetsLoading()
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    func test_loadPetImageDataCompletion_dispatchesFromBackgroundToMainThread() {
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.completesPetsLoading(with: [makePet()], at: 0)
+        
+        sut.simulatePetImageViewIsVisible(at: 0)
+        
+        let imageData0 = UIImage.make(withColor: .red).pngData()!
+        let exp = expectation(description: "Wait for background queue")
+        DispatchQueue.global().async {
+            loader.completesImageLoading(with: imageData0, at: 0)
             exp.fulfill()
         }
         wait(for: [exp], timeout: 1.0)

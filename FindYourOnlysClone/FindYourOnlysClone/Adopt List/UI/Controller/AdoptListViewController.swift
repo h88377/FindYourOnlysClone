@@ -30,9 +30,11 @@ final class AdoptListViewController: UICollectionViewController {
     }
     
     private let viewModel: AdoptListViewModel
+    private let paginationController: AdoptListPaginationViewController
     
-    init(viewModel: AdoptListViewModel) {
+    init(viewModel: AdoptListViewModel, paginationController: AdoptListPaginationViewController) {
         self.viewModel = viewModel
+        self.paginationController = paginationController
         super.init(collectionViewLayout: UICollectionViewLayout())
     }
     
@@ -48,6 +50,7 @@ final class AdoptListViewController: UICollectionViewController {
     }
     
     private func configureCollectionView() {
+        collectionView.backgroundColor = .systemGray6
         collectionView.collectionViewLayout = configureCollectionViewLayout()
         collectionView.dataSource = self.dataSource
         collectionView.prefetchDataSource = self
@@ -71,7 +74,7 @@ final class AdoptListViewController: UICollectionViewController {
     }
     
     private func binded(refreshView: UIRefreshControl) -> UIRefreshControl {
-        viewModel.isPetLoadingStateOnChange = { [weak self] isLoading in
+        viewModel.isPetRefreshLoadingStateOnChange = { [weak self] isLoading in
             if isLoading {
                 self?.collectionView.refreshControl?.beginRefreshing()
             } else {
@@ -84,6 +87,7 @@ final class AdoptListViewController: UICollectionViewController {
     }
     
     @objc private func loadPets() {
+        paginationController.resetPage()
         viewModel.refreshPets()
     }
     
@@ -113,11 +117,7 @@ extension AdoptListViewController {
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let offsetY = scrollView.contentOffset.y
-        let contentHeight = scrollView.contentSize.height
-        if (offsetY > contentHeight - scrollView.frame.height) {
-            viewModel.loadNextPage()
-        }
+        paginationController.paginate(on: scrollView)
     }
 }
 

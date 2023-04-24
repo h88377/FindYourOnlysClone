@@ -11,20 +11,26 @@ final class AdoptListUIComposer {
     private init() {}
     
     static func adoptListComposedWith(petLoader: PetLoader, imageLoader: PetImageDataLoader) -> AdoptListViewController {
-        let viewModel = AdoptListViewModel(petLoader: MainThreadDispatchDecorator(decoratee: petLoader))
-        let controller = AdoptListViewController(viewModel: viewModel)
+        let decoratedPetLoader = MainThreadDispatchDecorator(decoratee: petLoader)
+        let decoratedImageLoader = MainThreadDispatchDecorator(decoratee: imageLoader)
         
-        viewModel.isPetsRefreshingStateOnChange = { [weak controller] pets in
-            let cellControllers = adaptPetsToCellControllersWith(pets, imageLoader: imageLoader)
-            controller?.set(cellControllers)
+        let paginationViewModel = AdoptListPaginationViewModel(petLoader: decoratedPetLoader)
+        let paginationController = AdoptListPaginationViewController(viewModel: paginationViewModel)
+        
+        let adoptListViewModel = AdoptListViewModel(petLoader: MainThreadDispatchDecorator(decoratee: petLoader))
+        let adoptListController = AdoptListViewController(viewModel: adoptListViewModel, paginationController: paginationController)
+        
+        adoptListViewModel.isPetsRefreshingStateOnChange = { [weak adoptListController] pets in
+            let cellControllers = adaptPetsToCellControllersWith(pets, imageLoader: decoratedImageLoader)
+            adoptListController?.set(cellControllers)
         }
         
-        viewModel.isPetsAppendingStateOnChange = { [weak controller] pets in
-            let cellControllers = adaptPetsToCellControllersWith(pets, imageLoader: imageLoader)
-            controller?.append(cellControllers)
+        paginationViewModel.isPetsPaginationStateOnChange = { [weak adoptListController] pets in
+            let cellControllers = adaptPetsToCellControllersWith(pets, imageLoader: decoratedImageLoader)
+            adoptListController?.append(cellControllers)
         }
         
-        return controller
+        return adoptListController
     }
     
     private static func adaptPetsToCellControllersWith(_ pets: [Pet], imageLoader: PetImageDataLoader) -> [AdoptListCellViewController] {
@@ -55,6 +61,14 @@ private final class MainThreadDispatchDecorator<T> {
 extension MainThreadDispatchDecorator: PetLoader where T == PetLoader {
     func load(with request: AdoptListRequest, completion: @escaping (PetLoader.Result) -> Void) {
         decoratee.load(with: request) { [weak self] result in
+            self?.dispatch { completion(result) }
+        }
+    }
+}
+
+extension MainThreadDispatchDecorator: PetImageDataLoader where T == PetImageDataLoader {
+    func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) -> PetImageDataLoaderTask {
+        decoratee.loadImageData(from: url) { [weak self] result in
             self?.dispatch { completion(result) }
         }
     }

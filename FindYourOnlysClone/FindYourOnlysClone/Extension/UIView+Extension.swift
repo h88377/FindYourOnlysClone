@@ -8,6 +8,10 @@
 import UIKit
 
 extension UIView {
+    func addSubviews(_ views: [UIView]) {
+        views.forEach { addSubview($0) }
+    }
+    
     var isShimmering: Bool {
         set {
             if newValue {

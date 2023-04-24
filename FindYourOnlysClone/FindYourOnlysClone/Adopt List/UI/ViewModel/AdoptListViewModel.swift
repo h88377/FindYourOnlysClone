@@ -16,33 +16,21 @@ final class AdoptListViewModel {
         self.petLoader = petLoader
     }
     
-    private var currentPage = 0
-    
-    var isPetLoadingStateOnChange: Observer<Bool>?
-    var isPetsAppendingStateOnChange: Observer<[Pet]>?
+    var isPetRefreshLoadingStateOnChange: Observer<Bool>?
     var isPetsRefreshingStateOnChange: Observer<[Pet]>?
     
     func refreshPets() {
-        currentPage = 0
-        loadPets()
-    }
-    
-    func loadNextPage() {
-        currentPage += 1
         loadPets()
     }
     
     private func loadPets() {
-        isPetLoadingStateOnChange?(true)
-        petLoader.load(with: AdoptListRequest(page: currentPage)) { [weak self] result in
+        isPetRefreshLoadingStateOnChange?(true)
+        
+        petLoader.load(with: AdoptListRequest(page: 0)) { [weak self] result in
             if let pets = try? result.get() {
-                if self?.currentPage == 0 {
-                    self?.isPetsRefreshingStateOnChange?(pets)
-                } else {
-                    self?.isPetsAppendingStateOnChange?(pets)
-                }
+                self?.isPetsRefreshingStateOnChange?(pets)
             }
-            self?.isPetLoadingStateOnChange?(false)
+            self?.isPetRefreshLoadingStateOnChange?(false)
         }
     }
 }

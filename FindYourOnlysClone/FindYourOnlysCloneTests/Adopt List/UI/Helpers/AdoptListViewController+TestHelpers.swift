@@ -40,8 +40,15 @@ extension AdoptListViewController {
         dataSource?.collectionView?(collectionView, cancelPrefetchingForItemsAt: [IndexPath(item: index, section: petsSection)])
     }
     
+    func simulateIsNotVisibleAndVisibleAgain(with cell: AdoptListCell) {
+        let delegate = collectionView.delegate
+        let indexPath = IndexPath(item: 0, section: 0)
+        delegate?.collectionView?(collectionView, didEndDisplaying: cell, forItemAt: indexPath)
+        delegate?.collectionView?(collectionView, willDisplay: cell, forItemAt: indexPath)
+    }
+    
     func simulatePaginationScrolling() {
-        let scrollView = UIScrollView()
+        let scrollView = DraggingScrollView()
         scrollView.contentOffset.y = 1000
         scrollViewDidScroll(scrollView)
     }

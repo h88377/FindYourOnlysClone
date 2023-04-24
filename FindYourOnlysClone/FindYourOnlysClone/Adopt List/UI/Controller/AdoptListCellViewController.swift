@@ -20,11 +20,33 @@ final class AdoptListCellViewController {
         cell = collectionView.dequeueReusableCell(for: indexPath)
         
         cell?.genderLabel.text = viewModel.genderText
+        cell?.genderLabel.textColor = viewModel.genderText == "♂" ? .maleColor : .femaleColor
         cell?.cityLabel.text = viewModel.cityText
         cell?.kindLabel.text = viewModel.kindText
         cell?.retryButton.isHidden = true
-        cell?.retryImageLoadHandler = viewModel.loadPetImageData
         
+        cell?.retryImageLoadHandler = viewModel.loadPetImageData
+        cell?.prepareForReuseHandler = { [weak self, weak cell] in
+            cell?.petImageView.image = nil
+            self?.releaseBindings()
+        }
+        
+        return cell!
+    }
+    
+    func requestPetImageData() {
+        cell?.petImageView.image = nil
+        
+        setUpBindings()
+        viewModel.loadPetImageData()
+    }
+    
+    func cancelTask() {
+        viewModel.cancelTask()
+        releaseBindings()
+    }
+    
+    private func setUpBindings() {
         viewModel.isPetImageLoadingStateOnChange = { [weak cell] isLoading in
             cell?.petImageContainer.isShimmering = isLoading
         }
@@ -36,20 +58,9 @@ final class AdoptListCellViewController {
         viewModel.isPetImageStateOnChange = { [weak cell] image in
             cell?.petImageView.image = image
         }
-        
-        return cell!
     }
     
-    func requestPetImageData() {
-        viewModel.loadPetImageData()
-    }
-    
-    func cancelTask() {
-        viewModel.cancelTask()
-        releaseCallBacksForCellReuse()
-    }
-    
-    private func releaseCallBacksForCellReuse() {
+    private func releaseBindings() {
         viewModel.isPetImageStateOnChange = nil
         viewModel.isPetImageRetryStateOnChange = nil
         viewModel.isPetImageLoadingStateOnChange = nil
