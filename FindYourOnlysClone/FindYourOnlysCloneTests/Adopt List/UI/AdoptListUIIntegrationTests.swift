@@ -78,6 +78,16 @@ class AdoptListUIIntegrationTests: XCTestCase {
         assertThat(sut, isRendering: [pet0])
     }
     
+    func test_loadPetsCompletions_showsErrorViewOnError() {
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        assertThat(sut, isRendering: [])
+        
+        loader.completesPetsLoadingWithError()
+        XCTAssertTrue(sut.isShowingErrorView)
+    }
+    
     func test_petImageView_loadsImageURLWhenVisible() {
         let pet0 = makePet(photoURL: URL(string:"https://url-0.com")!)
         let pet1 = makePet(photoURL: nil)

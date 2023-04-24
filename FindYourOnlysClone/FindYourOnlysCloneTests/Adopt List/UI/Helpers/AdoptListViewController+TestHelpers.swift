@@ -63,6 +63,10 @@ extension AdoptListViewController {
         return collectionView.refreshControl?.isRefreshing == true
     }
     
+    var isShowingErrorView: Bool {
+        return errorView.isVisible == true
+    }
+    
     var numberOfPets: Int {
         return collectionView.numberOfSections == 0 ? 0 : collectionView.numberOfItems(inSection: petsSection)
     }

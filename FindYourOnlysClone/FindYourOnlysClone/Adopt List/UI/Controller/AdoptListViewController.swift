@@ -7,6 +7,16 @@
 
 import UIKit
 
+final class ErrorView: UIView {
+    var isVisible = false
+    
+    func show() {
+        isVisible = true
+    }
+    
+    
+}
+
 final class AdoptListViewController: UICollectionViewController {
     private lazy var dataSource: UICollectionViewDiffableDataSource<Int, AdoptListCellViewController> = {
         .init(collectionView: collectionView) { [weak self] collectionView, indexPath, controller in
@@ -29,6 +39,13 @@ final class AdoptListViewController: UICollectionViewController {
         dataSource.apply(snapshot, animatingDifferences: true)
     }
     
+    let errorView: ErrorView = {
+        let view = ErrorView()
+        
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private let viewModel: AdoptListViewModel
     private let paginationController: AdoptListPaginationViewController
     
@@ -44,6 +61,10 @@ final class AdoptListViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        viewModel.isPetsRefreshingErrorStateOnChange = { [weak self] _ in
+            self?.errorView.show()
+        }
         
         configureCollectionView()
         loadPets()
