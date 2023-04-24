@@ -98,19 +98,19 @@ class AdoptListUIIntegrationTests: XCTestCase {
         sut.loadViewIfNeeded()
         XCTAssertFalse(sut.isShowingNoResultReminder, "Expected no reminder before pets loading completion")
         
-        loader.completesPetsLoadingWithError()
+        loader.completesPetsLoadingWithError(at: 0)
         XCTAssertTrue(sut.isShowingNoResultReminder, "Expected reminder after pets loading completes with error")
         
         sut.simulateUserInitiatedPetsReload()
-        loader.completesPetsLoading(with: [makePet()])
+        loader.completesPetsLoading(with: [makePet()], at: 1)
         XCTAssertFalse(sut.isShowingNoResultReminder, "Expected no reminder after pets loading completes with pets")
         
         sut.simulateUserInitiatedPetsReload()
-        loader.completesPetsLoadingWithError()
+        loader.completesPetsLoadingWithError(at: 2)
         XCTAssertFalse(sut.isShowingNoResultReminder, "Expected no reminder after pets loading completes with error but there are pets from previous request")
         
         sut.simulateUserInitiatedPetsReload()
-        loader.completesPetsLoading(with: [])
+        loader.completesPetsLoading(with: [], at: 3)
         XCTAssertTrue(sut.isShowingNoResultReminder, "Expected no reminder after pets loading completes with empty result")
     }
     
