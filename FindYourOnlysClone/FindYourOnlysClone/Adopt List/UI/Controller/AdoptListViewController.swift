@@ -8,13 +8,33 @@
 import UIKit
 
 final class ErrorView: UIView {
-    var isVisible = false
+    let messageLabel = UILabel()
     
-    func show() {
-        isVisible = true
+    var isVisible: Bool {
+        return alpha > 0
     }
     
+    private var message: String? {
+        didSet { messageLabel.text = message }
+    }
     
+    func show(_ message: String?) {
+        self.message = message
+        
+        UIView.animate(
+            withDuration: 0.25,
+            animations: { self.alpha = 1 },
+            completion: { isCompleted in
+                if isCompleted { self.hide() }
+            })
+    }
+    
+    private func hide() {
+        UIView.animate(withDuration: 0.25) {
+            self.alpha = 0
+            self.message = nil
+        }
+    }
 }
 
 final class AdoptListViewController: UICollectionViewController {
@@ -62,8 +82,8 @@ final class AdoptListViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel.isPetsRefreshingErrorStateOnChange = { [weak self] _ in
-            self?.errorView.show()
+        viewModel.isPetsRefreshingErrorStateOnChange = { [weak self] message in
+            self?.errorView.show(message)
         }
         
         configureCollectionView()

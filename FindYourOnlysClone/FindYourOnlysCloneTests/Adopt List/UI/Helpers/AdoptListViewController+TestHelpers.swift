@@ -64,7 +64,7 @@ extension AdoptListViewController {
     }
     
     var isShowingErrorView: Bool {
-        return errorView.isVisible == true
+        return errorView.isVisible == true && errorView.messageLabel.text == "無法連接至伺服器"
     }
     
     var numberOfPets: Int {

@@ -80,12 +80,17 @@ class AdoptListUIIntegrationTests: XCTestCase {
     
     func test_loadPetsCompletions_showsErrorViewOnError() {
         let (sut, loader) = makeSUT()
-        
         sut.loadViewIfNeeded()
-        assertThat(sut, isRendering: [])
         
         loader.completesPetsLoadingWithError()
-        XCTAssertTrue(sut.isShowingErrorView)
+        XCTAssertTrue(sut.isShowingErrorView, "Expected error view once pets loading completes with error")
+        
+        let exp = expectation(description: "Wait for error view hiding completion")
+        DispatchQueue.main.async {
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 0.1)
+        XCTAssertFalse(sut.isShowingErrorView, "Expected no error view once shows animation completes")
     }
     
     func test_petImageView_loadsImageURLWhenVisible() {
@@ -93,205 +98,205 @@ class AdoptListUIIntegrationTests: XCTestCase {
         let pet1 = makePet(photoURL: nil)
         let pet2 = makePet(photoURL: URL(string:"https://url-1.com")!)
         let (sut, loader) = makeSUT()
-        
+
         sut.loadViewIfNeeded()
         loader.completesPetsLoading(with: [pet0, pet1, pet2], at: 0)
         XCTAssertEqual(loader.requestedImageURLs, [], "Expected no requested image url until cells become visible")
-        
+
         sut.simulatePetImageViewIsVisible(at: 0)
         XCTAssertEqual(loader.requestedImageURLs, [pet0.photoURL], "Expected first requested image url when first cell become visible")
-        
+
         sut.simulatePetImageViewIsVisible(at: 1)
         XCTAssertEqual(loader.requestedImageURLs, [pet0.photoURL], "Expected no requested image url state change when second cell become visible")
-        
+
         sut.simulatePetImageViewIsVisible(at: 2)
         XCTAssertEqual(loader.requestedImageURLs, [pet0.photoURL, pet2.photoURL], "Expected second requested image url when third cell become visible")
     }
-    
+
     func test_petImageView_cancelsImageURLWhenIsNotVisibleAnymore() {
         let pet0 = makePet(photoURL: URL(string:"https://url-0.com")!)
         let pet1 = makePet(photoURL: nil)
         let pet2 = makePet(photoURL: URL(string:"https://url-1.com")!)
         let (sut, loader) = makeSUT()
-        
+
         sut.loadViewIfNeeded()
         XCTAssertEqual(loader.cancelledURLs, [], "Expected no cancelled URL request until cells become visible")
         loader.completesPetsLoading(with: [pet0, pet1, pet2], at: 0)
-        
+
         sut.simulatePetImageViewIsNotVisible(at: 0)
         XCTAssertEqual(loader.cancelledURLs, [pet0.photoURL], "Expected first cancelled URL request when first view is not visible anymore")
-        
+
         sut.simulatePetImageViewIsNotVisible(at: 1)
         XCTAssertEqual(loader.cancelledURLs, [pet0.photoURL], "Expected no cancelled URL request state change when second view is not visible anymore")
-        
+
         sut.simulatePetImageViewIsNotVisible(at: 2)
         XCTAssertEqual(loader.cancelledURLs, [pet0.photoURL, pet2.photoURL], "Expected first cancelled URL request when first view is not visible anymore")
     }
-    
+
     func test_petImageViewLoadingIndicator_isVisibleWhenLoadingPet() {
         let (sut, loader) = makeSUT()
-        
+
         sut.loadViewIfNeeded()
         loader.completesPetsLoading(with: [makePet(), makePet(), makePet(photoURL: nil)], at: 0)
-        
+
         let view0 = sut.simulatePetImageViewIsVisible(at: 0)
         let view1 = sut.simulatePetImageViewIsVisible(at: 1)
         let view2 = sut.simulatePetImageViewIsVisible(at: 2)
         XCTAssertEqual(view0?.isShowingImageLoadingIndicator, true, "Expected first image loading indicator when loading first image")
         XCTAssertEqual(view1?.isShowingImageLoadingIndicator, true, "Expected second image loading indicator when loading second image")
         XCTAssertEqual(view2?.isShowingImageLoadingIndicator, false, "Expected no loading indicator state change when third view is visible")
-        
+
         loader.completesImageLoading(at: 0)
         XCTAssertEqual(view0?.isShowingImageLoadingIndicator, false, "Expected no image loading indicator when first image loading completes successfully")
-        
+
         loader.completesImageLoadingWithError(at: 1)
         XCTAssertEqual(view1?.isShowingImageLoadingIndicator, false, "Expected no image loading indicator when second image loading completes with error")
     }
-    
+
     func test_petImageView_rendersSuccessfullyLoadedImage() {
         let (sut, loader) = makeSUT()
-        
+
         sut.loadViewIfNeeded()
         loader.completesPetsLoading(with: [makePet(photoURL: nil), makePet(), makePet()], at: 0)
-        
+
         let view0 = sut.simulatePetImageViewIsVisible(at: 0)
         let view1 = sut.simulatePetImageViewIsVisible(at: 1)
         let view2 = sut.simulatePetImageViewIsVisible(at: 2)
         XCTAssertNil(view0?.renderedImageData, "Expected first view no image when it is visible")
         XCTAssertNil(view1?.renderedImageData, "Expected second view no image before second image loading completion")
         XCTAssertNil(view2?.renderedImageData, "Expected third view no image before third image loading completion")
-        
+
         let imageData1 = UIImage.make(withColor: .red).pngData()!
         loader.completesImageLoading(with: imageData1, at: 0)
         XCTAssertNil(view0?.renderedImageData, "Expected no state change for first image once second view completes image loading successfully")
         XCTAssertEqual(view1?.renderedImageData, imageData1, "Expected image for second view once first image loading completes successfully")
         XCTAssertNil(view2?.renderedImageData, "Expected no state change for third image before completing image loading")
-        
+
         let imageData2 = UIImage.make(withColor: .blue).pngData()!
         loader.completesImageLoading(with: imageData2, at: 1)
         XCTAssertNil(view0?.renderedImageData, "Expected no state change for first image once third view completes image loading successfully")
         XCTAssertEqual(view1?.renderedImageData, imageData1, "Expected no state change for second image once second view completes image loading successfully")
         XCTAssertEqual(view2?.renderedImageData, imageData2, "Expected image for third view once third image loading completes successfully")
     }
-    
+
     func test_petImageViewRetryButton_isVisibleOnPetImageLoadedError() {
         let (sut, loader) = makeSUT()
-        
+
         sut.loadViewIfNeeded()
         loader.completesPetsLoading(with: [makePet(), makePet(), makePet(photoURL: nil)], at: 0)
-        
+
         let view0 = sut.simulatePetImageViewIsVisible(at: 0)
         let view1 = sut.simulatePetImageViewIsVisible(at: 1)
         let view2 = sut.simulatePetImageViewIsVisible(at: 2)
         XCTAssertEqual(view0?.isShowingImageRetryAction, false, "Expected first view no retry action before first image loading completion")
         XCTAssertEqual(view1?.isShowingImageRetryAction, false, "Expected second view no retry action before second image loading completion")
         XCTAssertEqual(view2?.isShowingImageRetryAction, false, "Expected third view no retry action when it is visible")
-        
+
         loader.completesImageLoadingWithError(at: 0)
         XCTAssertEqual(view0?.isShowingImageRetryAction, true, "Expected first view is showing retry action once first image completes with error")
         XCTAssertEqual(view1?.isShowingImageRetryAction, false, "Expected no retry action state change for second view once first image loading completes with error")
         XCTAssertEqual(view2?.isShowingImageRetryAction, false, "Expected no retry action state change for third view once first image loading completes with error")
-        
+
         let imageData1 = UIImage.make(withColor: .blue).pngData()!
         loader.completesImageLoading(with: imageData1, at: 1)
         XCTAssertEqual(view0?.isShowingImageRetryAction, true, "Expected first view is showing retry action once first image completes with error")
         XCTAssertEqual(view1?.isShowingImageRetryAction, false, "Expected second view no retry action once second image loading completes successfully")
         XCTAssertEqual(view2?.isShowingImageRetryAction, false, "Expected no retry action state change for third view once second image loading completes successfully")
     }
-    
+
     func test_petImageViewRetryButton_isVisibleOnInvalidImageData() {
         let (sut, loader) = makeSUT()
-        
+
         sut.loadViewIfNeeded()
         loader.completesPetsLoading(with: [makePet(), makePet(), makePet(photoURL: nil)], at: 0)
-        
+
         let view0 = sut.simulatePetImageViewIsVisible(at: 0)
         let view1 = sut.simulatePetImageViewIsVisible(at: 1)
         let view2 = sut.simulatePetImageViewIsVisible(at: 2)
         XCTAssertEqual(view0?.isShowingImageRetryAction, false, "Expected first view no retry action before first image loading completion")
         XCTAssertEqual(view1?.isShowingImageRetryAction, false, "Expected second view no retry action before second image loading completion")
         XCTAssertEqual(view2?.isShowingImageRetryAction, false, "Expected third view no retry action when it is visible")
-        
+
         let invalidImageData = Data("invalid data".utf8)
         loader.completesImageLoading(with: invalidImageData, at: 0)
         XCTAssertEqual(view0?.isShowingImageRetryAction, true, "Expected first view is showing retry action once first image completes with invalid data")
         XCTAssertEqual(view1?.isShowingImageRetryAction, false, "Expected no retry action state change for second view once first image loading completes with invalid data")
         XCTAssertEqual(view2?.isShowingImageRetryAction, false, "Expected no retry action state change for third view once first image loading completes with invalid data")
-        
+
         let imageData1 = UIImage.make(withColor: .blue).pngData()!
         loader.completesImageLoading(with: imageData1, at: 1)
         XCTAssertEqual(view0?.isShowingImageRetryAction, true, "Expected first view is showing retry action once first image completes with invalid data")
         XCTAssertEqual(view1?.isShowingImageRetryAction, false, "Expected second view no retry action once second image loading completes successfully")
         XCTAssertEqual(view2?.isShowingImageRetryAction, false, "Expected no retry action state change for third view once second image loading completes with invalid data")
-        
+
     }
-    
+
     func test_petImageViewRetryAction_retriesImageLoad() {
         let pet0 = makePet(photoURL: URL(string:"https://url-0.com")!)
         let pet1 = makePet(photoURL: URL(string:"https://url-1.com")!)
         let (sut, loader) = makeSUT()
-        
+
         sut.loadViewIfNeeded()
         loader.completesPetsLoading(with: [pet0, pet1], at: 0)
-        
+
         let view0 = sut.simulatePetImageViewIsVisible(at: 0)
         let view1 = sut.simulatePetImageViewIsVisible(at: 1)
         XCTAssertEqual(loader.requestedImageURLs, [pet0.photoURL, pet1.photoURL], "Expected two image URL requests for the two visible views")
-        
+
         loader.completesImageLoadingWithError(at: 0)
         loader.completesImageLoadingWithError(at: 1)
         XCTAssertEqual(loader.requestedImageURLs, [pet0.photoURL, pet1.photoURL], "Expected only two URL requests before retry action")
-        
+
         view0?.simulateRetryAction()
         XCTAssertEqual(loader.requestedImageURLs, [pet0.photoURL, pet1.photoURL, pet0.photoURL], "Expected third image URL request after first view retry action")
-        
+
         view1?.simulateRetryAction()
         XCTAssertEqual(loader.requestedImageURLs, [pet0.photoURL, pet1.photoURL, pet0.photoURL, pet1.photoURL], "Expected fourth image URL request after second view retry action")
     }
-    
+
     func test_petImageView_preloadsImageURLWhenNearVisible() {
         let pet0 = makePet(photoURL: URL(string:"https://url-0.com")!)
         let pet1 = makePet(photoURL: URL(string:"https://url-1.com")!)
         let pet2 = makePet(photoURL: nil)
         let (sut, loader) = makeSUT()
-        
+
         sut.loadViewIfNeeded()
         loader.completesPetsLoading(with: [pet0, pet1, pet2], at: 0)
         XCTAssertEqual(loader.requestedImageURLs, [], "Expected no requested image url until cells near visible")
-        
+
         sut.simulatePetImageViewIsNearVisible(at: 0)
         XCTAssertEqual(loader.requestedImageURLs, [pet0.photoURL], "Expected first requested image url when first cell near visible")
-        
+
         sut.simulatePetImageViewIsNearVisible(at: 1)
         XCTAssertEqual(loader.requestedImageURLs, [pet0.photoURL, pet1.photoURL], "Expected second requested image url when second cell near visible")
-        
+
         sut.simulatePetImageViewIsNearVisible(at: 2)
         XCTAssertEqual(loader.requestedImageURLs, [pet0.photoURL, pet1.photoURL], "Expected no requested image url state change when third cell near visible")
     }
-    
+
     func test_petImageView_cancelsImageURLWhenIsNotNearVisibleAnymore() {
         let pet0 = makePet(photoURL: URL(string:"https://url-0.com")!)
         let pet1 = makePet(photoURL: URL(string:"https://url-1.com")!)
         let pet2 = makePet(photoURL: nil)
         let (sut, loader) = makeSUT()
-        
+
         sut.loadViewIfNeeded()
         XCTAssertEqual(loader.cancelledURLs, [], "Expected no cancelled URL request until cells are not near visible")
         loader.completesPetsLoading(with: [pet0, pet1, pet2], at: 0)
-        
+
         sut.simulatePetImageViewIsNotNearVisible(at: 0)
         XCTAssertEqual(loader.cancelledURLs, [pet0.photoURL], "Expected first cancelled URL request when first view is not near visible anymore")
-        
+
         sut.simulatePetImageViewIsNotNearVisible(at: 1)
         XCTAssertEqual(loader.cancelledURLs, [pet0.photoURL, pet1.photoURL], "Expected second cancelled URL request when second view is not near visible anymore")
-        
+
         sut.simulatePetImageViewIsNotNearVisible(at: 2)
         XCTAssertEqual(loader.cancelledURLs, [pet0.photoURL, pet1.photoURL], "Expected no cancelled URL request state change when third view is not near visible anymore")
     }
-    
+
     func test_paginationActions_requestsPetsFromLoader() {
         let (sut, loader) = makeSUT()
-        
+
         sut.loadViewIfNeeded()
         XCTAssertEqual(loader.loadPetsRequests, [.load(AdoptListRequest(page: 0))], "Expected a loading request once view is loaded")
 
@@ -301,7 +306,7 @@ class AdoptListUIIntegrationTests: XCTestCase {
             .load(AdoptListRequest(page: 0)),
             .load(AdoptListRequest(page: 1))
         ], "Expected pagination loading request once user scrolling the view")
-        
+
         loader.completesPetsLoading(with: [makePet(id: 1)], at: 1)
         sut.simulateUserInitiatedPetsReload()
         XCTAssertEqual(loader.loadPetsRequests, [
@@ -309,7 +314,7 @@ class AdoptListUIIntegrationTests: XCTestCase {
             .load(AdoptListRequest(page: 1)),
             .load(AdoptListRequest(page: 0))
         ], "Expected request first page once user initiated a reload")
-        
+
         loader.completesPetsLoading(with: [makePet(id: 2)], at: 2)
         sut.simulatePaginationScrolling()
         sut.simulatePaginationScrolling()
@@ -319,7 +324,7 @@ class AdoptListUIIntegrationTests: XCTestCase {
             .load(AdoptListRequest(page: 0)),
             .load(AdoptListRequest(page: 1))
         ], "Expected another pagination loading request once user scrolling the view")
-        
+
         loader.completesPetsLoadingWithError(at: 3)
         sut.simulatePaginationScrolling()
         XCTAssertEqual(loader.loadPetsRequests, [
@@ -330,53 +335,53 @@ class AdoptListUIIntegrationTests: XCTestCase {
             .load(AdoptListRequest(page: 1))
         ], "Expected another pagination loading request once user scrolling the view")
     }
-    
+
     func test_refresh_afterPaginationRequest_rendersOnlyTheFirstPage() {
         let firstPage = (0...3).map { makePet(id: $0) }
         let secondPage = (4...6).map { makePet(id: $0, photoURL: nil) }
         let (sut, loader) = makeSUT()
-        
+
         sut.loadViewIfNeeded()
         assertThat(sut, isRendering: [])
-        
+
         loader.completesPetsLoading(with: firstPage, at: 0)
         assertThat(sut, isRendering: firstPage)
-        
+
         sut.simulatePaginationScrolling()
         loader.completesPetsLoading(with: secondPage, at: 1)
         assertThat(sut, isRendering: firstPage + secondPage)
-        
+
         sut.simulateUserInitiatedPetsReload()
         loader.completesPetsLoading(with: firstPage, at: 2)
         assertThat(sut, isRendering: firstPage)
     }
-    
+
     func test_petImageView_doesNotDeliverImageFromPreviousRequestWhenCellIsReused() {
         let (sut, loader) = makeSUT()
-        
+
         sut.loadViewIfNeeded()
         loader.completesPetsLoading(with: [makePet(), makePet()])
-        
+
         let view0 = sut.simulatePetImageViewIsVisible(at: 0)
         view0?.prepareForReuse()
-        
+
         let imageData0 = UIImage.make(withColor: .red).pngData()!
         loader.completesImageLoading(with: imageData0, at: 0)
-        
+
         XCTAssertEqual(view0?.renderedImageData, .none, "Expected no image state change for reused view once image loading completes successfully")
     }
-    
+
     func test_petImageView_imageIsNilWhenCellIsReused() {
         let (sut, loader) = makeSUT()
-        
+
         sut.loadViewIfNeeded()
         loader.completesPetsLoading(with: [makePet(), makePet()])
-        
+
         let view0 = sut.simulatePetImageViewIsVisible(at: 0)
         let imageData0 = UIImage.make(withColor: .red).pngData()!
         loader.completesImageLoading(with: imageData0, at: 0)
         view0?.prepareForReuse()
-        
+
         XCTAssertEqual(view0?.renderedImageData, .none, "Expected no image for reused view after image loading completes successfully")
     }
 
@@ -384,40 +389,40 @@ class AdoptListUIIntegrationTests: XCTestCase {
         let (sut, loader) = makeSUT()
         sut.loadViewIfNeeded()
         loader.completesPetsLoading(with: [makePet()])
-        
+
         let image0 = UIImage.make(withColor: .red).pngData()!
         let view0 = try XCTUnwrap(sut.simulatePetImageViewIsVisible(at: 0))
         loader.completesImageLoading(with: image0, at: 0)
-        
+
         sut.simulateIsNotVisibleAndVisibleAgain(with: view0)
         XCTAssertNil(view0.renderedImageData)
     }
-    
+
     func test_petImageView_doesNotAlterStatesAfterNotVisible() {
         let (sut, loader) = makeSUT()
         sut.loadViewIfNeeded()
         loader.completesPetsLoading(with: [makePet(), makePet(), makePet(photoURL: nil)])
-        
+
         let view0 = sut.simulatePetImageViewIsNotVisible(at: 0)
         let view1 = sut.simulatePetImageViewIsNotVisible(at: 1)
         let view2 = sut.simulatePetImageViewIsNotVisible(at: 2)
-        
+
         let image = UIImage.make(withColor: .red).pngData()!
         loader.completesImageLoading(with: image, at: 0)
         XCTAssertNil(view0.renderedImageData, "Expected not to alter first image state")
-        
+
         loader.completesImageLoadingWithError(at: 1)
         XCTAssertFalse(view1.isShowingImageRetryAction, "Expected not to alter second retry button state")
         XCTAssertTrue(view1.isShowingImageLoadingIndicator, "Expected not to alter second image loading state")
-        
+
         XCTAssertFalse(view2.isShowingImageRetryAction, "Expected not to alter third view's retry button state")
         XCTAssertFalse(view2.isShowingImageLoadingIndicator, "Expected not to alter third image loading state")
     }
-    
+
     func test_loadPetsCompletion_dispatchesFromBackgroundToMainThread() {
         let (sut, loader) = makeSUT()
         sut.loadViewIfNeeded()
-        
+
         let exp = expectation(description: "Wait for background queue")
         DispatchQueue.global().async {
             loader.completesPetsLoading()
@@ -425,14 +430,14 @@ class AdoptListUIIntegrationTests: XCTestCase {
         }
         wait(for: [exp], timeout: 1.0)
     }
-    
+
     func test_loadPetImageDataCompletion_dispatchesFromBackgroundToMainThread() {
         let (sut, loader) = makeSUT()
         sut.loadViewIfNeeded()
         loader.completesPetsLoading(with: [makePet()], at: 0)
-        
+
         sut.simulatePetImageViewIsVisible(at: 0)
-        
+
         let imageData0 = UIImage.make(withColor: .red).pngData()!
         let exp = expectation(description: "Wait for background queue")
         DispatchQueue.global().async {
