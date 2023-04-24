@@ -8,7 +8,15 @@
 import UIKit
 
 final class ErrorView: UIView {
-    let messageLabel = UILabel()
+    let messageLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.textColor = .white
+        
+        return label
+    }()
     
     var isVisible: Bool {
         return alpha > 0
@@ -18,11 +26,29 @@ final class ErrorView: UIView {
         didSet { messageLabel.text = message }
     }
     
-    func show(_ message: String?) {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        setUpUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func show(_ message: String?, on view: UIView) {
         self.message = message
         
+        view.addSubview(self)
+        NSLayoutConstraint.activate([
+            centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.35),
+            heightAnchor.constraint(equalTo: widthAnchor)
+        ])
+        
         UIView.animate(
-            withDuration: 0.25,
+            withDuration: 1,
             animations: { self.alpha = 1 },
             completion: { isCompleted in
                 if isCompleted { self.hide() }
@@ -30,10 +56,25 @@ final class ErrorView: UIView {
     }
     
     private func hide() {
-        UIView.animate(withDuration: 0.25) {
-            self.alpha = 0
-            self.message = nil
-        }
+        UIView.animate(
+            withDuration: 1,
+            animations: { self.alpha = 0},
+            completion: { isCompleted in
+                self.message = nil
+                self.removeFromSuperview()
+            })
+    }
+    
+    private func setUpUI() {
+        backgroundColor = .darkGray
+        
+        addSubview(messageLabel)
+        NSLayoutConstraint.activate([
+            messageLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            messageLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+            messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16)
+        ])
     }
 }
 
@@ -83,11 +124,19 @@ final class AdoptListViewController: UICollectionViewController {
         super.viewDidLoad()
         
         viewModel.isPetsRefreshingErrorStateOnChange = { [weak self] message in
-            self?.errorView.show(message)
+            guard let self = self else { return }
+            
+            self.errorView.show(message, on: self.view)
         }
         
         configureCollectionView()
         loadPets()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        errorView.layer.cornerRadius = 20
     }
     
     private func configureCollectionView() {
