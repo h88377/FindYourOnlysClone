@@ -63,13 +63,15 @@ final class AdoptListCell: UICollectionViewCell {
         return imageView
     }()
     
-    let petImageContainer: UIView = {
-        let view = UIView()
-        view.clipsToBounds = true
-        view.backgroundColor = .systemGray4
-        
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
+    let petImageContainer: UIImageView = {
+        let imageView = UIImageView()
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFill
+        imageView.isUserInteractionEnabled = true
+        imageView.image = UIImage(named: "adoptListCellImagePlaceholder")
+
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
     }()
     
     private(set) lazy var retryButton: UIButton = {
@@ -77,7 +79,7 @@ final class AdoptListCell: UICollectionViewCell {
         button.addTarget(self, action: #selector(retryImageLoad), for: .touchUpInside)
         button.setTitle("↻", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 60)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.darkGray, for: .normal)
         
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
