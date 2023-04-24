@@ -323,10 +323,11 @@ class AdoptListUIIntegrationTests: XCTestCase {
 
         loader.completesPetsLoading(with: [makePet(id: 1)], at: 0)
         sut.simulatePaginationScrolling()
+        sut.simulateUserInitiatedPetsReload()
         XCTAssertEqual(loader.loadPetsRequests, [
             .load(AdoptListRequest(page: 0)),
             .load(AdoptListRequest(page: 1))
-        ], "Expected pagination loading request once user scrolling the view")
+        ], "Expected pagination loading request once user scrolling the view, and trigger a refresh before completion")
 
         loader.completesPetsLoading(with: [makePet(id: 1)], at: 1)
         sut.simulateUserInitiatedPetsReload()

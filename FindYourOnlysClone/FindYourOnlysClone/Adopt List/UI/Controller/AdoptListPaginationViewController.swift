@@ -15,7 +15,7 @@ final class AdoptListPaginationViewController {
         self.setUpBinding()
     }
     
-    private var isPaginating = false
+    private(set) var isPaginating = false
     
     func resetPage() {
         viewModel.resetPage()

@@ -142,6 +142,8 @@ final class AdoptListViewController: UICollectionViewController {
     }
     
     @objc private func loadPets() {
+        guard !paginationController.isPaginating else { return }
+
         paginationController.resetPage()
         viewModel.refreshPets()
     }
