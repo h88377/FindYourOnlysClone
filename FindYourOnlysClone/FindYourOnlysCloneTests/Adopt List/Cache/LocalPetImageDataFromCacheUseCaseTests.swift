@@ -8,7 +8,7 @@
 import XCTest
 @testable import FindYourOnlysClone
 
-class LocalPetImageDataLoaderTests: XCTestCase {
+class LocalPetImageDataFromCacheUseCaseTests: XCTestCase {
     
     func test_init_doesNotRequestImageDataUponCreation() {
         let (_, store) = makeSUT()
