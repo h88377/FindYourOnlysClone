@@ -9,10 +9,16 @@ import XCTest
 @testable import FindYourOnlysClone
 
 protocol PetImageDataStore {
-    func retrieve(dataForURL url: URL)
+    typealias Result = Swift.Result<Data?, Error>
+    
+    func retrieve(dataForURL url: URL, completion: @escaping (Result) -> Void)
 }
 
 final class LocalPetImageDataLoader: PetImageDataLoader {
+    enum Error: Swift.Error {
+        case failed
+    }
+    
     private struct LocalPetImageDataLoaderTask: PetImageDataLoaderTask {
         func cancel() {}
     }
@@ -24,7 +30,14 @@ final class LocalPetImageDataLoader: PetImageDataLoader {
     }
     
     func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) -> PetImageDataLoaderTask {
-        store.retrieve(dataForURL: url)
+        store.retrieve(dataForURL: url) { result in
+            switch result {
+            case .failure:
+                completion(.failure(Error.failed))
+            default: break
+            }
+        }
+        
         return LocalPetImageDataLoaderTask()
     }
 }
@@ -46,6 +59,26 @@ class LocalPetImageDataLoaderTests: XCTestCase {
         XCTAssertEqual(store.receivedURLs, [url])
     }
     
+    func test_loadImageData_failsOnStoreError() {
+        let storeError = anyNSError()
+        let (sut, store) = makeSUT()
+        let exp = expectation(description: "Wait for completion")
+        
+        _ = sut.loadImageData(from: anyURL()) { result in
+            switch result {
+            case let .failure(receivedError as LocalPetImageDataLoader.Error):
+                XCTAssertEqual(receivedError, .failed)
+                
+            default:
+                XCTFail("Expected failure, got \(result) instead")
+            }
+            exp.fulfill()
+        }
+        
+        store.completesWith(storeError)
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (LocalPetImageDataLoader, PetStoreSpy) {
@@ -57,10 +90,18 @@ class LocalPetImageDataLoaderTests: XCTestCase {
     }
     
     private class PetStoreSpy: PetImageDataStore {
-        private(set) var receivedURLs = [URL]()
+        var receivedURLs: [URL] {
+            return receivedMessages.map { $0.url }
+        }
         
-        func retrieve(dataForURL url: URL) {
-            receivedURLs.append(url)
+        private var receivedMessages = [(url: URL, completion: (PetImageDataStore.Result) -> Void)]()
+        
+        func retrieve(dataForURL url: URL, completion: @escaping (PetImageDataStore.Result) -> Void) {
+            receivedMessages.append((url, completion))
+        }
+        
+        func completesWith(_ error: Error, at index: Int = 0) {
+            receivedMessages[index].completion(.failure(error))
         }
     }
 }
