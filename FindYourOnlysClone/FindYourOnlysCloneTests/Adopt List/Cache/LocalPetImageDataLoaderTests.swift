@@ -20,8 +20,24 @@ final class LocalPetImageDataLoader: PetImageDataLoader {
         case notFound
     }
     
-    private struct LocalPetImageDataLoaderTask: PetImageDataLoaderTask {
-        func cancel() {}
+    private final class LocalPetImageDataLoaderTask: PetImageDataLoaderTask {
+        private var completion: ((PetImageDataLoader.Result) -> Void)?
+        
+        init(_ completion: @escaping (PetImageDataLoader.Result) -> Void) {
+            self.completion = completion
+        }
+        
+        func complete(_ result: PetImageDataLoader.Result) {
+            completion?(result)
+        }
+        
+        func cancel() {
+            preventFurtherCompletions()
+        }
+        
+        private func preventFurtherCompletions() {
+            completion = nil
+        }
     }
     
     private let store: PetImageDataStore
@@ -31,19 +47,20 @@ final class LocalPetImageDataLoader: PetImageDataLoader {
     }
     
     func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) -> PetImageDataLoaderTask {
+        let loaderTask = LocalPetImageDataLoaderTask(completion)
         store.retrieve(dataForURL: url) { result in
             switch result {
             case let .success(data):
-                guard let data = data else { return completion(.failure(Error.notFound)) }
+                guard let data = data else { return loaderTask.complete(.failure(Error.notFound)) }
                 
-                completion(.success(data))
+                loaderTask.complete(.success(data))
                 
             case .failure:
-                completion(.failure(Error.failed))
+                loaderTask.complete(.failure(Error.failed))
             }
         }
         
-        return LocalPetImageDataLoaderTask()
+        return loaderTask
     }
 }
 
@@ -88,6 +105,20 @@ class LocalPetImageDataLoaderTests: XCTestCase {
         expect(sut, toCompleteWith: .success(foundData), when: {
             store.completesWith(foundData)
         })
+    }
+    
+    func test_loadImageData_doesNotDeliverResultAfterTaskHasBeenCancelled() {
+        let (sut, store) = makeSUT()
+        
+        var receivedResult: LocalPetImageDataLoader.Result?
+        let task = sut.loadImageData(from: anyURL()) { result in receivedResult = result }
+        task.cancel()
+        
+        store.completesWith(anyNSError())
+        store.completesWith(anyData())
+        store.completesWith(.none)
+        
+        XCTAssertNil(receivedResult)
     }
     
     // MARK: - Helpers
