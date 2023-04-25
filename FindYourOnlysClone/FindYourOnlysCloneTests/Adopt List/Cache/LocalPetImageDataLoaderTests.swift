@@ -22,13 +22,20 @@ final class LocalPetImageDataLoader {
 class LocalPetImageDataLoaderTests: XCTestCase {
     
     func test_init_doesNotRequestImageDataUponCreation() {
-        let store = PetStoreSpy()
-        _ = LocalPetImageDataLoader(store: store)
+        let (_, store) = makeSUT()
         
         XCTAssertEqual(store.loadCallCount, 0)
     }
     
     // MARK: - Helpers
+    
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (LocalPetImageDataLoader, PetStoreSpy) {
+        let store = PetStoreSpy()
+        let sut = LocalPetImageDataLoader(store: store)
+        trackForMemoryLeak(store, file: file, line: line)
+        trackForMemoryLeak(sut, file: file, line: line)
+        return (sut, store)
+    }
     
     private class PetStoreSpy: PetStore {
         private(set) var loadCallCount = 0
