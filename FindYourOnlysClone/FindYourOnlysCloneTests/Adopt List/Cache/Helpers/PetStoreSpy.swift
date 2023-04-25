@@ -20,6 +20,7 @@ class PetStoreSpy: PetImageDataStore {
     private(set) var receivedMessages = [Message]()
     
     private var retrievalCompletions = [RetrievalCompletion]()
+    private var insertionCompletions = [InsertionCompletion]()
     
     func retrieve(dataForURL url: URL, completion: @escaping RetrievalCompletion) {
         receivedMessages.append(.retrieve(url))
@@ -28,6 +29,7 @@ class PetStoreSpy: PetImageDataStore {
     
     func insert(data: Data, for url: URL, completion: @escaping InsertionCompletion) {
         receivedMessages.append(.insert(data, url))
+        insertionCompletions.append(completion)
     }
     
     func completesRetrivalWith(_ error: Error, at index: Int = 0) {
@@ -36,5 +38,9 @@ class PetStoreSpy: PetImageDataStore {
     
     func completesRetrivalWith(_ data: Data?, at index: Int = 0) {
         retrievalCompletions[index](.success(data))
+    }
+    
+    func completesInsertionWith(_ error: Error, at index: Int = 0) {
+        insertionCompletions[index](.failure(error))
     }
 }

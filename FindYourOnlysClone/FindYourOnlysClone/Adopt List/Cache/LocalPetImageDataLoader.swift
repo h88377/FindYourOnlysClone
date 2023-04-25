@@ -16,10 +16,22 @@ final class LocalPetImageDataLoader {
 }
 
 extension LocalPetImageDataLoader {
-    typealias SaveResult = Swift.Result<Void, LoadError>
+    typealias SaveResult = Swift.Result<Void, Error>
+    
+    enum SaveError: Swift.Error {
+        case failed
+    }
     
     func save(data: Data, for url: URL, completion: @escaping (SaveResult) -> Void) {
-        store.insert(data: data, for: url) { _ in }
+        store.insert(data: data, for: url) { result in
+            switch result {
+            case .failure:
+                completion(.failure(SaveError.failed))
+                
+            default: break
+            }
+            
+        }
     }
 }
 
