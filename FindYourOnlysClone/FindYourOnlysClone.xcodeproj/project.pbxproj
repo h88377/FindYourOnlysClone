@@ -13,6 +13,7 @@
 		9814F16E29F7DC980094A25D /* PetImageDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F16D29F7DC980094A25D /* PetImageDataStore.swift */; };
 		9814F17029F7DEEF0094A25D /* CachePetImageDataUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F16F29F7DEEF0094A25D /* CachePetImageDataUseCaseTests.swift */; };
 		9814F17329F7E06B0094A25D /* PetStoreSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F17229F7E06B0094A25D /* PetStoreSpy.swift */; };
+		9814F17529F7F2D20094A25D /* CoreDataPetImageDataStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F17429F7F2D20094A25D /* CoreDataPetImageDataStoreTests.swift */; };
 		9891761D29E80211000002A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761C29E80211000002A4 /* AppDelegate.swift */; };
 		9891761F29E80211000002A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761E29E80211000002A4 /* SceneDelegate.swift */; };
 		9891762629E80212000002A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9891762529E80212000002A4 /* Assets.xcassets */; };
@@ -83,6 +84,7 @@
 		9814F16D29F7DC980094A25D /* PetImageDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetImageDataStore.swift; sourceTree = "<group>"; };
 		9814F16F29F7DEEF0094A25D /* CachePetImageDataUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachePetImageDataUseCaseTests.swift; sourceTree = "<group>"; };
 		9814F17229F7E06B0094A25D /* PetStoreSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetStoreSpy.swift; sourceTree = "<group>"; };
+		9814F17429F7F2D20094A25D /* CoreDataPetImageDataStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataPetImageDataStoreTests.swift; sourceTree = "<group>"; };
 		9891761929E80211000002A4 /* FindYourOnlysClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FindYourOnlysClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9891761C29E80211000002A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9891761E29E80211000002A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 				9814F17129F7E0610094A25D /* Helpers */,
 				9814F16729F7ADA30094A25D /* LoadPetImageDataFromCacheUseCaseTests.swift */,
 				9814F16F29F7DEEF0094A25D /* CachePetImageDataUseCaseTests.swift */,
+				9814F17429F7F2D20094A25D /* CoreDataPetImageDataStoreTests.swift */,
 			);
 			path = Cache;
 			sourceTree = "<group>";
@@ -563,6 +566,7 @@
 				989176B929F1214C000002A4 /* URLProtocolStub.swift in Sources */,
 				9891763429E80212000002A4 /* AdoptListUIIntegrationTests.swift in Sources */,
 				989176C029F1228A000002A4 /* AdoptListCell+TestHelpers.swift in Sources */,
+				9814F17529F7F2D20094A25D /* CoreDataPetImageDataStoreTests.swift in Sources */,
 				9891768229EC945F000002A4 /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 				989176BE29F1220B000002A4 /* AdoptListViewController+TestHelpers.swift in Sources */,
 				989176B329F092F2000002A4 /* HTTPClientSpy.swift in Sources */,
