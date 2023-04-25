@@ -7,22 +7,38 @@
 
 import Foundation
 
-final class LocalPetImageDataLoader: PetImageDataLoader {
+final class LocalPetImageDataLoader {
+    private let store: PetImageDataStore
+    
+    init(store: PetImageDataStore) {
+        self.store = store
+    }
+}
+
+extension LocalPetImageDataLoader {
+    typealias SaveResult = Swift.Result<Void, LoadError>
+    
+    func save(data: Data, for url: URL, completion: @escaping (SaveResult) -> Void) {
+        store.insert(data: data, for: url) { _ in }
+    }
+}
+
+extension LocalPetImageDataLoader: PetImageDataLoader {
+    typealias LoadResult = PetImageDataLoader.Result
+    
     enum LoadError: Swift.Error {
         case failed
         case notFound
     }
     
-    typealias SaveResult = Swift.Result<Void, LoadError>
-    
-    private final class LocalPetImageDataLoaderTask: PetImageDataLoaderTask {
-        private var completion: ((PetImageDataLoader.Result) -> Void)?
+    private final class LocalLoadPetImageDataTask: PetImageDataLoaderTask {
+        private var completion: ((LoadResult) -> Void)?
         
-        init(_ completion: @escaping (PetImageDataLoader.Result) -> Void) {
+        init(_ completion: @escaping (LoadResult) -> Void) {
             self.completion = completion
         }
         
-        func complete(_ result: PetImageDataLoader.Result) {
+        func complete(_ result: LoadResult) {
             completion?(result)
         }
         
@@ -35,14 +51,8 @@ final class LocalPetImageDataLoader: PetImageDataLoader {
         }
     }
     
-    private let store: PetImageDataStore
-    
-    init(store: PetImageDataStore) {
-        self.store = store
-    }
-    
-    func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) -> PetImageDataLoaderTask {
-        let loaderTask = LocalPetImageDataLoaderTask(completion)
+    func loadImageData(from url: URL, completion: @escaping (LoadResult) -> Void) -> PetImageDataLoaderTask {
+        let loaderTask = LocalLoadPetImageDataTask(completion)
         store.retrieve(dataForURL: url) { [weak self] result in
             guard self != nil else { return }
             
@@ -58,9 +68,5 @@ final class LocalPetImageDataLoader: PetImageDataLoader {
         }
         
         return loaderTask
-    }
-    
-    func save(data: Data, for url: URL, completion: @escaping (SaveResult) -> Void) {
-        store.insert(data: data, for: url) { _ in }
     }
 }
