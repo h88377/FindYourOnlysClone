@@ -34,9 +34,12 @@ final class LocalPetImageDataLoader: PetImageDataLoader {
         store.retrieve(dataForURL: url) { result in
             switch result {
             case let .success(data):
-                if data == nil {
+                if let data = data {
+                    completion(.success(data))
+                } else {
                     completion(.failure(Error.notFound))
                 }
+                
             case .failure:
                 completion(.failure(Error.failed))
             }
@@ -77,6 +80,15 @@ class LocalPetImageDataLoaderTests: XCTestCase {
         
         expect(sut, toCompleteWith: failure(.notFound), when: {
             store.completesWith(.none)
+        })
+    }
+    
+    func test_loadImageData_deliversStoredDataOnFoundData() {
+        let foundData = anyData()
+        let (sut, store) = makeSUT()
+        
+        expect(sut, toCompleteWith: .success(foundData), when: {
+            store.completesWith(foundData)
         })
     }
     
