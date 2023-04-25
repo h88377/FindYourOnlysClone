@@ -48,7 +48,9 @@ final class LocalPetImageDataLoader: PetImageDataLoader {
     
     func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) -> PetImageDataLoaderTask {
         let loaderTask = LocalPetImageDataLoaderTask(completion)
-        store.retrieve(dataForURL: url) { result in
+        store.retrieve(dataForURL: url) { [weak self] result in
+            guard self != nil else { return }
+            
             switch result {
             case let .success(data):
                 guard let data = data else { return loaderTask.complete(.failure(Error.notFound)) }
@@ -118,6 +120,18 @@ class LocalPetImageDataLoaderTests: XCTestCase {
         store.completesWith(anyData())
         store.completesWith(.none)
         
+        XCTAssertNil(receivedResult)
+    }
+    
+    func test_loadImageData_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
+        let store = PetStoreSpy()
+        var sut: LocalPetImageDataLoader? = LocalPetImageDataLoader(store: store)
+        var receivedResult: LocalPetImageDataLoader.Result?
+        _ = sut?.loadImageData(from: anyURL()) { result in receivedResult = result }
+        
+        sut = nil
+        
+        store.completesWith(anyNSError())
         XCTAssertNil(receivedResult)
     }
     
