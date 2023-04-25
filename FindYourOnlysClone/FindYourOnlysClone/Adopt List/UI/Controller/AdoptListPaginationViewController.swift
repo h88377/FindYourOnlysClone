@@ -15,14 +15,14 @@ final class AdoptListPaginationViewController {
         self.setUpBinding()
     }
     
-    private var isPaginating = false
+    private(set) var isPaginating = false
     
     func resetPage() {
         viewModel.resetPage()
     }
      
     func paginate(on scrollView: UIScrollView) {
-        guard scrollView.isDragging, !isPaginating else { return }
+        guard !isPaginating else { return }
         
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height

@@ -8,13 +8,66 @@
 import UIKit
 
 final class AdoptListViewController: UICollectionViewController {
+    
+    // MARK: - Property
+    
+    private let viewModel: AdoptListViewModel
+    private let paginationController: AdoptListPaginationViewController
+    
+    init(viewModel: AdoptListViewModel, paginationController: AdoptListPaginationViewController) {
+        self.viewModel = viewModel
+        self.paginationController = paginationController
+        super.init(collectionViewLayout: UICollectionViewLayout())
+    }
+    
+    let noResultReminder: UILabel = {
+        let label = UILabel()
+        label.text = ErrorMessage.loadPetsNoResultReminder.rawValue
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.isHidden = true
+        
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let errorView: ErrorView = {
+        let view = ErrorView()
+        
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private var petsSection: Int { return 0 }
+    
     private lazy var dataSource: UICollectionViewDiffableDataSource<Int, AdoptListCellViewController> = {
         .init(collectionView: collectionView) { [weak self] collectionView, indexPath, controller in
             return controller.view(in: collectionView, at: indexPath)
         }
     }()
     
-    private var petsSection: Int { return 0 }
+    // MARK: - Life cycle
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        setUpBinding()
+        configureUI()
+        configureCollectionView()
+        loadPets()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        errorView.layer.cornerRadius = 20
+    }
+    
+    // MARK: - Method
     
     func set(_ newItems: [AdoptListCellViewController]) {
         var snapshot = NSDiffableDataSourceSnapshot<Int, AdoptListCellViewController>()
@@ -29,26 +82,6 @@ final class AdoptListViewController: UICollectionViewController {
         dataSource.apply(snapshot, animatingDifferences: true)
     }
     
-    private let viewModel: AdoptListViewModel
-    private let paginationController: AdoptListPaginationViewController
-    
-    init(viewModel: AdoptListViewModel, paginationController: AdoptListPaginationViewController) {
-        self.viewModel = viewModel
-        self.paginationController = paginationController
-        super.init(collectionViewLayout: UICollectionViewLayout())
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        configureCollectionView()
-        loadPets()
-    }
-    
     private func configureCollectionView() {
         collectionView.backgroundColor = .systemGray6
         collectionView.collectionViewLayout = configureCollectionViewLayout()
@@ -56,6 +89,17 @@ final class AdoptListViewController: UICollectionViewController {
         collectionView.prefetchDataSource = self
         collectionView.register(AdoptListCell.self, forCellWithReuseIdentifier: AdoptListCell.identifier)
         collectionView.refreshControl = binded(refreshView: UIRefreshControl())
+    }
+    
+    private func configureUI() {
+        view.addSubview(noResultReminder)
+        
+        NSLayoutConstraint.activate([
+            noResultReminder.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            noResultReminder.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            noResultReminder.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            noResultReminder.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+        ])
     }
     
     private func configureCollectionViewLayout() -> UICollectionViewCompositionalLayout {
@@ -86,7 +130,20 @@ final class AdoptListViewController: UICollectionViewController {
         return refreshView
     }
     
+    private func setUpBinding() {
+        viewModel.isPetsRefreshingErrorStateOnChange = { [weak self] message in
+            guard let self = self else { return }
+            
+            self.errorView.show(message, on: self.view)
+            
+            let snapshot = self.dataSource.snapshot()
+            self.noResultReminder.isHidden = !snapshot.itemIdentifiers.isEmpty
+        }
+    }
+    
     @objc private func loadPets() {
+        guard !paginationController.isPaginating else { return }
+
         paginationController.resetPage()
         viewModel.refreshPets()
     }
@@ -116,7 +173,10 @@ extension AdoptListViewController {
         cancelTask(forItemAt: indexPath)
     }
     
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        let snapshot = dataSource.snapshot()
+        guard collectionView.refreshControl?.isRefreshing != true, !snapshot.itemIdentifiers.isEmpty else { return }
+            
         paginationController.paginate(on: scrollView)
     }
 }

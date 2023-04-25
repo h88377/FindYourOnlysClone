@@ -48,9 +48,8 @@ extension AdoptListViewController {
     }
     
     func simulatePaginationScrolling() {
-        let scrollView = DraggingScrollView()
-        scrollView.contentOffset.y = 1000
-        scrollViewDidScroll(scrollView)
+        collectionView.contentOffset.y = 1000
+        scrollViewDidEndDragging(collectionView, willDecelerate: true)
     }
     
     func itemAt(index: Int) -> UICollectionViewCell? {
@@ -61,6 +60,14 @@ extension AdoptListViewController {
     
     var isShowingLoadingIndicator: Bool {
         return collectionView.refreshControl?.isRefreshing == true
+    }
+    
+    var isShowingErrorView: Bool {
+        return errorView.isVisible == true && errorView.messageLabel.text == ErrorMessage.loadPets.rawValue
+    }
+    
+    var isShowingNoResultReminder: Bool {
+        return !noResultReminder.isHidden
     }
     
     var numberOfPets: Int {

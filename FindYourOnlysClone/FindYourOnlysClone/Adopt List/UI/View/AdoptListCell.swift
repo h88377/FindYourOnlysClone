@@ -78,7 +78,7 @@ final class AdoptListCell: UICollectionViewCell {
         let button = UIButton()
         button.addTarget(self, action: #selector(retryImageLoad), for: .touchUpInside)
         button.setTitle("↻", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 60)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 30)
         button.setTitleColor(.darkGray, for: .normal)
         
         button.translatesAutoresizingMaskIntoConstraints = false

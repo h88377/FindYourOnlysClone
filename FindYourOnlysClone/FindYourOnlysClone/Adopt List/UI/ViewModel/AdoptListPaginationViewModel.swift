@@ -19,6 +19,7 @@ final class AdoptListPaginationViewModel {
     private var currentPage = 0
     var isPetPaginationLoadingStateOnChange: Observer<Bool>?
     var isPetsPaginationStateOnChange: Observer<[Pet]>?
+    var isPetsPaginationErrorStateOnChange: Observer<String?>?
     
     func resetPage() {
         currentPage = 0
@@ -32,6 +33,7 @@ final class AdoptListPaginationViewModel {
                 self?.isPetsPaginationStateOnChange?(pets)
             } else {
                 self?.currentPage -= 1
+                self?.isPetsPaginationErrorStateOnChange?(ErrorMessage.loadPets.rawValue)
             }
             self?.isPetPaginationLoadingStateOnChange?(false)
         }

@@ -23,11 +23,18 @@ final class AdoptListUIComposer {
         adoptListViewModel.isPetsRefreshingStateOnChange = { [weak adoptListController] pets in
             let cellControllers = adaptPetsToCellControllersWith(pets, imageLoader: decoratedImageLoader)
             adoptListController?.set(cellControllers)
+            adoptListController?.noResultReminder.isHidden = !pets.isEmpty
         }
         
         paginationViewModel.isPetsPaginationStateOnChange = { [weak adoptListController] pets in
             let cellControllers = adaptPetsToCellControllersWith(pets, imageLoader: decoratedImageLoader)
             adoptListController?.append(cellControllers)
+        }
+        
+        paginationViewModel.isPetsPaginationErrorStateOnChange = { [weak adoptListController] message in
+            guard let adoptListController = adoptListController else { return }
+            
+            adoptListController.errorView.show(message, on: adoptListController.view)
         }
         
         return adoptListController
