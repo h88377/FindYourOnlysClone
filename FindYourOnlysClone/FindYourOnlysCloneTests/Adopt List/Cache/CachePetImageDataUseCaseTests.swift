@@ -35,6 +35,14 @@ class CachePetImageDataUseCaseTests: XCTestCase {
         })
     }
     
+    func test_saveImageData_succeedsOnInsertionSuccessful() {
+        let (sut, store) = makeSUT()
+        
+        expect(sut, toCompleteWith: .success(()), when: {
+            store.completesInsertionSuccessfully()
+        })
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (LocalPetImageDataLoader, PetStoreSpy) {

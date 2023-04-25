@@ -25,10 +25,11 @@ extension LocalPetImageDataLoader {
     func save(data: Data, for url: URL, completion: @escaping (SaveResult) -> Void) {
         store.insert(data: data, for: url) { result in
             switch result {
+            case .success:
+                completion(.success(()))
+                
             case .failure:
                 completion(.failure(SaveError.failed))
-                
-            default: break
             }
             
         }
