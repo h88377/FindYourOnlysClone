@@ -10,8 +10,10 @@ import XCTest
 
 protocol PetImageDataStore {
     typealias Result = Swift.Result<Data?, Error>
+    typealias InsertionResult = Swift.Result<Void, Error>
     
     func retrieve(dataForURL url: URL, completion: @escaping (Result) -> Void)
+    func insert(data: Data, for url: URL, completion: @escaping (InsertionResult) -> Void)
 }
 
 final class LocalPetImageDataLoader: PetImageDataLoader {
@@ -19,6 +21,8 @@ final class LocalPetImageDataLoader: PetImageDataLoader {
         case failed
         case notFound
     }
+    
+    typealias SaveResult = Swift.Result<Void, Error>
     
     private final class LocalPetImageDataLoaderTask: PetImageDataLoaderTask {
         private var completion: ((PetImageDataLoader.Result) -> Void)?
@@ -64,6 +68,10 @@ final class LocalPetImageDataLoader: PetImageDataLoader {
         
         return loaderTask
     }
+    
+    func save(data: Data, for url: URL, completion: @escaping (SaveResult) -> Void) {
+        store.insert(data: data, for: url) { _ in }
+    }
 }
 
 class LocalPetImageDataLoaderTests: XCTestCase {
@@ -72,6 +80,16 @@ class LocalPetImageDataLoaderTests: XCTestCase {
         let (_, store) = makeSUT()
         
         XCTAssertEqual(store.receivedURLs, [])
+    }
+    
+    func test_saveImageData_requestImageDataInsertionForURL() {
+        let imageData = anyData()
+        let imageURL = anyURL()
+        let (sut, store) = makeSUT()
+        
+        sut.save(data: imageData, for: imageURL) { _ in }
+        
+        XCTAssertEqual(store.messages, [.insert(imageData, imageURL)])
     }
     
     func test_loadImageData_requestsImageDataFromURL() {
@@ -172,6 +190,12 @@ class LocalPetImageDataLoaderTests: XCTestCase {
     }
     
     private class PetStoreSpy: PetImageDataStore {
+        enum Message: Equatable {
+            case insert(Data, URL)
+        }
+        
+        private(set) var messages = [Message]()
+        
         var receivedURLs: [URL] {
             return receivedMessages.map { $0.url }
         }
@@ -180,6 +204,10 @@ class LocalPetImageDataLoaderTests: XCTestCase {
         
         func retrieve(dataForURL url: URL, completion: @escaping (PetImageDataStore.Result) -> Void) {
             receivedMessages.append((url, completion))
+        }
+        
+        func insert(data: Data, for url: URL, completion: @escaping (PetImageDataStore.InsertionResult) -> Void) {
+            messages.append(.insert(data, url))
         }
         
         func completesWith(_ error: Error, at index: Int = 0) {
