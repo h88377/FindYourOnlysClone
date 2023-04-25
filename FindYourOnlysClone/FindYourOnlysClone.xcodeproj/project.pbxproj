@@ -284,7 +284,6 @@
 			isa = PBXGroup;
 			children = (
 				9891768129EC945F000002A4 /* XCTestCase+MemoryLeakTracking.swift */,
-				989176B029EFEC95000002A4 /* SharedTestHelpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -316,6 +315,7 @@
 				989176BB29F121B4000002A4 /* PetLoaderSpy.swift */,
 				989176B229F092F2000002A4 /* HTTPClientSpy.swift */,
 				989176B829F1214C000002A4 /* URLProtocolStub.swift */,
+				989176B029EFEC95000002A4 /* SharedTestHelpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
