@@ -79,7 +79,7 @@ class LocalPetImageDataLoaderTests: XCTestCase {
     func test_init_doesNotRequestImageDataUponCreation() {
         let (_, store) = makeSUT()
         
-        XCTAssertEqual(store.receivedURLs, [])
+        XCTAssertEqual(store.receivedMessages, [])
     }
     
     func test_saveImageData_requestImageDataInsertionForURL() {
@@ -89,7 +89,7 @@ class LocalPetImageDataLoaderTests: XCTestCase {
         
         sut.save(data: imageData, for: imageURL) { _ in }
         
-        XCTAssertEqual(store.messages, [.insert(imageData, imageURL)])
+        XCTAssertEqual(store.receivedMessages, [.insert(imageData, imageURL)])
     }
     
     func test_loadImageData_requestsImageDataFromURL() {
@@ -98,7 +98,7 @@ class LocalPetImageDataLoaderTests: XCTestCase {
         
         _ = sut.loadImageData(from: url) { _ in }
         
-        XCTAssertEqual(store.receivedURLs, [url])
+        XCTAssertEqual(store.receivedMessages, [.retrieve(url)])
     }
     
     func test_loadImageData_failsOnStoreError() {
@@ -191,31 +191,32 @@ class LocalPetImageDataLoaderTests: XCTestCase {
     
     private class PetStoreSpy: PetImageDataStore {
         enum Message: Equatable {
+            case retrieve(URL)
             case insert(Data, URL)
         }
         
-        private(set) var messages = [Message]()
+        typealias RetrievalCompletion = (PetImageDataStore.RetrievalResult) -> Void
+        typealias InsertionCompletion = (PetImageDataStore.InsertionResult) -> Void
         
-        var receivedURLs: [URL] {
-            return receivedMessages.map { $0.url }
+        private(set) var receivedMessages = [Message]()
+        
+        private var retrievalCompletions = [RetrievalCompletion]()
+        
+        func retrieve(dataForURL url: URL, completion: @escaping RetrievalCompletion) {
+            receivedMessages.append(.retrieve(url))
+            retrievalCompletions.append(completion)
         }
         
-        private var receivedMessages = [(url: URL, completion: (PetImageDataStore.RetrievalResult) -> Void)]()
-        
-        func retrieve(dataForURL url: URL, completion: @escaping (PetImageDataStore.RetrievalResult) -> Void) {
-            receivedMessages.append((url, completion))
-        }
-        
-        func insert(data: Data, for url: URL, completion: @escaping (PetImageDataStore.InsertionResult) -> Void) {
-            messages.append(.insert(data, url))
+        func insert(data: Data, for url: URL, completion: @escaping InsertionCompletion) {
+            receivedMessages.append(.insert(data, url))
         }
         
         func completesWith(_ error: Error, at index: Int = 0) {
-            receivedMessages[index].completion(.failure(error))
+            retrievalCompletions[index](.failure(error))
         }
         
         func completesWith(_ data: Data?, at index: Int = 0) {
-            receivedMessages[index].completion(.success(data))
+            retrievalCompletions[index](.success(data))
         }
     }
 }
