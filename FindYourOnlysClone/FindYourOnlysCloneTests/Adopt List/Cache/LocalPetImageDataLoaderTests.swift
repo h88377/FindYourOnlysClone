@@ -6,16 +6,26 @@
 //
 
 import XCTest
+@testable import FindYourOnlysClone
 
-protocol PetStore {
-    
+protocol PetImageDataStore {
+    func retrieve(dataForURL url: URL)
 }
 
-final class LocalPetImageDataLoader {
-    private let store: PetStore
+final class LocalPetImageDataLoader: PetImageDataLoader {
+    private struct LocalPetImageDataLoaderTask: PetImageDataLoaderTask {
+        func cancel() {}
+    }
     
-    init(store: PetStore) {
+    private let store: PetImageDataStore
+    
+    init(store: PetImageDataStore) {
         self.store = store
+    }
+    
+    func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) -> PetImageDataLoaderTask {
+        store.retrieve(dataForURL: url)
+        return LocalPetImageDataLoaderTask()
     }
 }
 
@@ -24,7 +34,16 @@ class LocalPetImageDataLoaderTests: XCTestCase {
     func test_init_doesNotRequestImageDataUponCreation() {
         let (_, store) = makeSUT()
         
-        XCTAssertEqual(store.loadCallCount, 0)
+        XCTAssertEqual(store.receivedURLs, [])
+    }
+    
+    func test_loadImageData_requestsImageDataFromURL() {
+        let url = anyURL()
+        let (sut, store) = makeSUT()
+        
+        _ = sut.loadImageData(from: url) { _ in }
+        
+        XCTAssertEqual(store.receivedURLs, [url])
     }
     
     // MARK: - Helpers
@@ -37,11 +56,11 @@ class LocalPetImageDataLoaderTests: XCTestCase {
         return (sut, store)
     }
     
-    private class PetStoreSpy: PetStore {
-        private(set) var loadCallCount = 0
+    private class PetStoreSpy: PetImageDataStore {
+        private(set) var receivedURLs = [URL]()
         
-        func loadImageData() {
-            
+        func retrieve(dataForURL url: URL) {
+            receivedURLs.append(url)
         }
     }
 }
