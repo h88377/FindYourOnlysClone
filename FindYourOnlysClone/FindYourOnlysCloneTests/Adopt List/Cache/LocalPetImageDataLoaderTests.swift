@@ -17,6 +17,7 @@ protocol PetImageDataStore {
 final class LocalPetImageDataLoader: PetImageDataLoader {
     enum Error: Swift.Error {
         case failed
+        case notFound
     }
     
     private struct LocalPetImageDataLoaderTask: PetImageDataLoaderTask {
@@ -32,9 +33,12 @@ final class LocalPetImageDataLoader: PetImageDataLoader {
     func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) -> PetImageDataLoaderTask {
         store.retrieve(dataForURL: url) { result in
             switch result {
+            case let .success(data):
+                if data == nil {
+                    completion(.failure(Error.notFound))
+                }
             case .failure:
                 completion(.failure(Error.failed))
-            default: break
             }
         }
         
@@ -79,6 +83,25 @@ class LocalPetImageDataLoaderTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    func test_loadImageData_deliversNotFoundErrorOnNotFound() {
+        let (sut, store) = makeSUT()
+        let exp = expectation(description: "Wait for completion")
+        
+        _ = sut.loadImageData(from: anyURL()) { result in
+            switch result {
+            case let .failure(receivedError as LocalPetImageDataLoader.Error):
+                XCTAssertEqual(receivedError, .notFound)
+                
+            default:
+                XCTFail("Expected failure, got \(result) instead")
+            }
+            exp.fulfill()
+        }
+        
+        store.completesWith(.none)
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (LocalPetImageDataLoader, PetStoreSpy) {
@@ -102,6 +125,10 @@ class LocalPetImageDataLoaderTests: XCTestCase {
         
         func completesWith(_ error: Error, at index: Int = 0) {
             receivedMessages[index].completion(.failure(error))
+        }
+        
+        func completesWith(_ data: Data?, at index: Int = 0) {
+            receivedMessages[index].completion(.success(data))
         }
     }
 }
