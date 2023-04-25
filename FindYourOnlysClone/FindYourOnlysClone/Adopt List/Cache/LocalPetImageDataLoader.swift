@@ -8,12 +8,12 @@
 import Foundation
 
 final class LocalPetImageDataLoader: PetImageDataLoader {
-    enum Error: Swift.Error {
+    enum LoadError: Swift.Error {
         case failed
         case notFound
     }
     
-    typealias SaveResult = Swift.Result<Void, Error>
+    typealias SaveResult = Swift.Result<Void, LoadError>
     
     private final class LocalPetImageDataLoaderTask: PetImageDataLoaderTask {
         private var completion: ((PetImageDataLoader.Result) -> Void)?
@@ -48,12 +48,12 @@ final class LocalPetImageDataLoader: PetImageDataLoader {
             
             switch result {
             case let .success(data):
-                guard let data = data else { return loaderTask.complete(.failure(Error.notFound)) }
+                guard let data = data else { return loaderTask.complete(.failure(LoadError.notFound)) }
                 
                 loaderTask.complete(.success(data))
                 
             case .failure:
-                loaderTask.complete(.failure(Error.failed))
+                loaderTask.complete(.failure(LoadError.failed))
             }
         }
         

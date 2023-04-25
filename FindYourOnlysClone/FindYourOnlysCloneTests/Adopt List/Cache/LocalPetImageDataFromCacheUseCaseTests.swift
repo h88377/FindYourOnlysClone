@@ -102,7 +102,7 @@ class LocalPetImageDataFromCacheUseCaseTests: XCTestCase {
         
         _ = sut.loadImageData(from: anyURL()) { receivedResult in
             switch (receivedResult, expectedResult) {
-            case let (.failure(receivedError as LocalPetImageDataLoader.Error), .failure(expectedError as LocalPetImageDataLoader.Error)):
+            case let (.failure(receivedError as LocalPetImageDataLoader.LoadError), .failure(expectedError as LocalPetImageDataLoader.LoadError)):
                 XCTAssertEqual(receivedError, expectedError, "Expected failure with \(expectedError), got \(receivedError) instead", file: file, line: line)
                 
             case let (.success(receivedData), .success(expectedData)):
@@ -119,7 +119,7 @@ class LocalPetImageDataFromCacheUseCaseTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
      
-    private func failure(_ error: LocalPetImageDataLoader.Error) -> LocalPetImageDataLoader.Result {
+    private func failure(_ error: LocalPetImageDataLoader.LoadError) -> LocalPetImageDataLoader.Result {
         return .failure(error)
     }
     
