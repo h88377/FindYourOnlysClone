@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9814F16829F7ADA30094A25D /* LocalPetImageDataLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F16729F7ADA30094A25D /* LocalPetImageDataLoaderTests.swift */; };
+		9814F16929F7BE3A0094A25D /* SharedTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176B029EFEC95000002A4 /* SharedTestHelpers.swift */; };
 		9891761D29E80211000002A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761C29E80211000002A4 /* AppDelegate.swift */; };
 		9891761F29E80211000002A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761E29E80211000002A4 /* SceneDelegate.swift */; };
 		9891762629E80212000002A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9891762529E80212000002A4 /* Assets.xcassets */; };
@@ -295,6 +296,7 @@
 			isa = PBXGroup;
 			children = (
 				9891768129EC945F000002A4 /* XCTestCase+MemoryLeakTracking.swift */,
+				989176B029EFEC95000002A4 /* SharedTestHelpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -326,7 +328,6 @@
 				989176BB29F121B4000002A4 /* PetLoaderSpy.swift */,
 				989176B229F092F2000002A4 /* HTTPClientSpy.swift */,
 				989176B829F1214C000002A4 /* URLProtocolStub.swift */,
-				989176B029EFEC95000002A4 /* SharedTestHelpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -544,6 +545,7 @@
 			files = (
 				989176A829EE9E94000002A4 /* AdoptListAPIEndToEndTests.swift in Sources */,
 				989176B629F11C03000002A4 /* XCTestCase+MemoryLeakTracking.swift in Sources */,
+				9814F16929F7BE3A0094A25D /* SharedTestHelpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

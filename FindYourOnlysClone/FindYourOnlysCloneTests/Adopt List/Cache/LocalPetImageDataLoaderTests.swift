@@ -34,11 +34,9 @@ final class LocalPetImageDataLoader: PetImageDataLoader {
         store.retrieve(dataForURL: url) { result in
             switch result {
             case let .success(data):
-                if let data = data {
-                    completion(.success(data))
-                } else {
-                    completion(.failure(Error.notFound))
-                }
+                guard let data = data else { return completion(.failure(Error.notFound)) }
+                
+                completion(.success(data))
                 
             case .failure:
                 completion(.failure(Error.failed))
