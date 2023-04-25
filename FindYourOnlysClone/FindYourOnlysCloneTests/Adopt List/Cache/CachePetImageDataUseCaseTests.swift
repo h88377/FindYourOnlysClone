@@ -43,6 +43,18 @@ class CachePetImageDataUseCaseTests: XCTestCase {
         })
     }
     
+    func test_saveImageData_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
+        let store = PetStoreSpy()
+        var sut: LocalPetImageDataLoader? = LocalPetImageDataLoader(store: store)
+        var receivedResult: LocalPetImageDataLoader.SaveResult?
+        _ = sut?.save(data: anyData(), for: anyURL()) { result in receivedResult = result }
+        
+        sut = nil
+        
+        store.completesInsertionSuccessfully()
+        XCTAssertNil(receivedResult)
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (LocalPetImageDataLoader, PetStoreSpy) {
