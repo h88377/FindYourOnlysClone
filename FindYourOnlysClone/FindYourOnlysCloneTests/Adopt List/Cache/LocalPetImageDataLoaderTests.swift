@@ -9,10 +9,10 @@ import XCTest
 @testable import FindYourOnlysClone
 
 protocol PetImageDataStore {
-    typealias Result = Swift.Result<Data?, Error>
+    typealias RetrievalResult = Swift.Result<Data?, Error>
     typealias InsertionResult = Swift.Result<Void, Error>
     
-    func retrieve(dataForURL url: URL, completion: @escaping (Result) -> Void)
+    func retrieve(dataForURL url: URL, completion: @escaping (RetrievalResult) -> Void)
     func insert(data: Data, for url: URL, completion: @escaping (InsertionResult) -> Void)
 }
 
@@ -200,9 +200,9 @@ class LocalPetImageDataLoaderTests: XCTestCase {
             return receivedMessages.map { $0.url }
         }
         
-        private var receivedMessages = [(url: URL, completion: (PetImageDataStore.Result) -> Void)]()
+        private var receivedMessages = [(url: URL, completion: (PetImageDataStore.RetrievalResult) -> Void)]()
         
-        func retrieve(dataForURL url: URL, completion: @escaping (PetImageDataStore.Result) -> Void) {
+        func retrieve(dataForURL url: URL, completion: @escaping (PetImageDataStore.RetrievalResult) -> Void) {
             receivedMessages.append((url, completion))
         }
         
