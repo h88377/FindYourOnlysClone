@@ -40,10 +40,11 @@ class URLSessionHTTPClientTests: XCTestCase {
     }
     
     func test_cancelDispatchRequestTask_cancelsURLRequest() {
-        let url = anyURL()
-        let exp = expectation(description: "Wait for completion")
+        let exp1 = expectation(description: "Wait for stub to receive request")
+        URLProtocolStub.observeRequest { _ in exp1.fulfill() }
         
-        let task = makeSUT().dispatch(URLRequest(url: url)) { result in
+        let exp2 = expectation(description: "Wait for task completion")
+        let task = makeSUT().dispatch(anyURLRequest()) { result in
             switch result {
             case let .failure(error as NSError) where error.code == URLError.cancelled.rawValue:
                 break
@@ -51,21 +52,21 @@ class URLSessionHTTPClientTests: XCTestCase {
             default:
                 XCTFail("Expected cancelled result, got \(result) instead")
             }
-            exp.fulfill()
+            exp2.fulfill()
         }
-        
         task.cancel()
-        wait(for: [exp], timeout: 1.0)
+        
+        wait(for: [exp1, exp2], timeout: 1.0)
     }
     
     func test_dispatchRequest_failsOnRequestError() {
         let requestError = anyNSError()
         let receivedError = resultErrorFor(data: nil, response: nil, error: requestError)
-        
+
         XCTAssertEqual((receivedError! as NSError).domain, requestError.domain)
         XCTAssertEqual((receivedError! as NSError).code, requestError.code)
     }
-    
+
     func test_dispatchRequest_failsOnInvalidCompletionCases() {
         XCTAssertNotNil(resultErrorFor(data: nil, response: nil, error: nil))
         XCTAssertNotNil(resultErrorFor(data: nil, response: anyURLResponse(), error: nil))
@@ -77,22 +78,22 @@ class URLSessionHTTPClientTests: XCTestCase {
         XCTAssertNotNil(resultErrorFor(data: anyData(), response: anyHTTPURLResponse(), error: anyNSError()))
         XCTAssertNotNil(resultErrorFor(data: anyData(), response: anyURLResponse(), error: nil))
     }
-    
+
     func test_dispatchRequest_succeedsOnEmptyDataWithHTTPURLResponseWithNilError() {
         let emptyData = Data()
         let response = anyHTTPURLResponse()
         let receivedValues = resultValuesFor(data: emptyData, response: response, error: nil)
-        
+
         XCTAssertEqual(receivedValues?.data, emptyData)
         XCTAssertEqual(receivedValues?.response.url, response.url)
         XCTAssertEqual(receivedValues?.response.statusCode, response.statusCode)
     }
-    
+
     func test_dispatchRequest_succeedsOnHTTPURLResponseWithData() {
         let data = anyData()
         let response = anyHTTPURLResponse()
         let receivedValues = resultValuesFor(data: data, response: response, error: nil)
-        
+
         XCTAssertEqual(receivedValues?.data, data)
         XCTAssertEqual(receivedValues?.response.url, response.url)
         XCTAssertEqual(receivedValues?.response.statusCode, response.statusCode)
