@@ -8,22 +8,12 @@
 import XCTest
 @testable import FindYourOnlysClone
 
-class LocalPetImageDataFromCacheUseCaseTests: XCTestCase {
+class LoadPetImageDataFromCacheUseCaseTests: XCTestCase {
     
     func test_init_doesNotRequestImageDataUponCreation() {
         let (_, store) = makeSUT()
         
         XCTAssertEqual(store.receivedMessages, [])
-    }
-    
-    func test_saveImageData_requestImageDataInsertionForURL() {
-        let imageData = anyData()
-        let imageURL = anyURL()
-        let (sut, store) = makeSUT()
-        
-        sut.save(data: imageData, for: imageURL) { _ in }
-        
-        XCTAssertEqual(store.receivedMessages, [.insert(imageData, imageURL)])
     }
     
     func test_loadImageData_requestsImageDataFromURL() {
@@ -40,7 +30,7 @@ class LocalPetImageDataFromCacheUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT()
         
         expect(sut, toCompleteWith: failure(.failed), when: {
-            store.completesWith(storeError)
+            store.completesRetrivalWith(storeError)
         })
     }
     
@@ -48,7 +38,7 @@ class LocalPetImageDataFromCacheUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT()
         
         expect(sut, toCompleteWith: failure(.notFound), when: {
-            store.completesWith(.none)
+            store.completesRetrivalWith(.none)
         })
     }
     
@@ -57,7 +47,7 @@ class LocalPetImageDataFromCacheUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT()
         
         expect(sut, toCompleteWith: .success(foundData), when: {
-            store.completesWith(foundData)
+            store.completesRetrivalWith(foundData)
         })
     }
     
@@ -68,9 +58,9 @@ class LocalPetImageDataFromCacheUseCaseTests: XCTestCase {
         let task = sut.loadImageData(from: anyURL()) { result in receivedResult = result }
         task.cancel()
         
-        store.completesWith(anyNSError())
-        store.completesWith(anyData())
-        store.completesWith(.none)
+        store.completesRetrivalWith(anyNSError())
+        store.completesRetrivalWith(anyData())
+        store.completesRetrivalWith(.none)
         
         XCTAssertNil(receivedResult)
     }
@@ -83,7 +73,7 @@ class LocalPetImageDataFromCacheUseCaseTests: XCTestCase {
         
         sut = nil
         
-        store.completesWith(anyNSError())
+        store.completesRetrivalWith(anyNSError())
         XCTAssertNil(receivedResult)
     }
     
@@ -122,35 +112,35 @@ class LocalPetImageDataFromCacheUseCaseTests: XCTestCase {
     private func failure(_ error: LocalPetImageDataLoader.LoadError) -> LocalPetImageDataLoader.Result {
         return .failure(error)
     }
+}
+
+class PetStoreSpy: PetImageDataStore {
+    enum Message: Equatable {
+        case retrieve(URL)
+        case insert(Data, URL)
+    }
     
-    private class PetStoreSpy: PetImageDataStore {
-        enum Message: Equatable {
-            case retrieve(URL)
-            case insert(Data, URL)
-        }
-        
-        typealias RetrievalCompletion = (PetImageDataStore.RetrievalResult) -> Void
-        typealias InsertionCompletion = (PetImageDataStore.InsertionResult) -> Void
-        
-        private(set) var receivedMessages = [Message]()
-        
-        private var retrievalCompletions = [RetrievalCompletion]()
-        
-        func retrieve(dataForURL url: URL, completion: @escaping RetrievalCompletion) {
-            receivedMessages.append(.retrieve(url))
-            retrievalCompletions.append(completion)
-        }
-        
-        func insert(data: Data, for url: URL, completion: @escaping InsertionCompletion) {
-            receivedMessages.append(.insert(data, url))
-        }
-        
-        func completesWith(_ error: Error, at index: Int = 0) {
-            retrievalCompletions[index](.failure(error))
-        }
-        
-        func completesWith(_ data: Data?, at index: Int = 0) {
-            retrievalCompletions[index](.success(data))
-        }
+    typealias RetrievalCompletion = (PetImageDataStore.RetrievalResult) -> Void
+    typealias InsertionCompletion = (PetImageDataStore.InsertionResult) -> Void
+    
+    private(set) var receivedMessages = [Message]()
+    
+    private var retrievalCompletions = [RetrievalCompletion]()
+    
+    func retrieve(dataForURL url: URL, completion: @escaping RetrievalCompletion) {
+        receivedMessages.append(.retrieve(url))
+        retrievalCompletions.append(completion)
+    }
+    
+    func insert(data: Data, for url: URL, completion: @escaping InsertionCompletion) {
+        receivedMessages.append(.insert(data, url))
+    }
+    
+    func completesRetrivalWith(_ error: Error, at index: Int = 0) {
+        retrievalCompletions[index](.failure(error))
+    }
+    
+    func completesRetrivalWith(_ data: Data?, at index: Int = 0) {
+        retrievalCompletions[index](.success(data))
     }
 }
