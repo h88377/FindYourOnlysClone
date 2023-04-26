@@ -56,6 +56,10 @@ class PetStoreSpy: PetImageDataStore {
         insertionCompletions[index](.success(()))
     }
     
+    func completesDeletionWith(_ error: Error, at index: Int = 0) {
+        deletionCompletions[index](.failure(error))
+    }
+    
     func completesDeletionSuccessfully(at index: Int = 0) {
         deletionCompletions[index](.success(()))
     }
