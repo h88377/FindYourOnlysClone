@@ -59,7 +59,7 @@ class CachePetImageDataUseCaseTests: XCTestCase {
         let insertionError = anyNSError()
         let (sut, store) = makeSUT()
 
-        expect(sut, toCompleteWith: failure(.failed), when: {
+        expect(sut, toCompleteWith: saveFailure(.failed), when: {
             store.completesDeletionSuccessfully()
             store.completesInsertionWith(insertionError)
         })
@@ -122,7 +122,7 @@ class CachePetImageDataUseCaseTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
-    private func failure(_ error: LocalPetImageDataLoader.SaveError) -> LocalPetImageDataLoader.SaveResult {
+    private func saveFailure(_ error: LocalPetImageDataLoader.SaveError) -> LocalPetImageDataLoader.SaveResult {
         return .failure(error)
     }
     
