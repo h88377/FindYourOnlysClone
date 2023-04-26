@@ -16,26 +16,14 @@ final class CoreDataPetImageDataStore: PetImageDataStore {
     func insert(data: Data, for url: URL, completion: @escaping (InsertionResult) -> Void) {
         
     }
-    
-    
 }
 
 class CoreDataPetImageDataStoreTests: XCTestCase {
     
     func test_retrieveImageData_deliversEmptyResultOnEmpty() {
         let sut = makeSUT()
-        let exp = expectation(description: "Wait for completion")
         
-        sut.retrieve(dataForURL: anyURL()) { result in
-            switch result {
-            case let .success(receivedData):
-                XCTAssertEqual(receivedData, .none, "Expected empty result, got \(String(describing: receivedData)) instead")
-            default:
-                XCTFail("Expected succeed with empty data, got \(result) instead")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1.0)
+        expect(sut, toCompleteWith: .success(.none))
     }
     
     // MARK: - Helpers
@@ -44,5 +32,23 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
         let sut = CoreDataPetImageDataStore()
         trackForMemoryLeak(sut, file: file, line: line)
         return sut
+    }
+    
+    private func expect(_ sut: CoreDataPetImageDataStore, toCompleteWith expectedResult: PetImageDataStore.RetrievalResult, file: StaticString = #filePath, line: UInt = #line) {
+        let exp = expectation(description: "Wait for completion")
+        
+        sut.retrieve(dataForURL: anyURL()) { receivedResult in
+            switch (receivedResult, expectedResult) {
+            case let (.success(receivedData), .success(expectedData)):
+                XCTAssertEqual(receivedData, expectedData, "Expected \(String(describing: expectedData)), got \(String(describing: receivedData)) instead")
+                
+            case (.failure, .failure): break
+                
+            default:
+                XCTFail("Expected \(expectedResult), got \(receivedResult) instead")
+            }
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
     }
 }
