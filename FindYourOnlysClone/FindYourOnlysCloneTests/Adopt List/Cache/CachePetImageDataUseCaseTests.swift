@@ -46,6 +46,15 @@ class CachePetImageDataUseCaseTests: XCTestCase {
         XCTAssertEqual(store.receivedMessages, [.delete(imageURL), .insert(imageData, imageURL)])
     }
     
+    func test_saveImageData_failsOnDeletionError() {
+        let deletionError = anyNSError()
+        let (sut, store) = makeSUT()
+
+        expect(sut, toCompleteWith: deletionFailure(.failed), when: {
+            store.completesDeletionWith(deletionError)
+        })
+    }
+    
     func test_saveImageData_failsOnInsertionError() {
         let insertionError = anyNSError()
         let (sut, store) = makeSUT()
@@ -97,6 +106,9 @@ class CachePetImageDataUseCaseTests: XCTestCase {
             case let (.failure(receivedError as LocalPetImageDataLoader.SaveError), .failure(expectedError as LocalPetImageDataLoader.SaveError)):
                 XCTAssertEqual(receivedError, expectedError, "Expected failure with \(expectedError), got \(receivedError) instead", file: file, line: line)
                 
+            case let (.failure(receivedError as LocalPetImageDataLoader.DeleteError), .failure(expectedError as LocalPetImageDataLoader.DeleteError)):
+                XCTAssertEqual(receivedError, expectedError, "Expected failure with \(expectedError), got \(receivedError) instead", file: file, line: line)
+                
             case (.success, .success): break
                 
             default:
@@ -111,6 +123,10 @@ class CachePetImageDataUseCaseTests: XCTestCase {
     }
     
     private func failure(_ error: LocalPetImageDataLoader.SaveError) -> LocalPetImageDataLoader.SaveResult {
+        return .failure(error)
+    }
+    
+    private func deletionFailure(_ error: LocalPetImageDataLoader.DeleteError) -> LocalPetImageDataLoader.SaveResult {
         return .failure(error)
     }
 }

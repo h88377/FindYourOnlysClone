@@ -22,6 +22,10 @@ extension LocalPetImageDataLoader {
         case failed
     }
     
+    enum DeleteError: Swift.Error {
+        case failed
+    }
+    
     func save(data: Data, for url: URL, completion: @escaping (SaveResult) -> Void) {
         store.delete(dataForURL: url) { [weak self] result in
             switch result {
@@ -36,10 +40,10 @@ extension LocalPetImageDataLoader {
                     case .failure:
                         completion(.failure(SaveError.failed))
                     }
-                    
                 }
                 
-            default: break
+            case .failure:
+                completion(.failure(DeleteError.failed))
             }
         }
     }
