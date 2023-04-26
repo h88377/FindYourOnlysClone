@@ -15,6 +15,15 @@ class CachePetImageDataUseCaseTests: XCTestCase {
 
         XCTAssertEqual(store.receivedMessages, [])
     }
+    
+    func test_saveImageData_requestImageDataDeletionForURL() {
+        let imageURL = anyURL()
+        let (sut, store) = makeSUT()
+
+        sut.save(data: anyData(), for: imageURL) { _ in }
+
+        XCTAssertEqual(store.receivedMessages, [.delete(imageURL)])
+    }
 
     func test_saveImageData_requestImageDataInsertionForURL() {
         let imageData = anyData()
