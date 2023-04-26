@@ -78,13 +78,11 @@ class CachePetImageDataUseCaseTests: XCTestCase {
         let store = PetStoreSpy()
         var sut: LocalPetImageDataLoader? = LocalPetImageDataLoader(store: store)
         var receivedResult: LocalPetImageDataLoader.SaveResult?
-        _ = sut?.save(data: anyData(), for: anyURL()) { result in receivedResult = result }
-
-        store.completesDeletionSuccessfully()
+        sut?.save(data: anyData(), for: anyURL()) { result in receivedResult = result }
         
         sut = nil
+        store.completesDeletionSuccessfully()
         
-        store.completesInsertionSuccessfully()
         XCTAssertNil(receivedResult)
     }
     
