@@ -8,16 +8,6 @@
 import XCTest
 @testable import FindYourOnlysClone
 
-final class CoreDataPetImageDataStore: PetImageDataStore {
-    func retrieve(dataForURL url: URL, completion: @escaping (RetrievalResult) -> Void) {
-        completion(.success(.none))
-    }
-    
-    func insert(data: Data, for url: URL, completion: @escaping (InsertionResult) -> Void) {
-        
-    }
-}
-
 class CoreDataPetImageDataStoreTests: XCTestCase {
     
     func test_retrieveImageData_deliversEmptyResultOnEmpty() {
@@ -26,12 +16,23 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
         expect(sut, toCompleteWith: .success(.none))
     }
     
+    func test_retrieveImageData_hasNoSideEffectsOnEmptyResult() {
+        let sut = makeSUT()
+        
+        expect(sut, toCompleteTwiceWith: .success(.none))
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> CoreDataPetImageDataStore {
         let sut = CoreDataPetImageDataStore()
         trackForMemoryLeak(sut, file: file, line: line)
         return sut
+    }
+    
+    private func expect(_ sut: CoreDataPetImageDataStore, toCompleteTwiceWith expectedResult: PetImageDataStore.RetrievalResult, file: StaticString = #filePath, line: UInt = #line) {
+        expect(sut, toCompleteWith: expectedResult)
+        expect(sut, toCompleteWith: expectedResult)
     }
     
     private func expect(_ sut: CoreDataPetImageDataStore, toCompleteWith expectedResult: PetImageDataStore.RetrievalResult, file: StaticString = #filePath, line: UInt = #line) {
