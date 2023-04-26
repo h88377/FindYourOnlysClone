@@ -23,17 +23,24 @@ extension LocalPetImageDataLoader {
     }
     
     func save(data: Data, for url: URL, completion: @escaping (SaveResult) -> Void) {
-        store.insert(data: data, for: url) { [weak self] result in
-            guard self != nil else { return }
-            
+        store.delete(dataForURL: url) { [weak self] result in
             switch result {
             case .success:
-                completion(.success(()))
+                self?.store.insert(data: data, for: url) { [weak self] result in
+                    guard self != nil else { return }
+                    
+                    switch result {
+                    case .success:
+                        completion(.success(()))
+                        
+                    case .failure:
+                        completion(.failure(SaveError.failed))
+                    }
+                    
+                }
                 
-            case .failure:
-                completion(.failure(SaveError.failed))
+            default: break
             }
-            
         }
     }
 }

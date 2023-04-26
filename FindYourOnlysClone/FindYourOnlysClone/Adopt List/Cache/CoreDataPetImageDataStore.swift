@@ -15,4 +15,8 @@ final class CoreDataPetImageDataStore: PetImageDataStore {
     func insert(data: Data, for url: URL, completion: @escaping (InsertionResult) -> Void) {
         
     }
+    
+    func delete(dataForURL url: URL, completion: @escaping (DeletionResult) -> Void) {
+        
+    }
 }

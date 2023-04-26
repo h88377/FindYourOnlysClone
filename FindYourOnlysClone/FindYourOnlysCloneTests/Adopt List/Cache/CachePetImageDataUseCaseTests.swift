@@ -12,42 +12,47 @@ class CachePetImageDataUseCaseTests: XCTestCase {
     
     func test_init_doesNotMessageStoreUponCreation() {
         let (_, store) = makeSUT()
-        
+
         XCTAssertEqual(store.receivedMessages, [])
     }
-    
+
     func test_saveImageData_requestImageDataInsertionForURL() {
         let imageData = anyData()
         let imageURL = anyURL()
         let (sut, store) = makeSUT()
-        
+
         sut.save(data: imageData, for: imageURL) { _ in }
-        
-        XCTAssertEqual(store.receivedMessages, [.insert(imageData, imageURL)])
+        store.completesDeletionSuccessfully()
+
+        XCTAssertEqual(store.receivedMessages, [.delete(imageURL), .insert(imageData, imageURL)])
     }
     
     func test_saveImageData_failsOnInsertionError() {
         let insertionError = anyNSError()
         let (sut, store) = makeSUT()
-        
+
         expect(sut, toCompleteWith: failure(.failed), when: {
+            store.completesDeletionSuccessfully()
             store.completesInsertionWith(insertionError)
         })
     }
-    
+
     func test_saveImageData_succeedsOnInsertionSuccessful() {
         let (sut, store) = makeSUT()
-        
+
         expect(sut, toCompleteWith: .success(()), when: {
+            store.completesDeletionSuccessfully()
             store.completesInsertionSuccessfully()
         })
     }
-    
+
     func test_saveImageData_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
         let store = PetStoreSpy()
         var sut: LocalPetImageDataLoader? = LocalPetImageDataLoader(store: store)
         var receivedResult: LocalPetImageDataLoader.SaveResult?
         _ = sut?.save(data: anyData(), for: anyURL()) { result in receivedResult = result }
+
+        store.completesDeletionSuccessfully()
         
         sut = nil
         
