@@ -9,26 +9,10 @@ import Foundation
 import CoreData
 
 final class CoreDataPetImageDataStore: PetImageDataStore {
-    enum LoadingError: Error {
-        case modelNotFound
-        case failedToLoadPersistentStore(Error)
-    }
-    
     private let container: NSPersistentContainer
     
     init(bundle: Bundle = .main) throws {
-        guard let modelURL = bundle.url(forResource: "PetStore", withExtension: "momd"), let model = NSManagedObjectModel(contentsOf: modelURL) else {
-            throw LoadingError.modelNotFound
-        }
-        
-        container = NSPersistentContainer(name: "PetStore", managedObjectModel: model)
-        
-        var loadError: Error?
-        container.loadPersistentStores { _, error in
-            loadError = error
-        }
-        
-        try loadError.map { throw LoadingError.failedToLoadPersistentStore($0) }
+        container = try NSPersistentContainer.load(modelName: "PetStore", in: bundle)
     }
     
     func retrieve(dataForURL url: URL, completion: @escaping (RetrievalResult) -> Void) {
@@ -41,5 +25,29 @@ final class CoreDataPetImageDataStore: PetImageDataStore {
     
     func delete(dataForURL url: URL, completion: @escaping (DeletionResult) -> Void) {
         
+    }
+}
+
+extension NSPersistentContainer {
+    enum LoadingError: Error {
+        case modelNotFound
+        case failedToLoadPersistentStore(Error)
+    }
+    
+    static func load(modelName: String, in bundle: Bundle) throws -> NSPersistentContainer {
+        guard let modelURL = bundle.url(forResource: modelName, withExtension: "momd"), let model = NSManagedObjectModel(contentsOf: modelURL) else {
+            throw LoadingError.modelNotFound
+        }
+        
+        let container = NSPersistentContainer(name: modelName, managedObjectModel: model)
+        
+        var loadError: Error?
+        container.loadPersistentStores { _, error in
+            loadError = error
+        }
+        
+        try loadError.map { throw LoadingError.failedToLoadPersistentStore($0) }
+        
+        return container
     }
 }
