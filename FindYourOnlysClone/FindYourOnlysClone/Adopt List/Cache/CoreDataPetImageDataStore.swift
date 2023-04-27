@@ -18,8 +18,7 @@ final class CoreDataPetImageDataStore: PetImageDataStore {
     }
     
     func retrieve(dataForURL url: URL, completion: @escaping (RetrievalResult) -> Void) {
-        let context = context
-        context.perform {
+        perform { context in
             do {
                 guard let managedPetImageData = try ManagedPetImageData.find(for: url, in: context) else {
                     return completion(.success(.none))
@@ -36,8 +35,7 @@ final class CoreDataPetImageDataStore: PetImageDataStore {
     }
     
     func insert(data: Data, for url: URL, timestamp: Date, completion: @escaping (InsertionResult) -> Void) {
-        let context = context
-        context.perform {
+        perform { context in
             do {
                 let managedPetImageData = try ManagedPetImageData.newInstance(for: url, in: context)
                 managedPetImageData.url = url
@@ -53,8 +51,7 @@ final class CoreDataPetImageDataStore: PetImageDataStore {
     }
     
     func delete(dataForURL url: URL, completion: @escaping (DeletionResult) -> Void) {
-        let context = context
-        context.perform {
+        perform { context in
             do {
                 try ManagedPetImageData.find(for: url, in: context)
                     .map(context.delete)
@@ -63,6 +60,13 @@ final class CoreDataPetImageDataStore: PetImageDataStore {
             } catch {
                 completion(.failure(error))
             }
+        }
+    }
+    
+    private func perform(_ action: @escaping (NSManagedObjectContext) -> Void) {
+        let context = self.context
+        context.perform {
+            action(context)
         }
     }
 }
