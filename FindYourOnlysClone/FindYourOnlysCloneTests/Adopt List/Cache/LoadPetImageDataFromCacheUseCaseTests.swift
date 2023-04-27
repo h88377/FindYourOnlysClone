@@ -42,10 +42,14 @@ class LoadPetImageDataFromCacheUseCaseTests: XCTestCase {
         })
     }
     
-    func test_loadImageData_deliversStoredDataOnFoundData() {
+    func test_loadImageData_deliversFoundDataOnNonExpiredData() {
+        let currentDate = Date()
+        let (sut, store) = makeSUT { currentDate }
+        
+        let nonExpiredTimestamp = currentDate.adding(days: -1)
         let imageData = anyData()
-        let foundData = CachedPetImageData(timestamp: Date(), value: imageData)
-        let (sut, store) = makeSUT()
+        let foundData = CachedPetImageData(timestamp: nonExpiredTimestamp, value: imageData)
+        
         
         expect(sut, toCompleteWith: .success(imageData), when: {
             store.completesRetrivalWith(foundData)
@@ -112,5 +116,11 @@ class LoadPetImageDataFromCacheUseCaseTests: XCTestCase {
      
     private func failure(_ error: LocalPetImageDataLoader.LoadError) -> LocalPetImageDataLoader.Result {
         return .failure(error)
+    }
+}
+
+private extension Date {
+    func adding(days: Int, calendar: Calendar = Calendar(identifier: .gregorian)) -> Date {
+        return calendar.date(byAdding: .day, value: days, to: self)!
     }
 }
