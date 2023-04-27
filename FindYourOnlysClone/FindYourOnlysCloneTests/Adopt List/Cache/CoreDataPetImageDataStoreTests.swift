@@ -122,6 +122,19 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
         }
     }
     
+    func test_deleteImageData_succeedsOnMatchedURLCache() {
+        let url = anyURL()
+        let sut = makeSUT()
+        
+        insert(data: anyData(), for: url, timestamp: Date(), in: sut)
+        
+        let result = delete(dataForURL: url, in: sut)
+        switch result {
+            case .success: break
+            default: XCTFail("Expected successful insertion, got \(String(describing: result)) instead")
+        }
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> CoreDataPetImageDataStore {
