@@ -7,8 +7,13 @@
 
 import Foundation
 
+struct CachedPetImageData: Equatable {
+    let timestamp: Date
+    let value: Data
+}
+
 protocol PetImageDataStore {
-    typealias RetrievalResult = Swift.Result<Data?, Error>
+    typealias RetrievalResult = Swift.Result<CachedPetImageData?, Error>
     typealias InsertionResult = Swift.Result<Void, Error>
     typealias DeletionResult = Swift.Result<Void, Error>
     

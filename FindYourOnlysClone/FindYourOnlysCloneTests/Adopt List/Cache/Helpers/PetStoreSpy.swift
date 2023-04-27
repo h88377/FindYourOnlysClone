@@ -44,7 +44,7 @@ class PetStoreSpy: PetImageDataStore {
         retrievalCompletions[index](.failure(error))
     }
     
-    func completesRetrivalWith(_ data: Data?, at index: Int = 0) {
+    func completesRetrivalWith(_ data: CachedPetImageData?, at index: Int = 0) {
         retrievalCompletions[index](.success(data))
     }
     

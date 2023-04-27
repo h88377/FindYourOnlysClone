@@ -43,10 +43,11 @@ class LoadPetImageDataFromCacheUseCaseTests: XCTestCase {
     }
     
     func test_loadImageData_deliversStoredDataOnFoundData() {
-        let foundData = anyData()
+        let imageData = anyData()
+        let foundData = CachedPetImageData(timestamp: Date(), value: imageData)
         let (sut, store) = makeSUT()
         
-        expect(sut, toCompleteWith: .success(foundData), when: {
+        expect(sut, toCompleteWith: .success(imageData), when: {
             store.completesRetrivalWith(foundData)
         })
     }
@@ -59,7 +60,7 @@ class LoadPetImageDataFromCacheUseCaseTests: XCTestCase {
         task.cancel()
         
         store.completesRetrivalWith(anyNSError())
-        store.completesRetrivalWith(anyData())
+        store.completesRetrivalWith(CachedPetImageData(timestamp: Date(), value: anyData()))
         store.completesRetrivalWith(.none)
         
         XCTAssertNil(receivedResult)

@@ -89,7 +89,7 @@ extension LocalPetImageDataLoader: PetImageDataLoader {
             case let .success(data):
                 guard let data = data else { return loaderTask.complete(.failure(LoadError.notFound)) }
                 
-                loaderTask.complete(.success(data))
+                loaderTask.complete(.success(data.value))
                 
             case .failure:
                 loaderTask.complete(.failure(LoadError.failed))
