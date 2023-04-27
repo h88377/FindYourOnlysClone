@@ -56,6 +56,20 @@ extension LocalPetImageDataLoader {
     }
 }
 
+final class CachePolicy {
+    private init() {}
+    
+    static let calendar = Calendar(identifier: .gregorian)
+    
+    private static var maxCacheAgeInDays: Int { return 7 }
+    
+    static func validate(_ timestamp: Date, against date: Date) -> Bool {
+        guard let maxCacheAge = calendar.date(byAdding: .day, value: maxCacheAgeInDays, to: timestamp) else { return false }
+        
+        return maxCacheAge > date
+    }
+}
+
 extension LocalPetImageDataLoader: PetImageDataLoader {
     typealias LoadResult = PetImageDataLoader.Result
     
@@ -91,7 +105,7 @@ extension LocalPetImageDataLoader: PetImageDataLoader {
             
             switch result {
             case let .success(data):
-                guard let data = data, self.validate(data.timestamp, against: self.currentDate()) else { return loaderTask.complete(.failure(LoadError.notFound)) }
+                guard let data = data, CachePolicy.validate(data.timestamp, against: self.currentDate()) else { return loaderTask.complete(.failure(LoadError.notFound)) }
                 
                 loaderTask.complete(.success(data.value))
                 
@@ -101,13 +115,5 @@ extension LocalPetImageDataLoader: PetImageDataLoader {
         }
         
         return loaderTask
-    }
-    
-    private var maxCacheAgeInDays: Int { return 7 }
-    
-    private func validate(_ timestamp: Date, against date: Date) -> Bool {
-        guard let maxCacheAge = calendar.date(byAdding: .day, value: maxCacheAgeInDays, to: timestamp) else { return false }
-        
-        return maxCacheAge > date
     }
 }
