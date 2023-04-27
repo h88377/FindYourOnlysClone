@@ -15,6 +15,7 @@
 		9814F17329F7E06B0094A25D /* PetStoreSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F17229F7E06B0094A25D /* PetStoreSpy.swift */; };
 		9814F17529F7F2D20094A25D /* CoreDataPetImageDataStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F17429F7F2D20094A25D /* CoreDataPetImageDataStoreTests.swift */; };
 		9814F17729F8D86F0094A25D /* CoreDataPetImageDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F17629F8D86F0094A25D /* CoreDataPetImageDataStore.swift */; };
+		9814F17C29FA40580094A25D /* CachePolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F17B29FA40580094A25D /* CachePolicy.swift */; };
 		9891761D29E80211000002A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761C29E80211000002A4 /* AppDelegate.swift */; };
 		9891761F29E80211000002A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761E29E80211000002A4 /* SceneDelegate.swift */; };
 		9891762629E80212000002A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9891762529E80212000002A4 /* Assets.xcassets */; };
@@ -87,6 +88,7 @@
 		9814F17229F7E06B0094A25D /* PetStoreSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetStoreSpy.swift; sourceTree = "<group>"; };
 		9814F17429F7F2D20094A25D /* CoreDataPetImageDataStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataPetImageDataStoreTests.swift; sourceTree = "<group>"; };
 		9814F17629F8D86F0094A25D /* CoreDataPetImageDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataPetImageDataStore.swift; sourceTree = "<group>"; };
+		9814F17B29FA40580094A25D /* CachePolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachePolicy.swift; sourceTree = "<group>"; };
 		9891761929E80211000002A4 /* FindYourOnlysClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FindYourOnlysClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9891761C29E80211000002A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9891761E29E80211000002A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -177,6 +179,7 @@
 			isa = PBXGroup;
 			children = (
 				9814F16B29F7DC480094A25D /* LocalPetImageDataLoader.swift */,
+				9814F17B29FA40580094A25D /* CachePolicy.swift */,
 				9814F16D29F7DC980094A25D /* PetImageDataStore.swift */,
 				9814F17629F8D86F0094A25D /* CoreDataPetImageDataStore.swift */,
 			);
@@ -540,6 +543,7 @@
 				9814F17729F8D86F0094A25D /* CoreDataPetImageDataStore.swift in Sources */,
 				98F23B1C29F5A81C00E7FCB0 /* AdoptListPaginationViewController.swift in Sources */,
 				9891765229E89B55000002A4 /* PetLoader.swift in Sources */,
+				9814F17C29FA40580094A25D /* CachePolicy.swift in Sources */,
 				9814F16E29F7DC980094A25D /* PetImageDataStore.swift in Sources */,
 				9891766E29EC0AB0000002A4 /* UICollectionViewCell+Extension.swift in Sources */,
 				989176B529F10505000002A4 /* RemotePetImageDataLoader.swift in Sources */,
