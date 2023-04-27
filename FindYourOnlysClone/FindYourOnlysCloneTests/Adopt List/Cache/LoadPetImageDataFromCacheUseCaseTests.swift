@@ -67,6 +67,18 @@ class LoadPetImageDataFromCacheUseCaseTests: XCTestCase {
         })
     }
     
+    func test_loadImageData_deliversNotFoundErrorOnExpirationCache() {
+        let currentDate = Date()
+        let (sut, store) = makeSUT { currentDate }
+        
+        let expirationTimestamp = currentDate.adding(days: -7)
+        let expirationCache = CachedPetImageData(timestamp: expirationTimestamp, value: anyData())
+        
+        expect(sut, toCompleteWith: failure(.notFound), when: {
+            store.completesRetrivalWith(expirationCache)
+        })
+    }
+    
     func test_loadImageData_doesNotDeliverResultAfterTaskHasBeenCancelled() {
         let (sut, store) = makeSUT()
         
