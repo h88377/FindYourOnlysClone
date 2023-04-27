@@ -30,24 +30,27 @@ extension LocalPetImageDataLoader {
     }
     
     func save(data: Data, for url: URL, completion: @escaping (SaveResult) -> Void) {
-        let timestamp = currentDate()
         store.delete(dataForURL: url) { [weak self] result in
             switch result {
             case .success:
-                self?.store.insert(data: data, for: url, timestamp: timestamp) { [weak self] result in
-                    guard self != nil else { return }
-                    
-                    switch result {
-                    case .success:
-                        completion(.success(()))
-                        
-                    case .failure:
-                        completion(.failure(SaveError.failed))
-                    }
-                }
+                self?.cache(data: data, for: url, completion: completion)
                 
             case .failure:
                 completion(.failure(DeleteError.failed))
+            }
+        }
+    }
+    
+    private func cache(data: Data, for url: URL, completion: @escaping (SaveResult) -> Void) {
+        store.insert(data: data, for: url, timestamp: currentDate()) { [weak self] result in
+            guard self != nil else { return }
+            
+            switch result {
+            case .success:
+                completion(.success(()))
+                
+            case .failure:
+                completion(.failure(SaveError.failed))
             }
         }
     }
