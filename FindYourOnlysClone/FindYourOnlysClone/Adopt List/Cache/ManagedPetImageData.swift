@@ -13,3 +13,16 @@ class ManagedPetImageData: NSManagedObject {
     @NSManaged var timestamp: Date
     @NSManaged var value: Data
 }
+
+extension ManagedPetImageData {
+    static func find(for url: URL, in context: NSManagedObjectContext) throws -> ManagedPetImageData? {
+        guard let entityName = ManagedPetImageData.entity().name else { return nil }
+        
+        let request: NSFetchRequest<ManagedPetImageData> = NSFetchRequest(entityName: entityName)
+        request.returnsObjectsAsFaults = false
+        request.fetchLimit = 1
+        request.predicate = NSPredicate(format: "%K = %@", argumentArray: [#keyPath(ManagedPetImageData.url), url])
+        
+        return try context.fetch(request).first
+    }
+}

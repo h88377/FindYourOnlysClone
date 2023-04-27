@@ -20,20 +20,15 @@ final class CoreDataPetImageDataStore: PetImageDataStore {
     func retrieve(dataForURL url: URL, completion: @escaping (RetrievalResult) -> Void) {
         let context = context
         context.perform {
-            guard let entityName = ManagedPetImageData.entity().name else { return }
-            
-            let request: NSFetchRequest<ManagedPetImageData> = NSFetchRequest(entityName: entityName)
-            request.returnsObjectsAsFaults = false
-            request.fetchLimit = 1
-            request.predicate = NSPredicate(format: "%K = %@", argumentArray: [#keyPath(ManagedPetImageData.url), url])
-            
             do {
-                guard let managedPetImageData = try context.fetch(request).first else {
+                guard let managedPetImageData = try ManagedPetImageData.find(for: url, in: context) else {
                     return completion(.success(.none))
                 }
                 
-                let cache = CachedPetImageData(timestamp: managedPetImageData.timestamp, url: managedPetImageData.url, value: managedPetImageData.value)
-                completion(.success(cache))
+                completion(.success(CachedPetImageData(
+                    timestamp: managedPetImageData.timestamp,
+                    url: managedPetImageData.url,
+                    value: managedPetImageData.value)))
             } catch {
                 completion(.failure(error))
             }
