@@ -185,7 +185,7 @@
 				9814F16B29F7DC480094A25D /* LocalPetImageDataLoader.swift */,
 				9814F17B29FA40580094A25D /* CachePolicy.swift */,
 				9814F16D29F7DC980094A25D /* PetImageDataStore.swift */,
-				9814F17629F8D86F0094A25D /* CoreDataPetImageDataStore.swift */,
+				9814F18429FA7E0D0094A25D /* Infrastructure */,
 				9814F17F29FA491C0094A25D /* PetStore.xcdatamodeld */,
 				9814F18229FA4BE10094A25D /* ManagedPetImageData.swift */,
 			);
@@ -198,6 +198,14 @@
 				9814F17229F7E06B0094A25D /* PetStoreSpy.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		9814F18429FA7E0D0094A25D /* Infrastructure */ = {
+			isa = PBXGroup;
+			children = (
+				9814F17629F8D86F0094A25D /* CoreDataPetImageDataStore.swift */,
+			);
+			path = Infrastructure;
 			sourceTree = "<group>";
 		};
 		9891761029E80211000002A4 = {

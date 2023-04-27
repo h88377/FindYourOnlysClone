@@ -145,6 +145,27 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
         expect(sut, toCompleteRetrievalWith: .success(.none))
     }
     
+    func test_storeSideEffects_runSerially() {
+        let sut = makeSUT()
+        
+        let exp1 = expectation(description: "Wait for exp1")
+        sut.insert(data: anyData(), for: anyURL(), timestamp: Date()) { _ in
+            exp1.fulfill()
+        }
+        
+        let exp2 = expectation(description: "Wait for exp2")
+        sut.delete(dataForURL: anyURL()) { _ in
+            exp2.fulfill()
+        }
+        
+        let exp3 = expectation(description: "Wait for exp3")
+        sut.insert(data: anyData(), for: anyURL(), timestamp: Date()) { _ in
+            exp3.fulfill()
+        }
+        
+        wait(for: [exp1, exp2, exp3], timeout: 1.0, enforceOrder: true)
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> CoreDataPetImageDataStore {
