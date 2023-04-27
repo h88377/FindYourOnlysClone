@@ -35,7 +35,7 @@ class CachePetImageDataUseCaseTests: XCTestCase {
         XCTAssertEqual(store.receivedMessages, [.delete(imageURL)])
     }
 
-    func test_saveImageData_requestImageDataInsertionForURL() {
+    func test_saveImageData_requestImageDataInsertionForURLOnSuccessfulDeletion() {
         let imageData = anyData()
         let imageURL = anyURL()
         let (sut, store) = makeSUT()
@@ -55,7 +55,7 @@ class CachePetImageDataUseCaseTests: XCTestCase {
         })
     }
     
-    func test_saveImageData_failsOnInsertionError() {
+    func test_saveImageData_failsOnSuccessfulDeletionAndInsertionError() {
         let insertionError = anyNSError()
         let (sut, store) = makeSUT()
 
@@ -65,7 +65,7 @@ class CachePetImageDataUseCaseTests: XCTestCase {
         })
     }
 
-    func test_saveImageData_succeedsOnInsertionSuccessful() {
+    func test_saveImageData_succeedsOnSuccessfulDeletionAndInsertion() {
         let (sut, store) = makeSUT()
 
         expect(sut, toCompleteWith: .success(()), when: {
