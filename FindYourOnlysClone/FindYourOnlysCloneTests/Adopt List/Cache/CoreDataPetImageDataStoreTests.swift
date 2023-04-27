@@ -32,6 +32,16 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
         expect(sut, toCompleteRetrievalWith: .success(.none), for: url)
     }
     
+    func test_retrieveImageData_hasNoSideEffectsOnUnmatchedURLCache() {
+        let unmatchedURL = URL(string: "https://unmatch-url.com")!
+        let url = anyURL()
+        let sut = makeSUT()
+        
+        insert(data: anyData(), for: unmatchedURL, timestamp: Date(), in: sut)
+        
+        expect(sut, toCompleteRetrivalTwiceWith: .success(.none), for: url)
+    }
+    
     func test_retrieveImageData_deliversFoundValuesOnNonEmptyCache() {
         let imageData = anyData()
         let imageURL = anyURL()
