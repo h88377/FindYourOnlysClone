@@ -48,7 +48,7 @@ class LoadPetImageDataFromCacheUseCaseTests: XCTestCase {
         
         let nonExpiredTimestamp = currentDate.adding(days: -7).adding(days: 1)
         let imageData = anyData()
-        let foundCache = CachedPetImageData(timestamp: nonExpiredTimestamp, value: imageData)
+        let foundCache = CachedPetImageData(timestamp: nonExpiredTimestamp, url: anyURL(), value: imageData)
         
         expect(sut, toCompleteWith: .success(imageData), when: {
             store.completesRetrivalWith(foundCache)
@@ -60,7 +60,7 @@ class LoadPetImageDataFromCacheUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT { currentDate }
         
         let expiredTimestamp = currentDate.adding(days: -7).adding(second: -1)
-        let expiredCache = CachedPetImageData(timestamp: expiredTimestamp, value: anyData())
+        let expiredCache = CachedPetImageData(timestamp: expiredTimestamp, url: anyURL(), value: anyData())
         
         expect(sut, toCompleteWith: failure(.notFound), when: {
             store.completesRetrivalWith(expiredCache)
@@ -72,7 +72,7 @@ class LoadPetImageDataFromCacheUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT { currentDate }
         
         let expirationTimestamp = currentDate.adding(days: -7)
-        let expirationCache = CachedPetImageData(timestamp: expirationTimestamp, value: anyData())
+        let expirationCache = CachedPetImageData(timestamp: expirationTimestamp, url: anyURL(), value: anyData())
         
         expect(sut, toCompleteWith: failure(.notFound), when: {
             store.completesRetrivalWith(expirationCache)
@@ -87,7 +87,7 @@ class LoadPetImageDataFromCacheUseCaseTests: XCTestCase {
         task.cancel()
         
         store.completesRetrivalWith(anyNSError())
-        store.completesRetrivalWith(CachedPetImageData(timestamp: Date(), value: anyData()))
+        store.completesRetrivalWith(CachedPetImageData(timestamp: Date(), url: anyURL(), value: anyData()))
         store.completesRetrivalWith(.none)
         
         XCTAssertNil(receivedResult)

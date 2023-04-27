@@ -32,7 +32,7 @@ final class CoreDataPetImageDataStore: PetImageDataStore {
                     return completion(.success(.none))
                 }
                 
-                let cache = CachedPetImageData(timestamp: managedPetImageData.timestamp, value: managedPetImageData.value)
+                let cache = CachedPetImageData(timestamp: managedPetImageData.timestamp, url: managedPetImageData.url, value: managedPetImageData.value)
                 completion(.success(cache))
             } catch {
                 completion(.failure(error))

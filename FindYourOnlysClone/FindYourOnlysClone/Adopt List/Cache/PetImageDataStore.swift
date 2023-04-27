@@ -9,6 +9,7 @@ import Foundation
 
 struct CachedPetImageData: Equatable {
     let timestamp: Date
+    let url: URL
     let value: Data
 }
 
