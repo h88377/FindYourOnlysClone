@@ -66,6 +66,18 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
         }
     }
     
+    func test_insertImageData_overridesPreviousInsertedCache() {
+        let imageData = anyData()
+        let imageURL = anyURL()
+        let timestamp = Date()
+        let sut = makeSUT()
+
+        insert(data: anyData(), for: anyURL(), timestamp: Date(), in: sut)
+        insert(data: imageData, for: imageURL, timestamp: timestamp, in: sut)
+        
+        expect(sut, toCompleteWith: .success(CachedPetImageData(timestamp: timestamp, url: imageURL, value: imageData)))
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> CoreDataPetImageDataStore {

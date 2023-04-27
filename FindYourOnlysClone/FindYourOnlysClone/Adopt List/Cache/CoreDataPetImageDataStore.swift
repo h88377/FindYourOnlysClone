@@ -38,12 +38,16 @@ final class CoreDataPetImageDataStore: PetImageDataStore {
     func insert(data: Data, for url: URL, timestamp: Date, completion: @escaping (InsertionResult) -> Void) {
         let context = context
         context.perform {
-            let managedPetImageData = ManagedPetImageData(context: context)
-            managedPetImageData.url = url
-            managedPetImageData.value = data
-            managedPetImageData.timestamp = timestamp
-            
             do {
+                if let previousCache = try ManagedPetImageData.find(for: url, in: context) {
+                    context.delete(previousCache)
+                }
+                
+                let managedPetImageData = ManagedPetImageData(context: context)
+                managedPetImageData.url = url
+                managedPetImageData.value = data
+                managedPetImageData.timestamp = timestamp
+                
                 try context.save()
                 completion(.success(()))
             } catch {
