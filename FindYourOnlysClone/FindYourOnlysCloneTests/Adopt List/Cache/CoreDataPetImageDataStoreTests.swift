@@ -135,6 +135,16 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
         }
     }
     
+    func test_deleteImageData_emptiesPreviousInsertedCache() {
+        let url = anyURL()
+        let sut = makeSUT()
+        
+        insert(data: anyData(), for: url, timestamp: Date(), in: sut)
+        delete(dataForURL: url, in: sut)
+        
+        expect(sut, toCompleteRetrievalWith: .success(.none))
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> CoreDataPetImageDataStore {

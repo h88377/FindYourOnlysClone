@@ -53,7 +53,17 @@ final class CoreDataPetImageDataStore: PetImageDataStore {
     }
     
     func delete(dataForURL url: URL, completion: @escaping (DeletionResult) -> Void) {
-        completion(.success(()))
+        let context = context
+        context.perform {
+            do {
+                try ManagedPetImageData.find(for: url, in: context)
+                    .map(context.delete)
+                    .map(context.save)
+                completion(.success(()))
+            } catch {
+                completion(.failure(error))
+            }
+        }
     }
 }
 
