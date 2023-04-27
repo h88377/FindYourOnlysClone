@@ -46,7 +46,19 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
     
     func test_insertImageData_succeedsOnEmptyCache() {
         let sut = makeSUT()
+        
+        let result = insert(data: anyData(), for: anyURL(), timestamp: Date(), in: sut)
+        switch result {
+            case .success: break
+            default: XCTFail("Expected successful insertion, got \(String(describing: result)) instead")
+        }
+    }
+    
+    func test_insertImageData_succeedsOnNonEmptyCache() {
+        let sut = makeSUT()
 
+        insert(data: anyData(), for: anyURL(), timestamp: Date(), in: sut)
+        
         let result = insert(data: anyData(), for: anyURL(), timestamp: Date(), in: sut)
         switch result {
             case .success: break
