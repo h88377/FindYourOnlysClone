@@ -44,6 +44,16 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
         expect(sut, toCompleteTwiceWith: .success(CachedPetImageData(timestamp: timestamp, url: imageURL, value: imageData)))
     }
     
+    func test_insertImageData_succeedsOnEmptyCache() {
+        let sut = makeSUT()
+
+        let result = insert(data: anyData(), for: anyURL(), timestamp: Date(), in: sut)
+        switch result {
+            case .success: break
+            default: XCTFail("Expected successful insertion, got \(String(describing: result)) instead")
+        }
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> CoreDataPetImageDataStore {
