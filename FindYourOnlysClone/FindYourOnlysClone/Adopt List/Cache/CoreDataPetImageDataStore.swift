@@ -10,9 +10,11 @@ import CoreData
 
 final class CoreDataPetImageDataStore: PetImageDataStore {
     private let container: NSPersistentContainer
+    private let context: NSManagedObjectContext
     
     init(bundle: Bundle = .main) throws {
         container = try NSPersistentContainer.load(modelName: "PetStore", in: bundle)
+        context = container.newBackgroundContext()
     }
     
     func retrieve(dataForURL url: URL, completion: @escaping (RetrievalResult) -> Void) {
