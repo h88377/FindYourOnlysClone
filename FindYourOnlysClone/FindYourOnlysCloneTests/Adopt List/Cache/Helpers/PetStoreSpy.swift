@@ -11,7 +11,7 @@ import Foundation
 class PetStoreSpy: PetImageDataStore {
     enum Message: Equatable {
         case retrieve(URL)
-        case insert(Data, URL)
+        case insert(Data, URL, Date)
         case delete(URL)
     }
     
@@ -30,8 +30,8 @@ class PetStoreSpy: PetImageDataStore {
         retrievalCompletions.append(completion)
     }
     
-    func insert(data: Data, for url: URL, completion: @escaping InsertionCompletion) {
-        receivedMessages.append(.insert(data, url))
+    func insert(data: Data, for url: URL, timestamp: Date, completion: @escaping InsertionCompletion) {
+        receivedMessages.append(.insert(data, url, timestamp))
         insertionCompletions.append(completion)
     }
     

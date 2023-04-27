@@ -8,9 +8,11 @@
 import Foundation
 
 final class LocalPetImageDataLoader {
+    private let currentDate: () -> Date
     private let store: PetImageDataStore
     
-    init(store: PetImageDataStore) {
+    init(store: PetImageDataStore, currentDate: @escaping () -> Date) {
+        self.currentDate = currentDate
         self.store = store
     }
 }
@@ -27,10 +29,11 @@ extension LocalPetImageDataLoader {
     }
     
     func save(data: Data, for url: URL, completion: @escaping (SaveResult) -> Void) {
+        let timestamp = currentDate()
         store.delete(dataForURL: url) { [weak self] result in
             switch result {
             case .success:
-                self?.store.insert(data: data, for: url) { [weak self] result in
+                self?.store.insert(data: data, for: url, timestamp: timestamp) { [weak self] result in
                     guard self != nil else { return }
                     
                     switch result {

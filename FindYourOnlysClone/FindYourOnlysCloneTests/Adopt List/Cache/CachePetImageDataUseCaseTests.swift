@@ -35,15 +35,16 @@ class CachePetImageDataUseCaseTests: XCTestCase {
         XCTAssertEqual(store.receivedMessages, [.delete(imageURL)])
     }
 
-    func test_saveImageData_requestImageDataInsertionForURLOnSuccessfulDeletion() {
+    func test_saveImageData_requestImageDataInsertionWithTimestampForURLOnSuccessfulDeletion() {
+        let timestamp = Date()
         let imageData = anyData()
         let imageURL = anyURL()
-        let (sut, store) = makeSUT()
+        let (sut, store) = makeSUT { timestamp }
 
         sut.save(data: imageData, for: imageURL) { _ in }
         store.completesDeletionSuccessfully()
 
-        XCTAssertEqual(store.receivedMessages, [.delete(imageURL), .insert(imageData, imageURL)])
+        XCTAssertEqual(store.receivedMessages, [.delete(imageURL), .insert(imageData, imageURL, timestamp)])
     }
     
     func test_saveImageData_failsOnDeletionError() {
@@ -76,7 +77,7 @@ class CachePetImageDataUseCaseTests: XCTestCase {
 
     func test_saveImageData_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
         let store = PetStoreSpy()
-        var sut: LocalPetImageDataLoader? = LocalPetImageDataLoader(store: store)
+        var sut: LocalPetImageDataLoader? = LocalPetImageDataLoader(store: store, currentDate: Date.init)
         var receivedResult: LocalPetImageDataLoader.SaveResult?
         sut?.save(data: anyData(), for: anyURL()) { result in receivedResult = result }
         
@@ -88,9 +89,9 @@ class CachePetImageDataUseCaseTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (LocalPetImageDataLoader, PetStoreSpy) {
+    private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #filePath, line: UInt = #line) -> (LocalPetImageDataLoader, PetStoreSpy) {
         let store = PetStoreSpy()
-        let sut = LocalPetImageDataLoader(store: store)
+        let sut = LocalPetImageDataLoader(store: store, currentDate: currentDate)
         trackForMemoryLeak(store, file: file, line: line)
         trackForMemoryLeak(sut, file: file, line: line)
         return (sut, store)

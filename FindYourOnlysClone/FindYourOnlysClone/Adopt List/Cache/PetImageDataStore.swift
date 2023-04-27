@@ -13,6 +13,6 @@ protocol PetImageDataStore {
     typealias DeletionResult = Swift.Result<Void, Error>
     
     func retrieve(dataForURL url: URL, completion: @escaping (RetrievalResult) -> Void)
-    func insert(data: Data, for url: URL, completion: @escaping (InsertionResult) -> Void)
+    func insert(data: Data, for url: URL, timestamp: Date, completion: @escaping (InsertionResult) -> Void)
     func delete(dataForURL url: URL, completion: @escaping (DeletionResult) -> Void)
 }

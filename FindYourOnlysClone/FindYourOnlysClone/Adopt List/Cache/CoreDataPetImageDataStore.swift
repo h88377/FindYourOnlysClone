@@ -12,7 +12,7 @@ final class CoreDataPetImageDataStore: PetImageDataStore {
         completion(.success(.none))
     }
     
-    func insert(data: Data, for url: URL, completion: @escaping (InsertionResult) -> Void) {
+    func insert(data: Data, for url: URL, timestamp: Date, completion: @escaping (InsertionResult) -> Void) {
         
     }
     

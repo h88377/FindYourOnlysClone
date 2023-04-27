@@ -67,7 +67,7 @@ class LoadPetImageDataFromCacheUseCaseTests: XCTestCase {
     
     func test_loadImageData_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
         let store = PetStoreSpy()
-        var sut: LocalPetImageDataLoader? = LocalPetImageDataLoader(store: store)
+        var sut: LocalPetImageDataLoader? = LocalPetImageDataLoader(store: store, currentDate: Date.init)
         var receivedResult: LocalPetImageDataLoader.Result?
         _ = sut?.loadImageData(from: anyURL()) { result in receivedResult = result }
         
@@ -79,9 +79,9 @@ class LoadPetImageDataFromCacheUseCaseTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (LocalPetImageDataLoader, PetStoreSpy) {
+    private func makeSUT(currentDate: @escaping () -> Date = Date.init, file: StaticString = #filePath, line: UInt = #line) -> (LocalPetImageDataLoader, PetStoreSpy) {
         let store = PetStoreSpy()
-        let sut = LocalPetImageDataLoader(store: store)
+        let sut = LocalPetImageDataLoader(store: store, currentDate: currentDate)
         trackForMemoryLeak(store, file: file, line: line)
         trackForMemoryLeak(sut, file: file, line: line)
         return (sut, store)
