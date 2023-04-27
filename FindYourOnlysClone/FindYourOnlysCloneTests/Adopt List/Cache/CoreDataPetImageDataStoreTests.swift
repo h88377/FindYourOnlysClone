@@ -25,7 +25,8 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> CoreDataPetImageDataStore {
-        let sut = CoreDataPetImageDataStore()
+        let bundle = Bundle(for: CoreDataPetImageDataStore.self)
+        let sut = try! CoreDataPetImageDataStore(bundle: bundle)
         trackForMemoryLeak(sut, file: file, line: line)
         return sut
     }
