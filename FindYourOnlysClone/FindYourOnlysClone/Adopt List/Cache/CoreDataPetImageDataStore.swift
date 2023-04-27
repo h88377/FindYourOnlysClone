@@ -39,11 +39,7 @@ final class CoreDataPetImageDataStore: PetImageDataStore {
         let context = context
         context.perform {
             do {
-                if let previousCache = try ManagedPetImageData.find(for: url, in: context) {
-                    context.delete(previousCache)
-                }
-                
-                let managedPetImageData = ManagedPetImageData(context: context)
+                let managedPetImageData = try ManagedPetImageData.newInstance(for: url, in: context)
                 managedPetImageData.url = url
                 managedPetImageData.value = data
                 managedPetImageData.timestamp = timestamp

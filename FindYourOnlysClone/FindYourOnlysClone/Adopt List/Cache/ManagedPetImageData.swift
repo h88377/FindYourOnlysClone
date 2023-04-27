@@ -25,4 +25,11 @@ extension ManagedPetImageData {
         
         return try context.fetch(request).first
     }
+    
+    static func newInstance(for url: URL, in context: NSManagedObjectContext) throws -> ManagedPetImageData {
+        try ManagedPetImageData.find(for: url, in: context)
+            .map(context.delete)
+        
+        return ManagedPetImageData(context: context)
+    }
 }
