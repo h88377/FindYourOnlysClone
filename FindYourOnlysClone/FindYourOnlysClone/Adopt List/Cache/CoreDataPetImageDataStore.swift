@@ -53,7 +53,7 @@ final class CoreDataPetImageDataStore: PetImageDataStore {
     }
     
     func delete(dataForURL url: URL, completion: @escaping (DeletionResult) -> Void) {
-        
+        completion(.success(()))
     }
 }
 

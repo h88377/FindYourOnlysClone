@@ -98,6 +98,16 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
         expect(sut, toCompleteRetrievalWith: .success(CachedPetImageData(timestamp: timestamp, url: imageURL, value: imageData)), for: imageURL)
     }
     
+    func test_deleteImageData_succeedsOnEmptyCache() {
+        let sut = makeSUT()
+        
+        let result = delete(dataForURL: anyURL(), in: sut)
+        switch result {
+            case .success: break
+            default: XCTFail("Expected successful insertion, got \(String(describing: result)) instead")
+        }
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> CoreDataPetImageDataStore {
@@ -143,5 +153,19 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
         
         return insertionResult
+    }
+    
+    @discardableResult
+    private func delete(dataForURL url: URL, in sut: CoreDataPetImageDataStore) -> PetImageDataStore.DeletionResult? {
+        let exp = expectation(description: "Wait for completion")
+        
+        var deletionResult: PetImageDataStore.DeletionResult?
+        sut.delete(dataForURL: url){ result in
+            deletionResult = result
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+        
+        return deletionResult
     }
 }
