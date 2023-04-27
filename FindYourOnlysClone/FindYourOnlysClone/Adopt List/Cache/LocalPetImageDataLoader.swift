@@ -10,7 +10,6 @@ import Foundation
 final class LocalPetImageDataLoader {
     private let currentDate: () -> Date
     private let store: PetImageDataStore
-    private let calendar = Calendar(identifier: .gregorian)
     
     init(store: PetImageDataStore, currentDate: @escaping () -> Date) {
         self.currentDate = currentDate
