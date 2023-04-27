@@ -19,47 +19,39 @@ final class CoreDataPetImageDataStore: PetImageDataStore {
     
     func retrieve(dataForURL url: URL, completion: @escaping (RetrievalResult) -> Void) {
         perform { context in
-            do {
+            completion(Result {
                 guard let managedPetImageData = try ManagedPetImageData.find(for: url, in: context) else {
-                    return completion(.success(.none))
+                    return nil
                 }
                 
-                completion(.success(CachedPetImageData(
+                return CachedPetImageData(
                     timestamp: managedPetImageData.timestamp,
                     url: managedPetImageData.url,
-                    value: managedPetImageData.value)))
-            } catch {
-                completion(.failure(error))
-            }
+                    value: managedPetImageData.value)
+            })
         }
     }
     
     func insert(data: Data, for url: URL, timestamp: Date, completion: @escaping (InsertionResult) -> Void) {
         perform { context in
-            do {
+            completion(Result {
                 let managedPetImageData = try ManagedPetImageData.newInstance(for: url, in: context)
                 managedPetImageData.url = url
                 managedPetImageData.value = data
                 managedPetImageData.timestamp = timestamp
                 
                 try context.save()
-                completion(.success(()))
-            } catch {
-                completion(.failure(error))
-            }
+            })
         }
     }
     
     func delete(dataForURL url: URL, completion: @escaping (DeletionResult) -> Void) {
         perform { context in
-            do {
+            completion(Result {
                 try ManagedPetImageData.find(for: url, in: context)
                     .map(context.delete)
                     .map(context.save)
-                completion(.success(()))
-            } catch {
-                completion(.failure(error))
-            }
+            })
         }
     }
     
