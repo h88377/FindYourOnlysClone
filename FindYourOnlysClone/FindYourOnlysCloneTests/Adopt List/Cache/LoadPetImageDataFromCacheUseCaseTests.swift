@@ -46,7 +46,7 @@ class LoadPetImageDataFromCacheUseCaseTests: XCTestCase {
         let currentDate = Date()
         let (sut, store) = makeSUT { currentDate }
         
-        let nonExpiredTimestamp = currentDate.adding(days: -1)
+        let nonExpiredTimestamp = currentDate.adding(days: -7).adding(days: 1)
         let imageData = anyData()
         let foundCache = CachedPetImageData(timestamp: nonExpiredTimestamp, value: imageData)
         
