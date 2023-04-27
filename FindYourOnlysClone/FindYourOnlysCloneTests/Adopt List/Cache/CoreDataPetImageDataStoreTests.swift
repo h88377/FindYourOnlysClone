@@ -12,14 +12,44 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
     
     func test_retrieveImageData_deliversEmptyResultOnEmpty() {
         let sut = makeSUT()
-        
+
         expect(sut, toCompleteWith: .success(.none))
     }
-    
+
     func test_retrieveImageData_hasNoSideEffectsOnEmptyResult() {
         let sut = makeSUT()
-        
+
         expect(sut, toCompleteTwiceWith: .success(.none))
+    }
+    
+    func test_retrieveImageData_deliversFoundValuesOnNonEmptyCache() {
+        let imageData = anyData()
+        let url = anyURL()
+        let timestamp = Date()
+        let sut = makeSUT()
+
+        let exp = expectation(description: "Wait for completion")
+        sut.insert(data: imageData, for: url, timestamp: timestamp) { insertionResult in
+            switch insertionResult {
+            case .success:
+                sut.retrieve(dataForURL: url) { retrivalResult in
+                    switch retrivalResult {
+                    case let .success(cache):
+                        XCTAssertEqual(cache?.value, imageData)
+                        XCTAssertEqual(cache?.timestamp, timestamp)
+
+                    default:
+                        XCTFail("Expected successful retrival, got \(retrivalResult) instead")
+                    }
+                }
+
+            default:
+                XCTFail("Expected successful insertion, got \(insertionResult) instead")
+            }
+            exp.fulfill()
+        }
+
+        wait(for: [exp], timeout: 1.0)
     }
     
     // MARK: - Helpers

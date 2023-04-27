@@ -18,11 +18,43 @@ final class CoreDataPetImageDataStore: PetImageDataStore {
     }
     
     func retrieve(dataForURL url: URL, completion: @escaping (RetrievalResult) -> Void) {
-        completion(.success(.none))
+        let context = context
+        context.perform {
+            guard let entityName = ManagedPetImageData.entity().name else { return }
+            
+            let request: NSFetchRequest<ManagedPetImageData> = NSFetchRequest(entityName: entityName)
+            request.returnsObjectsAsFaults = false
+            request.fetchLimit = 1
+            request.predicate = NSPredicate(format: "%K = %@", argumentArray: [#keyPath(ManagedPetImageData.url), url])
+            
+            do {
+                guard let managedPetImageData = try context.fetch(request).first else {
+                    return completion(.success(.none))
+                }
+                
+                let cache = CachedPetImageData(timestamp: managedPetImageData.timestamp, value: managedPetImageData.value)
+                completion(.success(cache))
+            } catch {
+                completion(.failure(error))
+            }
+        }
     }
     
     func insert(data: Data, for url: URL, timestamp: Date, completion: @escaping (InsertionResult) -> Void) {
-        
+        let context = context
+        context.perform {
+            let managedPetImageData = ManagedPetImageData(context: context)
+            managedPetImageData.url = url
+            managedPetImageData.value = data
+            managedPetImageData.timestamp = timestamp
+            
+            do {
+                try context.save()
+                completion(.success(()))
+            } catch {
+                completion(.failure(error))
+            }
+        }
     }
     
     func delete(dataForURL url: URL, completion: @escaping (DeletionResult) -> Void) {

@@ -7,6 +7,7 @@
 
 import CoreData
 
+@objc(ManagedPetImageData)
 class ManagedPetImageData: NSManagedObject {
     @NSManaged var url: URL
     @NSManaged var timestamp: Date
