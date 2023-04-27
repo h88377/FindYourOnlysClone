@@ -13,13 +13,13 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
     func test_retrieveImageData_deliversEmptyResultOnEmpty() {
         let sut = makeSUT()
 
-        expect(sut, toCompleteWith: .success(.none))
+        expect(sut, toCompleteRetrievalWith: .success(.none))
     }
 
     func test_retrieveImageData_hasNoSideEffectsOnEmptyResult() {
         let sut = makeSUT()
 
-        expect(sut, toCompleteTwiceWith: .success(.none))
+        expect(sut, toCompleteRetrivalTwiceWith: .success(.none))
     }
     
     func test_retrieveImageData_deliversFoundValuesOnNonEmptyCache() {
@@ -30,7 +30,7 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
 
         insert(data: imageData, for: imageURL, timestamp: timestamp, in: sut)
         
-        expect(sut, toCompleteWith: .success(CachedPetImageData(timestamp: timestamp, url: imageURL, value: imageData)))
+        expect(sut, toCompleteRetrievalWith: .success(CachedPetImageData(timestamp: timestamp, url: imageURL, value: imageData)), for: imageURL)
     }
     
     func test_retrieveImageData_hasNoSideEffectsOnNonEmptyCache() {
@@ -41,7 +41,7 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
 
         insert(data: imageData, for: imageURL, timestamp: timestamp, in: sut)
         
-        expect(sut, toCompleteTwiceWith: .success(CachedPetImageData(timestamp: timestamp, url: imageURL, value: imageData)))
+        expect(sut, toCompleteRetrivalTwiceWith: .success(CachedPetImageData(timestamp: timestamp, url: imageURL, value: imageData)), for: imageURL)
     }
     
     func test_insertImageData_succeedsOnEmptyCache() {
@@ -75,7 +75,7 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
         insert(data: anyData(), for: anyURL(), timestamp: Date(), in: sut)
         insert(data: imageData, for: imageURL, timestamp: timestamp, in: sut)
         
-        expect(sut, toCompleteWith: .success(CachedPetImageData(timestamp: timestamp, url: imageURL, value: imageData)))
+        expect(sut, toCompleteRetrievalWith: .success(CachedPetImageData(timestamp: timestamp, url: imageURL, value: imageData)), for: imageURL)
     }
     
     // MARK: - Helpers
@@ -88,15 +88,15 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
         return sut
     }
     
-    private func expect(_ sut: CoreDataPetImageDataStore, toCompleteTwiceWith expectedResult: PetImageDataStore.RetrievalResult, file: StaticString = #filePath, line: UInt = #line) {
-        expect(sut, toCompleteWith: expectedResult, file: file, line: line)
-        expect(sut, toCompleteWith: expectedResult, file: file, line: line)
+    private func expect(_ sut: CoreDataPetImageDataStore, toCompleteRetrivalTwiceWith expectedResult: PetImageDataStore.RetrievalResult, for url: URL = URL(string: "https://any-url.com")!, file: StaticString = #filePath, line: UInt = #line) {
+        expect(sut, toCompleteRetrievalWith: expectedResult, for: url, file: file, line: line)
+        expect(sut, toCompleteRetrievalWith: expectedResult, for: url, file: file, line: line)
     }
     
-    private func expect(_ sut: CoreDataPetImageDataStore, toCompleteWith expectedResult: PetImageDataStore.RetrievalResult, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(_ sut: CoreDataPetImageDataStore, toCompleteRetrievalWith expectedResult: PetImageDataStore.RetrievalResult, for url: URL = URL(string: "https://any-url.com")!, file: StaticString = #filePath, line: UInt = #line) {
         let exp = expectation(description: "Wait for completion")
         
-        sut.retrieve(dataForURL: anyURL()) { receivedResult in
+        sut.retrieve(dataForURL: url) { receivedResult in
             switch (receivedResult, expectedResult) {
             case let (.success(receivedData), .success(expectedData)):
                 XCTAssertEqual(receivedData, expectedData, "Expected \(String(describing: expectedData)), got \(String(describing: receivedData)) instead", file: file, line: line)
