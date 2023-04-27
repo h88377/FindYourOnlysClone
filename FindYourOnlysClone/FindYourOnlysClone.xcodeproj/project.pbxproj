@@ -18,6 +18,7 @@
 		9814F17C29FA40580094A25D /* CachePolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F17B29FA40580094A25D /* CachePolicy.swift */; };
 		9814F18129FA491C0094A25D /* PetStore.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9814F17F29FA491C0094A25D /* PetStore.xcdatamodeld */; };
 		9814F18329FA4BE10094A25D /* ManagedPetImageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F18229FA4BE10094A25D /* ManagedPetImageData.swift */; };
+		9814F18629FA7E570094A25D /* CoreDataHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F18529FA7E570094A25D /* CoreDataHelpers.swift */; };
 		9891761D29E80211000002A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761C29E80211000002A4 /* AppDelegate.swift */; };
 		9891761F29E80211000002A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761E29E80211000002A4 /* SceneDelegate.swift */; };
 		9891762629E80212000002A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9891762529E80212000002A4 /* Assets.xcassets */; };
@@ -93,6 +94,7 @@
 		9814F17B29FA40580094A25D /* CachePolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachePolicy.swift; sourceTree = "<group>"; };
 		9814F18029FA491C0094A25D /* PetStore.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PetStore.xcdatamodel; sourceTree = "<group>"; };
 		9814F18229FA4BE10094A25D /* ManagedPetImageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedPetImageData.swift; sourceTree = "<group>"; };
+		9814F18529FA7E570094A25D /* CoreDataHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelpers.swift; sourceTree = "<group>"; };
 		9891761929E80211000002A4 /* FindYourOnlysClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FindYourOnlysClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9891761C29E80211000002A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9891761E29E80211000002A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 			isa = PBXGroup;
 			children = (
 				9814F17629F8D86F0094A25D /* CoreDataPetImageDataStore.swift */,
+				9814F18529FA7E570094A25D /* CoreDataHelpers.swift */,
 			);
 			path = Infrastructure;
 			sourceTree = "<group>";
@@ -562,6 +565,7 @@
 				9814F17C29FA40580094A25D /* CachePolicy.swift in Sources */,
 				9814F16E29F7DC980094A25D /* PetImageDataStore.swift in Sources */,
 				9891766E29EC0AB0000002A4 /* UICollectionViewCell+Extension.swift in Sources */,
+				9814F18629FA7E570094A25D /* CoreDataHelpers.swift in Sources */,
 				989176B529F10505000002A4 /* RemotePetImageDataLoader.swift in Sources */,
 				9891765C29E90FB2000002A4 /* UIView+Extension.swift in Sources */,
 				9891768B29ECBB4C000002A4 /* RemotePet.swift in Sources */,
