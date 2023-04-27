@@ -20,6 +20,7 @@
 		9814F18329FA4BE10094A25D /* ManagedPetImageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F18229FA4BE10094A25D /* ManagedPetImageData.swift */; };
 		9814F18629FA7E570094A25D /* CoreDataHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F18529FA7E570094A25D /* CoreDataHelpers.swift */; };
 		9814F18E29FA81800094A25D /* FindYourOnlysCloneCacheIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F18D29FA81800094A25D /* FindYourOnlysCloneCacheIntegrationTests.swift */; };
+		9814F19429FA82C30094A25D /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891768129EC945F000002A4 /* XCTestCase+MemoryLeakTracking.swift */; };
 		9891761D29E80211000002A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761C29E80211000002A4 /* AppDelegate.swift */; };
 		9891761F29E80211000002A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761E29E80211000002A4 /* SceneDelegate.swift */; };
 		9891762629E80212000002A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9891762529E80212000002A4 /* Assets.xcassets */; };
@@ -599,6 +600,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9814F18E29FA81800094A25D /* FindYourOnlysCloneCacheIntegrationTests.swift in Sources */,
+				9814F19429FA82C30094A25D /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
