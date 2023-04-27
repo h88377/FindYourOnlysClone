@@ -10,6 +10,7 @@ import Foundation
 final class LocalPetImageDataLoader {
     private let currentDate: () -> Date
     private let store: PetImageDataStore
+    private let calendar = Calendar(identifier: .gregorian)
     
     init(store: PetImageDataStore, currentDate: @escaping () -> Date) {
         self.currentDate = currentDate
@@ -83,11 +84,11 @@ extension LocalPetImageDataLoader: PetImageDataLoader {
     func loadImageData(from url: URL, completion: @escaping (LoadResult) -> Void) -> PetImageDataLoaderTask {
         let loaderTask = LocalLoadPetImageDataTask(completion)
         store.retrieve(dataForURL: url) { [weak self] result in
-            guard self != nil else { return }
+            guard let self = self else { return }
             
             switch result {
             case let .success(data):
-                guard let data = data else { return loaderTask.complete(.failure(LoadError.notFound)) }
+                guard let data = data, self.validate(data.timestamp, against: self.currentDate()) else { return loaderTask.complete(.failure(LoadError.notFound)) }
                 
                 loaderTask.complete(.success(data.value))
                 
@@ -97,5 +98,13 @@ extension LocalPetImageDataLoader: PetImageDataLoader {
         }
         
         return loaderTask
+    }
+    
+    private var maxCacheAgeInDays: Int { return 7 }
+    
+    private func validate(_ timestamp: Date, against date: Date) -> Bool {
+        guard let maxCacheAge = calendar.date(byAdding: .day, value: maxCacheAgeInDays, to: timestamp) else { return false }
+        
+        return maxCacheAge > date
     }
 }
