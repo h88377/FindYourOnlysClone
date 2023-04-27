@@ -108,6 +108,20 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
         }
     }
     
+    func test_deleteImageData_succeedsOnUnmatchedURLCache() {
+        let url = anyURL()
+        let unmatchedURL = URL(string: "https://unmatch-url.com")!
+        let sut = makeSUT()
+        
+        insert(data: anyData(), for: unmatchedURL, timestamp: Date(), in: sut)
+        
+        let result = delete(dataForURL: url, in: sut)
+        switch result {
+            case .success: break
+            default: XCTFail("Expected successful insertion, got \(String(describing: result)) instead")
+        }
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> CoreDataPetImageDataStore {
