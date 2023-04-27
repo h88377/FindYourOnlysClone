@@ -33,6 +33,17 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
         expect(sut, toCompleteWith: .success(CachedPetImageData(timestamp: timestamp, url: imageURL, value: imageData)))
     }
     
+    func test_retrieveImageData_hasNoSideEffectsOnNonEmptyCache() {
+        let imageData = anyData()
+        let imageURL = anyURL()
+        let timestamp = Date()
+        let sut = makeSUT()
+
+        insert(data: imageData, for: imageURL, timestamp: timestamp, in: sut)
+        
+        expect(sut, toCompleteTwiceWith: .success(CachedPetImageData(timestamp: timestamp, url: imageURL, value: imageData)))
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> CoreDataPetImageDataStore {
