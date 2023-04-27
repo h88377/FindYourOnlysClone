@@ -28,29 +28,9 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
         let timestamp = Date()
         let sut = makeSUT()
 
-        let exp = expectation(description: "Wait for completion")
-        sut.insert(data: imageData, for: imageURL, timestamp: timestamp) { insertionResult in
-            switch insertionResult {
-            case .success:
-                sut.retrieve(dataForURL: imageURL) { retrivalResult in
-                    switch retrivalResult {
-                    case let .success(cache):
-                        XCTAssertEqual(cache?.timestamp, timestamp)
-                        XCTAssertEqual(cache?.value, imageData)
-                        XCTAssertEqual(cache?.url, imageURL)
-
-                    default:
-                        XCTFail("Expected successful retrival, got \(retrivalResult) instead")
-                    }
-                }
-
-            default:
-                XCTFail("Expected successful insertion, got \(insertionResult) instead")
-            }
-            exp.fulfill()
-        }
-
-        wait(for: [exp], timeout: 1.0)
+        insert(data: imageData, for: imageURL, timestamp: timestamp, in: sut)
+        
+        expect(sut, toCompleteWith: .success(CachedPetImageData(timestamp: timestamp, url: imageURL, value: imageData)))
     }
     
     // MARK: - Helpers
@@ -64,8 +44,8 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
     }
     
     private func expect(_ sut: CoreDataPetImageDataStore, toCompleteTwiceWith expectedResult: PetImageDataStore.RetrievalResult, file: StaticString = #filePath, line: UInt = #line) {
-        expect(sut, toCompleteWith: expectedResult)
-        expect(sut, toCompleteWith: expectedResult)
+        expect(sut, toCompleteWith: expectedResult, file: file, line: line)
+        expect(sut, toCompleteWith: expectedResult, file: file, line: line)
     }
     
     private func expect(_ sut: CoreDataPetImageDataStore, toCompleteWith expectedResult: PetImageDataStore.RetrievalResult, file: StaticString = #filePath, line: UInt = #line) {
@@ -74,15 +54,29 @@ class CoreDataPetImageDataStoreTests: XCTestCase {
         sut.retrieve(dataForURL: anyURL()) { receivedResult in
             switch (receivedResult, expectedResult) {
             case let (.success(receivedData), .success(expectedData)):
-                XCTAssertEqual(receivedData, expectedData, "Expected \(String(describing: expectedData)), got \(String(describing: receivedData)) instead")
+                XCTAssertEqual(receivedData, expectedData, "Expected \(String(describing: expectedData)), got \(String(describing: receivedData)) instead", file: file, line: line)
                 
             case (.failure, .failure): break
                 
             default:
-                XCTFail("Expected \(expectedResult), got \(receivedResult) instead")
+                XCTFail("Expected \(expectedResult), got \(receivedResult) instead", file: file, line: line)
             }
             exp.fulfill()
         }
         wait(for: [exp], timeout: 1.0)
+    }
+    
+    @discardableResult
+    private func insert(data: Data, for url: URL, timestamp: Date, in sut: CoreDataPetImageDataStore) -> PetImageDataStore.InsertionResult? {
+        let exp = expectation(description: "Wait for completion")
+        
+        var insertionResult: PetImageDataStore.InsertionResult?
+        sut.insert(data: data, for: url, timestamp: timestamp) { result in
+            insertionResult = result
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+        
+        return insertionResult
     }
 }
