@@ -57,6 +57,15 @@ class PetImageDataLoaderWithFallbackCompositeTests: XCTestCase {
         expect(sut, toCompleteWith: fallbackResult)
     }
     
+    func test_loadImageData_deliversFallbackFailureResultOnBothPrimaryAndFallbackAreFailure() {
+        let primaryResult: PetImageDataLoader.Result = .failure(NSError(domain: "primary error", code: 0))
+        let fallbackResult: PetImageDataLoader.Result = .failure(NSError(domain: "fallback error", code: 0))
+        
+        let sut = makeSUT(primaryResult: primaryResult, fallbackResult: fallbackResult)
+        
+        expect(sut, toCompleteWith: fallbackResult)
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(primaryResult: PetImageDataLoader.Result, fallbackResult: PetImageDataLoader.Result, file: StaticString = #filePath, line: UInt = #line) -> PetImageDataLoaderWithFallbackComposite {
