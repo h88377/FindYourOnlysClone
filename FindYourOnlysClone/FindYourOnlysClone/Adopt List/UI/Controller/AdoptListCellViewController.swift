@@ -41,6 +41,10 @@ final class AdoptListCellViewController {
         viewModel.loadPetImageData()
     }
     
+    func preloadPetImageData() {
+        viewModel.preloadPetImageData()
+    }
+    
     func cancelTask() {
         viewModel.cancelTask()
         releaseBindings()

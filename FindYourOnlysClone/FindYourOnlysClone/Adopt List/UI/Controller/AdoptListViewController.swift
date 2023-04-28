@@ -152,6 +152,10 @@ final class AdoptListViewController: UICollectionViewController {
         cellController(at: indexPath)?.requestPetImageData()
     }
     
+    private func preloadImageData(at indexPath: IndexPath) {
+        cellController(at: indexPath)?.preloadPetImageData()
+    }
+    
     private func cancelTask(forItemAt indexPath: IndexPath) {
         cellController(at: indexPath)?.cancelTask()
     }
@@ -186,9 +190,7 @@ extension AdoptListViewController {
 extension AdoptListViewController: UICollectionViewDataSourcePrefetching {
     
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        for indexPath in indexPaths {
-            requestImageData(at: indexPath)
-        }
+        indexPaths.forEach(preloadImageData)
     }
     
     func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {

@@ -40,6 +40,12 @@ final class AdoptListCellViewModel<Image> {
         }
     }
     
+    func preloadPetImageData() {
+        guard let photoURL = pet.photoURL else { return }
+        
+        task = imageLoader.loadImageData(from: photoURL) { _ in }
+    }
+    
     func cancelTask() {
         task?.cancel()
         task = nil
