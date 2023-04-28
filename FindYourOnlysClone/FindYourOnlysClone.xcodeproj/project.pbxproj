@@ -27,6 +27,7 @@
 		9814F19D29FBC5200094A25D /* MainThreadDispatchDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F19C29FBC5200094A25D /* MainThreadDispatchDecorator.swift */; };
 		9814F19F29FBC6DC0094A25D /* PetImageDataLoaderWithCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F19E29FBC6DC0094A25D /* PetImageDataLoaderWithCacheTests.swift */; };
 		9814F1A229FBC9BB0094A25D /* PetImageDataLoaderSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1A129FBC9BB0094A25D /* PetImageDataLoaderSpy.swift */; };
+		9814F1A429FBCF150094A25D /* PetImageDataLoaderTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1A329FBCF150094A25D /* PetImageDataLoaderTestCase.swift */; };
 		9891761D29E80211000002A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761C29E80211000002A4 /* AppDelegate.swift */; };
 		9891761F29E80211000002A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761E29E80211000002A4 /* SceneDelegate.swift */; };
 		9891762629E80212000002A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9891762529E80212000002A4 /* Assets.xcassets */; };
@@ -117,6 +118,7 @@
 		9814F19C29FBC5200094A25D /* MainThreadDispatchDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainThreadDispatchDecorator.swift; sourceTree = "<group>"; };
 		9814F19E29FBC6DC0094A25D /* PetImageDataLoaderWithCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetImageDataLoaderWithCacheTests.swift; sourceTree = "<group>"; };
 		9814F1A129FBC9BB0094A25D /* PetImageDataLoaderSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetImageDataLoaderSpy.swift; sourceTree = "<group>"; };
+		9814F1A329FBCF150094A25D /* PetImageDataLoaderTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetImageDataLoaderTestCase.swift; sourceTree = "<group>"; };
 		9891761929E80211000002A4 /* FindYourOnlysClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FindYourOnlysClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9891761C29E80211000002A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9891761E29E80211000002A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -272,6 +274,7 @@
 			isa = PBXGroup;
 			children = (
 				9814F1A129FBC9BB0094A25D /* PetImageDataLoaderSpy.swift */,
+				9814F1A329FBCF150094A25D /* PetImageDataLoaderTestCase.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -712,6 +715,7 @@
 				989176BE29F1220B000002A4 /* AdoptListViewController+TestHelpers.swift in Sources */,
 				989176B329F092F2000002A4 /* HTTPClientSpy.swift in Sources */,
 				9891769129ED42A9000002A4 /* URLSessionHTTPClientTests.swift in Sources */,
+				9814F1A429FBCF150094A25D /* PetImageDataLoaderTestCase.swift in Sources */,
 				989176C429F122D3000002A4 /* UIButton+TestHelpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
