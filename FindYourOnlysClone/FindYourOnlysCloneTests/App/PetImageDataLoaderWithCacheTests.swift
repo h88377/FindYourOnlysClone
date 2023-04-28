@@ -89,31 +89,45 @@ class PetImageDataLoaderWithCacheDecoratorTests: XCTestCase, PetImageDataLoaderT
     func test_loadImageData_requestsCacheOnSuccessfulyLoad() {
         let imageURL = anyURL()
         let imageData = anyData()
-        let (sut, loader) = makeSUT()
+        let cache = CacheSpy()
+        let (sut, loader) = makeSUT(cache: cache)
         
         _ = sut.loadImageData(from: imageURL) { _ in }
         loader.completeLoadSucessfully(with: imageData)
         
-        XCTAssertEqual(loader.savedMessages, [.saved(data: imageData, url: imageURL)])
+        XCTAssertEqual(cache.savedMessages, [.saved(data: imageData, url: imageURL)])
     }
     
     func test_loadImageData_doesNotRequestCacheOnDecorateeFailure() {
         let decorateeError = anyNSError()
-        let (sut, loader) = makeSUT()
+        let cache = CacheSpy()
+        let (sut, loader) = makeSUT(cache: cache)
         
         _ = sut.loadImageData(from: anyURL()) { _ in }
         loader.completeLoadWithError(decorateeError)
         
-        XCTAssertEqual(loader.savedMessages, [])
+        XCTAssertEqual(cache.savedMessages, [])
     }
     
     // MARK: - Helpers
     
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (PetImageDataLoaderWithCacheDecorator, PetImageDataLoaderSpy) {
+    private func makeSUT(cache: CacheSpy = .init(), file: StaticString = #filePath, line: UInt = #line) -> (PetImageDataLoaderWithCacheDecorator, PetImageDataLoaderSpy) {
         let loader = PetImageDataLoaderSpy()
-        let sut = PetImageDataLoaderWithCacheDecorator(decoratee: loader, cache: loader)
+        let sut = PetImageDataLoaderWithCacheDecorator(decoratee: loader, cache: cache)
         trackForMemoryLeak(sut, file: file, line: line)
         trackForMemoryLeak(loader, file: file, line: line)
         return (sut, loader)
+    }
+    
+    private class CacheSpy: PetImageDataCache {
+        enum SavedMessage: Equatable {
+            case saved(data: Data, url: URL)
+        }
+        
+        private(set) var savedMessages = [SavedMessage]()
+        
+        func save(data: Data, for url: URL, completion: @escaping (PetImageDataCache.Result) -> Void) {
+            savedMessages.append(.saved(data: data, url: url))
+        }
     }
 }
