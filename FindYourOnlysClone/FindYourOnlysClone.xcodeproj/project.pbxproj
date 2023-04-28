@@ -23,6 +23,7 @@
 		9814F19429FA82C30094A25D /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891768129EC945F000002A4 /* XCTestCase+MemoryLeakTracking.swift */; };
 		9814F19529FA84A80094A25D /* SharedTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176B029EFEC95000002A4 /* SharedTestHelpers.swift */; };
 		9814F19829FBA8E50094A25D /* PetImageDataLoaderWithFallbackCompositeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F19729FBA8E50094A25D /* PetImageDataLoaderWithFallbackCompositeTests.swift */; };
+		9814F19A29FBC3310094A25D /* PetImageDataLoaderWithFallbackComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F19929FBC3310094A25D /* PetImageDataLoaderWithFallbackComposite.swift */; };
 		9891761D29E80211000002A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761C29E80211000002A4 /* AppDelegate.swift */; };
 		9891761F29E80211000002A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761E29E80211000002A4 /* SceneDelegate.swift */; };
 		9891762629E80212000002A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9891762529E80212000002A4 /* Assets.xcassets */; };
@@ -109,6 +110,7 @@
 		9814F18B29FA81800094A25D /* FindYourOnlysCloneCacheIntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FindYourOnlysCloneCacheIntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9814F18D29FA81800094A25D /* AdoptListCacheIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptListCacheIntegrationTests.swift; sourceTree = "<group>"; };
 		9814F19729FBA8E50094A25D /* PetImageDataLoaderWithFallbackCompositeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetImageDataLoaderWithFallbackCompositeTests.swift; sourceTree = "<group>"; };
+		9814F19929FBC3310094A25D /* PetImageDataLoaderWithFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetImageDataLoaderWithFallbackComposite.swift; sourceTree = "<group>"; };
 		9891761929E80211000002A4 /* FindYourOnlysClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FindYourOnlysClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9891761C29E80211000002A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9891761E29E80211000002A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -276,6 +278,7 @@
 				9891761C29E80211000002A4 /* AppDelegate.swift */,
 				9891761E29E80211000002A4 /* SceneDelegate.swift */,
 				9891766929E99C13000002A4 /* AdoptListUIComposer.swift */,
+				9814F19929FBC3310094A25D /* PetImageDataLoaderWithFallbackComposite.swift */,
 				9891767A29EC8412000002A4 /* Adopt List */,
 				9891762529E80212000002A4 /* Assets.xcassets */,
 				9891762729E80212000002A4 /* LaunchScreen.storyboard */,
@@ -634,6 +637,7 @@
 				9891766429E99A44000002A4 /* AdoptListCellViewController.swift in Sources */,
 				98F23B2029F64A5D00E7FCB0 /* UIColor+Extension.swift in Sources */,
 				9891765529E89BA5000002A4 /* AdoptListCell.swift in Sources */,
+				9814F19A29FBC3310094A25D /* PetImageDataLoaderWithFallbackComposite.swift in Sources */,
 				98F23B2229F6742400E7FCB0 /* ErrorView.swift in Sources */,
 				9814F16C29F7DC480094A25D /* LocalPetImageDataLoader.swift in Sources */,
 				9891765E29E91C9D000002A4 /* PetImageDataLoader.swift in Sources */,
