@@ -25,6 +25,7 @@
 		9814F19829FBA8E50094A25D /* PetImageDataLoaderWithFallbackCompositeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F19729FBA8E50094A25D /* PetImageDataLoaderWithFallbackCompositeTests.swift */; };
 		9814F19A29FBC3310094A25D /* PetImageDataLoaderWithFallbackComposite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F19929FBC3310094A25D /* PetImageDataLoaderWithFallbackComposite.swift */; };
 		9814F19D29FBC5200094A25D /* MainThreadDispatchDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F19C29FBC5200094A25D /* MainThreadDispatchDecorator.swift */; };
+		9814F19F29FBC6DC0094A25D /* PetImageDataLoaderWithCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F19E29FBC6DC0094A25D /* PetImageDataLoaderWithCacheTests.swift */; };
 		9891761D29E80211000002A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761C29E80211000002A4 /* AppDelegate.swift */; };
 		9891761F29E80211000002A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761E29E80211000002A4 /* SceneDelegate.swift */; };
 		9891762629E80212000002A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9891762529E80212000002A4 /* Assets.xcassets */; };
@@ -113,6 +114,7 @@
 		9814F19729FBA8E50094A25D /* PetImageDataLoaderWithFallbackCompositeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetImageDataLoaderWithFallbackCompositeTests.swift; sourceTree = "<group>"; };
 		9814F19929FBC3310094A25D /* PetImageDataLoaderWithFallbackComposite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetImageDataLoaderWithFallbackComposite.swift; sourceTree = "<group>"; };
 		9814F19C29FBC5200094A25D /* MainThreadDispatchDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainThreadDispatchDecorator.swift; sourceTree = "<group>"; };
+		9814F19E29FBC6DC0094A25D /* PetImageDataLoaderWithCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetImageDataLoaderWithCacheTests.swift; sourceTree = "<group>"; };
 		9891761929E80211000002A4 /* FindYourOnlysClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FindYourOnlysClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9891761C29E80211000002A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9891761E29E80211000002A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -248,6 +250,7 @@
 			isa = PBXGroup;
 			children = (
 				9814F19729FBA8E50094A25D /* PetImageDataLoaderWithFallbackCompositeTests.swift */,
+				9814F19E29FBC6DC0094A25D /* PetImageDataLoaderWithCacheTests.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -683,6 +686,7 @@
 				9814F17029F7DEEF0094A25D /* CachePetImageDataUseCaseTests.swift in Sources */,
 				989176AF29EFCBFE000002A4 /* LoadPetImageDataFromRemoteUseCaseTests.swift in Sources */,
 				989176C629F122E8000002A4 /* UIImage+TestHelpers.swift in Sources */,
+				9814F19F29FBC6DC0094A25D /* PetImageDataLoaderWithCacheTests.swift in Sources */,
 				9814F17329F7E06B0094A25D /* PetStoreSpy.swift in Sources */,
 				9814F16829F7ADA30094A25D /* LoadPetImageDataFromCacheUseCaseTests.swift in Sources */,
 				989176B129EFEC95000002A4 /* SharedTestHelpers.swift in Sources */,
