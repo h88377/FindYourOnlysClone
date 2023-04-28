@@ -40,17 +40,13 @@ class PetImageDataLoaderWithFallbackComposite: PetImageDataLoader {
 class PetImageDataLoaderWithFallbackCompositeTests: XCTestCase {
     
     func test_loadImageData_deliversPrimarySuccessfulResultOnPrimarySuccess() {
-        let imageURL = URL(string: "https://imageURL-url")!
         let primaryData = Data("primary data".utf8)
         let fallbackData = Data("fallback data".utf8)
         
-        let primaryLoader = PetImageDataLoaderStub(result: .success(primaryData))
-        let fallbackLoader = PetImageDataLoaderStub(result: .success(fallbackData))
-        
-        let sut = PetImageDataLoaderWithFallbackComposite(primary: primaryLoader, fallback: fallbackLoader)
+        let sut = makeSUT(primaryResult: .success(primaryData), fallbackResult: .success(fallbackData))
         
         let exp = expectation(description: "Wait for completion")
-        _ = sut.loadImageData(from: imageURL) { result in
+        _ = sut.loadImageData(from: anyURL()) { result in
             switch result {
             case let .success(receivedData):
                 XCTAssertEqual(receivedData, primaryData, "Expected \(primaryData), got \(receivedData) instead")
@@ -64,17 +60,13 @@ class PetImageDataLoaderWithFallbackCompositeTests: XCTestCase {
     }
     
     func test_loadImageData_deliversFallbackSuccessfulResultOnPrimaryFailureAndFallbackSuccess() {
-        let imageURL = URL(string: "https://imageURL-url")!
         let primaryError = anyNSError()
         let fallbackData = Data("fallback data".utf8)
         
-        let primaryLoader = PetImageDataLoaderStub(result: .failure(primaryError))
-        let fallbackLoader = PetImageDataLoaderStub(result: .success(fallbackData))
-        
-        let sut = PetImageDataLoaderWithFallbackComposite(primary: primaryLoader, fallback: fallbackLoader)
+        let sut = makeSUT(primaryResult: .failure(primaryError), fallbackResult: .success(fallbackData))
         
         let exp = expectation(description: "Wait for completion")
-        _ = sut.loadImageData(from: imageURL) { result in
+        _ = sut.loadImageData(from: anyURL()) { result in
             switch result {
             case let .success(receivedData):
                 XCTAssertEqual(receivedData, fallbackData, "Expected \(fallbackData), got \(receivedData) instead")
@@ -88,6 +80,16 @@ class PetImageDataLoaderWithFallbackCompositeTests: XCTestCase {
     }
     
     // MARK: - Helpers
+    
+    private func makeSUT(primaryResult: PetImageDataLoader.Result, fallbackResult: PetImageDataLoader.Result, file: StaticString = #filePath, line: UInt = #line) -> PetImageDataLoaderWithFallbackComposite {
+        let primaryLoader = PetImageDataLoaderStub(result: primaryResult)
+        let fallbackLoader = PetImageDataLoaderStub(result: fallbackResult)
+        let sut = PetImageDataLoaderWithFallbackComposite(primary: primaryLoader, fallback: fallbackLoader)
+        trackForMemoryLeak(sut, file: file, line: line)
+        trackForMemoryLeak(primaryLoader, file: file, line: line)
+        trackForMemoryLeak(fallbackLoader, file: file, line: line)
+        return sut
+    }
     
     private class PetImageDataLoaderStub: PetImageDataLoader {
         private struct TaskStub: PetImageDataLoaderTask {
