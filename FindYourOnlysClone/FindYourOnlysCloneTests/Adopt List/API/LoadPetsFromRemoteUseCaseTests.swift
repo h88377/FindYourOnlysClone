@@ -1,5 +1,5 @@
 //
-//  RemotePetLoaderTests.swift
+//  LoadPetsFromRemoteUseCaseTests.swift
 //  FindYourOnlysCloneTests
 //
 //  Created by 鄭昭韋 on 2023/4/17.
@@ -8,7 +8,7 @@
 import XCTest
 @testable import FindYourOnlysClone
 
-class RemotePetLoaderTests: XCTestCase {
+class LoadPetsFromRemoteUseCaseTests: XCTestCase {
     
     func test_init_doesNotRequestDataFromRequest() {
         let (_, client) = makeSUT()

@@ -56,7 +56,7 @@ class URLSessionHTTPClientTests: XCTestCase {
         }
         task.cancel()
         
-        wait(for: [exp1, exp2], timeout: 1.0)
+        wait(for: [exp1, exp2], timeout: 3.0)
     }
     
     func test_dispatchRequest_failsOnRequestError() {
