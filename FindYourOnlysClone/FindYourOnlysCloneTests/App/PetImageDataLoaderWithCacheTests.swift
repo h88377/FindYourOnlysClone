@@ -22,6 +22,7 @@ final class PetImageDataLoaderWithCacheDecorator: PetImageDataLoader {
     }
     
     func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) -> FindYourOnlysClone.PetImageDataLoaderTask {
+        _ = decoratee.loadImageData(from: url, completion: completion)
         return PetImageDataLoaderWithCacheTask()
     }
     
@@ -35,5 +36,15 @@ class PetImageDataLoaderWithCacheDecoratorTests: XCTestCase {
         _ = PetImageDataLoaderWithCacheDecorator(decoratee: loader)
         
         XCTAssertEqual(loader.receivedURLs, [])
+    }
+    
+    func test_loadImageData_requestsImageDataFromURL() {
+        let url = anyURL()
+        let loader = PetImageDataLoaderSpy()
+        let sut = PetImageDataLoaderWithCacheDecorator(decoratee: loader)
+        
+        _ = sut.loadImageData(from: url) { _ in }
+        
+        XCTAssertEqual(loader.receivedURLs, [url])
     }
 }
