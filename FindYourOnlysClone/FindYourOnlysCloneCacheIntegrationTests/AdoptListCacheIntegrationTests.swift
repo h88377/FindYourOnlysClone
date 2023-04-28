@@ -39,6 +39,22 @@ final class AdoptListCacheIntegrationTests: XCTestCase {
         expect(loaderToLoad, toCompleteWith: .success(imageData), from: imageURL)
     }
     
+    func test_loadImageData_deliversLastSavedDataOnASeparatedInstance() {
+        let firstData = Data("first data".utf8)
+        let firstURL = URL(string: "https://first-url.com")!
+        let lastData = Data("last data".utf8)
+        let lastURL = URL(string: "https://last-url.com")!
+        
+        let loaderToSaveFirst = makeSUT()
+        let loaderToSaveLast = makeSUT()
+        let loaderToLoad = makeSUT()
+
+        save(data: firstData, for: firstURL, with: loaderToSaveFirst)
+        save(data: lastData, for: lastURL, with: loaderToSaveLast)
+        
+        expect(loaderToLoad, toCompleteWith: .success(lastData), from: lastURL)
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> LocalPetImageDataLoader {
