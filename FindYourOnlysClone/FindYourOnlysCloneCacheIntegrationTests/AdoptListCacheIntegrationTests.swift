@@ -28,6 +28,18 @@ final class AdoptListCacheIntegrationTests: XCTestCase {
         expect(sut, toCompleteWith: failure(.notFound), from: anyURL())
     }
     
+    func test_loadImageData_deliversNotFoundErrorOnUnmatchedURLSavedFromASeparatedInstance() {
+        let unmatchedURL = URL(string: "https://unmatched-url.com")!
+        let url = URL(string: "https://last-url.com")!
+        
+        let loaderToSave = makeSUT()
+        let loaderToLoad = makeSUT()
+
+        save(data: anyData(), for: unmatchedURL, with: loaderToSave)
+        
+        expect(loaderToLoad, toCompleteWith: failure(.notFound), from: url)
+    }
+    
     func test_loadImageData_deliversSavedDataOnASeparatedInstance() {
         let imageData = anyData()
         let imageURL = anyURL()
