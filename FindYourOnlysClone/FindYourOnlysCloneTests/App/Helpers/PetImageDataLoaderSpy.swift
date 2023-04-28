@@ -1,0 +1,41 @@
+//
+//  PetImageDataLoaderSpy.swift
+//  FindYourOnlysCloneTests
+//
+//  Created by 鄭昭韋 on 2023/4/28.
+//
+
+import Foundation
+@testable import FindYourOnlysClone
+
+class PetImageDataLoaderSpy: PetImageDataLoader {
+    private struct TaskStub: PetImageDataLoaderTask {
+        let callback: () -> Void
+        
+        init(callback: @escaping () -> Void) {
+            self.callback = callback
+        }
+        
+        func cancel() {
+            callback()
+        }
+    }
+    
+    private(set) var cancelledURLs = [URL]()
+    private var receivedCompletions = [(PetImageDataLoader.Result) -> Void]()
+    
+    func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) -> PetImageDataLoaderTask {
+        receivedCompletions.append(completion)
+        return TaskStub { [weak self] in
+            self?.cancelledURLs.append(url)
+        }
+    }
+    
+    func completeLoadSucessfully(with data: Data, at index: Int = 0) {
+        receivedCompletions[index](.success(data))
+    }
+    
+    func completeLoadWithError(_ error: Error, at index: Int = 0) {
+        receivedCompletions[index](.failure(error))
+    }
+}
