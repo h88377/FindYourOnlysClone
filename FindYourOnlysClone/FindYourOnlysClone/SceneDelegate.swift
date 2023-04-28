@@ -47,6 +47,7 @@ private extension SceneDelegate {
         }
         
         let local = LocalPetImageDataLoader(store: store, currentDate: Date.init)
-        return PetImageDataLoaderWithFallbackComposite(primary: local, fallback: remote)
+        let docoratedRemote = PetImageDataLoaderWithCacheDecorator(decoratee: remote, cache: local)
+        return PetImageDataLoaderWithFallbackComposite(primary: local, fallback: docoratedRemote)
     }
 }
