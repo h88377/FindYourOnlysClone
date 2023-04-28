@@ -17,6 +17,10 @@ final class CoreDataPetImageDataStore: PetImageDataStore {
         context = container.newBackgroundContext()
     }
     
+    deinit {
+        cleanUpReferenceToPersistentStore()
+    }
+    
     func retrieve(dataForURL url: URL, completion: @escaping (RetrievalResult) -> Void) {
         perform { context in
             completion(Result {
@@ -59,6 +63,13 @@ final class CoreDataPetImageDataStore: PetImageDataStore {
         let context = self.context
         context.perform {
             action(context)
+        }
+    }
+    
+    private func cleanUpReferenceToPersistentStore() {
+        context.performAndWait {
+            let coordinator = container.persistentStoreCoordinator
+            try? coordinator.persistentStores.forEach(coordinator.remove)
         }
     }
 }
