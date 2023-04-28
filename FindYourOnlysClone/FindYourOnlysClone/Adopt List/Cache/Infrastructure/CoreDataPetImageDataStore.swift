@@ -9,12 +9,28 @@ import Foundation
 import CoreData
 
 final class CoreDataPetImageDataStore: PetImageDataStore {
+    enum StoreError: Error {
+        case modelNotFound
+        case failedToLoadPersistentStore(Error)
+    }
+    
+    private static let modelName = "PetStore"
+    private static let model = NSManagedObjectModel.with(name: modelName, in: Bundle(for: CoreDataPetImageDataStore.self))
+    
     private let container: NSPersistentContainer
     private let context: NSManagedObjectContext
     
-    init(bundle: Bundle = .main, storeURL: URL) throws {
-        container = try NSPersistentContainer.load(modelName: "PetStore", in: bundle, storeURL: storeURL)
-        context = container.newBackgroundContext()
+    init(storeURL: URL) throws {
+        guard let model = CoreDataPetImageDataStore.model else {
+            throw StoreError.modelNotFound
+        }
+        
+        do {
+            container = try NSPersistentContainer.load(modelName: CoreDataPetImageDataStore.modelName, model: model, storeURL: storeURL)
+            context = container.newBackgroundContext()
+        } catch {
+            throw StoreError.failedToLoadPersistentStore(error)
+        }
     }
     
     deinit {

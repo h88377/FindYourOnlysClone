@@ -70,9 +70,8 @@ final class AdoptListCacheIntegrationTests: XCTestCase {
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> LocalPetImageDataLoader {
-        let bundle = Bundle(for: CoreDataPetImageDataStore.self)
         let testSpecificStoreURL = testSpecificStoreURL()
-        let store = try! CoreDataPetImageDataStore(bundle: bundle, storeURL: testSpecificStoreURL)
+        let store = try! CoreDataPetImageDataStore(storeURL: testSpecificStoreURL)
         let sut = LocalPetImageDataLoader(store: store, currentDate: Date.init)
         trackForMemoryLeak(store, file: file, line: line)
         trackForMemoryLeak(sut, file: file, line: line)
