@@ -9,8 +9,12 @@ import XCTest
 @testable import FindYourOnlysClone
 
 class PetImageDataLoaderWithFallbackComposite: PetImageDataLoader {
-    private struct PetImageDataLoaderWithFallbackTask: PetImageDataLoaderTask {
-        func cancel() {}
+    private class PetImageDataLoaderWithFallbackTask: PetImageDataLoaderTask {
+        var compositeeTask: PetImageDataLoaderTask?
+        
+        func cancel() {
+            compositeeTask?.cancel()
+        }
     }
     
     private let primary: PetImageDataLoader
@@ -22,63 +26,80 @@ class PetImageDataLoaderWithFallbackComposite: PetImageDataLoader {
     }
     
     func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) -> FindYourOnlysClone.PetImageDataLoaderTask {
-        _ = primary.loadImageData(from: url) { result in
+        let compositeTask = PetImageDataLoaderWithFallbackTask()
+        compositeTask.compositeeTask = primary.loadImageData(from: url) { [weak self] result in
             switch result {
             case .success:
                 completion(result)
             
             case .failure:
-                _ = self.fallback.loadImageData(from: url) { result in
-                    completion(result)
-                }
+                compositeTask.compositeeTask = self?.fallback.loadImageData(from: url, completion: completion)
             }
         }
-        return PetImageDataLoaderWithFallbackTask()
+        return compositeTask
     }
 }
 
 class PetImageDataLoaderWithFallbackCompositeTests: XCTestCase {
     
     func test_loadImageData_deliversPrimarySuccessfulResultOnPrimarySuccess() {
-        let primaryResult: PetImageDataLoader.Result = .success(Data("primary data".utf8))
-        let fallbackResult: PetImageDataLoader.Result = .success(Data("fallback data".utf8))
-        
-        let sut = makeSUT(primaryResult: primaryResult, fallbackResult: fallbackResult)
-        
-        expect(sut, toCompleteWith: primaryResult)
+        let primaryData = anyData()
+
+        let (sut, primary, _) = makeSUT()
+
+        expect(sut, toCompleteWith: .success(primaryData), when: {
+            primary.completeLoadSucessfully(with: primaryData)
+        })
     }
-    
+
     func test_loadImageData_deliversFallbackSuccessfulResultOnPrimaryFailureAndFallbackSuccess() {
-        let primaryResult: PetImageDataLoader.Result = .failure(anyNSError())
-        let fallbackResult: PetImageDataLoader.Result = .success(anyData())
-        
-        let sut = makeSUT(primaryResult: primaryResult, fallbackResult: fallbackResult)
-        
-        expect(sut, toCompleteWith: fallbackResult)
+        let primaryError = anyNSError()
+        let fallbackData = anyData()
+
+        let (sut, primary, fallback) = makeSUT()
+
+        expect(sut, toCompleteWith: .success(fallbackData), when: {
+            primary.completeLoadWithError(primaryError)
+            fallback.completeLoadSucessfully(with: fallbackData)
+        })
+    }
+
+    func test_loadImageData_deliversFallbackFailureResultOnBothPrimaryAndFallbackAreFailure() {
+        let primaryError = NSError(domain: "primary error", code: 0)
+        let fallbackError = NSError(domain: "fallback error", code: 0)
+
+        let (sut, primary, fallback) = makeSUT()
+
+        expect(sut, toCompleteWith: .failure(fallbackError), when: {
+            primary.completeLoadWithError(primaryError)
+            fallback.completeLoadWithError(fallbackError)
+        })
     }
     
-    func test_loadImageData_deliversFallbackFailureResultOnBothPrimaryAndFallbackAreFailure() {
-        let primaryResult: PetImageDataLoader.Result = .failure(NSError(domain: "primary error", code: 0))
-        let fallbackResult: PetImageDataLoader.Result = .failure(NSError(domain: "fallback error", code: 0))
+    func test_cancelsLoadImageDataTask_cancelsPrimaryLoaderTask() {
+        let url = anyURL()
+        let (sut, primary, fallback) = makeSUT()
         
-        let sut = makeSUT(primaryResult: primaryResult, fallbackResult: fallbackResult)
+        let task = sut.loadImageData(from: url) { _ in }
+        task.cancel()
         
-        expect(sut, toCompleteWith: fallbackResult)
+        XCTAssertEqual(primary.cancelledURLs, [url])
+        XCTAssertTrue(fallback.cancelledURLs.isEmpty)
     }
     
     // MARK: - Helpers
     
-    private func makeSUT(primaryResult: PetImageDataLoader.Result, fallbackResult: PetImageDataLoader.Result, file: StaticString = #filePath, line: UInt = #line) -> PetImageDataLoaderWithFallbackComposite {
-        let primaryLoader = PetImageDataLoaderStub(result: primaryResult)
-        let fallbackLoader = PetImageDataLoaderStub(result: fallbackResult)
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: PetImageDataLoaderWithFallbackComposite, primary: PetImageDataLoaderSpy, fallback: PetImageDataLoaderSpy) {
+        let primaryLoader = PetImageDataLoaderSpy()
+        let fallbackLoader = PetImageDataLoaderSpy()
         let sut = PetImageDataLoaderWithFallbackComposite(primary: primaryLoader, fallback: fallbackLoader)
         trackForMemoryLeak(sut, file: file, line: line)
         trackForMemoryLeak(primaryLoader, file: file, line: line)
         trackForMemoryLeak(fallbackLoader, file: file, line: line)
-        return sut
+        return (sut, primaryLoader, fallbackLoader)
     }
     
-    private func expect(_ sut: PetImageDataLoaderWithFallbackComposite, toCompleteWith expectedResult: PetImageDataLoader.Result, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(_ sut: PetImageDataLoaderWithFallbackComposite, toCompleteWith expectedResult: PetImageDataLoader.Result, when action: () -> Void, file: StaticString = #filePath, line: UInt = #line) {
         let exp = expectation(description: "Wait for completion")
         _ = sut.loadImageData(from: anyURL()) { receivedResult in
             switch (receivedResult, expectedResult) {
@@ -93,25 +114,41 @@ class PetImageDataLoaderWithFallbackCompositeTests: XCTestCase {
             }
             exp.fulfill()
         }
+        
+        action()
+        
         wait(for: [exp], timeout: 1.0)
     }
     
-    private class PetImageDataLoaderStub: PetImageDataLoader {
+    private class PetImageDataLoaderSpy: PetImageDataLoader {
         private struct TaskStub: PetImageDataLoaderTask {
+            let callback: () -> Void
+            
+            init(callback: @escaping () -> Void) {
+                self.callback = callback
+            }
+            
             func cancel() {
-                
+                callback()
             }
         }
         
-        private let result: PetImageDataLoader.Result
-        
-        init(result: PetImageDataLoader.Result) {
-            self.result = result
-        }
+        private(set) var cancelledURLs = [URL]()
+        private var receivedCompletions = [(PetImageDataLoader.Result) -> Void]()
         
         func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) -> PetImageDataLoaderTask {
-            completion(result)
-            return TaskStub()
+            receivedCompletions.append(completion)
+            return TaskStub { [weak self] in
+                self?.cancelledURLs.append(url)
+            }
+        }
+        
+        func completeLoadSucessfully(with data: Data, at index: Int = 0) {
+            receivedCompletions[index](.success(data))
+        }
+        
+        func completeLoadWithError(_ error: Error, at index: Int = 0) {
+            receivedCompletions[index](.failure(error))
         }
     }
 }
