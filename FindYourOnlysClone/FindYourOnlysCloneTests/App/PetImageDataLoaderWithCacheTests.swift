@@ -58,6 +58,15 @@ class PetImageDataLoaderWithCacheDecoratorTests: XCTestCase, PetImageDataLoaderT
         XCTAssertEqual(loader.cancelledURLs, [url])
     }
     
+    func test_loadImageData_deliversImageDataOnLoadSuccessfully() {
+        let imageData = anyData()
+        let (sut, loader) = makeSUT()
+        
+        expect(sut, toCompleteWith: .success(imageData), when: {
+            loader.completeLoadSucessfully(with: imageData)
+        })
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (PetImageDataLoaderWithCacheDecorator, PetImageDataLoaderSpy) {
