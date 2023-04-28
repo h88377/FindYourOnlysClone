@@ -83,8 +83,21 @@ class PetImageDataLoaderWithFallbackCompositeTests: XCTestCase {
         let task = sut.loadImageData(from: url) { _ in }
         task.cancel()
         
-        XCTAssertEqual(primary.cancelledURLs, [url])
-        XCTAssertTrue(fallback.cancelledURLs.isEmpty)
+        XCTAssertEqual(primary.cancelledURLs, [url], "Expected cancel primary task")
+        XCTAssertTrue(fallback.cancelledURLs.isEmpty, "Expected does not cancel fallback task since task haven't started")
+    }
+    
+    func test_cancelsLoadImageDataTask_cancelsFallbackLoaderTaskOnPrimaryLoaderFailure() {
+        let url = anyURL()
+        let (sut, primary, fallback) = makeSUT()
+        
+        let task = sut.loadImageData(from: url) { _ in }
+        
+        primary.completeLoadWithError(anyNSError())
+        task.cancel()
+        
+        XCTAssertTrue(primary.cancelledURLs.isEmpty, "Expected does not cancel primary task since task has been completed")
+        XCTAssertEqual(fallback.cancelledURLs, [url], "Expected cancel fallback task")
     }
     
     // MARK: - Helpers
