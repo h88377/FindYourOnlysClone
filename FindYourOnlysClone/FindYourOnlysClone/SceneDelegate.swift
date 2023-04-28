@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -26,14 +27,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 }
 
-extension SceneDelegate {
+private extension SceneDelegate {
     func makeAdoptListViewController() -> AdoptListViewController {
         let baseURL = URL(string: "https://data.coa.gov.tw/Service/OpenData/TransService.aspx")!
         let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
         let petLoader = RemotePetLoader(baseURL: baseURL, client: client)
-        let imageLoader = RemotePetImageDataLoader(client: client)
+        let imageLoader = makeLocalImageDataLoaderWithRemoteFallback(with: client)
+        
         let vc = AdoptListUIComposer.adoptListComposedWith(petLoader: petLoader, imageLoader: imageLoader)
         
         return vc
+    }
+    
+    func makeLocalImageDataLoaderWithRemoteFallback(with client: HTTPClient) -> PetImageDataLoader {
+        let remote = RemotePetImageDataLoader(client: client)
+        
+        guard let store = try? CoreDataPetImageDataStore(storeURL: NSPersistentContainer.defaultDirectoryURL().appendingPathComponent("PetStore.sqlite")) else {
+            return remote
+        }
+        
+        let local = LocalPetImageDataLoader(store: store, currentDate: Date.init)
+        return PetImageDataLoaderWithFallbackComposite(primary: local, fallback: remote)
     }
 }
