@@ -9,9 +9,11 @@ import XCTest
 @testable import FindYourOnlysClone
 
 final class PetImageDataLoaderWithCacheDecorator: PetImageDataLoader {
-    private struct PetImageDataLoaderWithCacheTask: PetImageDataLoaderTask {
+    private class PetImageDataLoaderWithCacheTask: PetImageDataLoaderTask {
+        var decorateeTask: PetImageDataLoaderTask?
+        
         func cancel() {
-            
+            decorateeTask?.cancel()
         }
     }
     
@@ -22,11 +24,10 @@ final class PetImageDataLoaderWithCacheDecorator: PetImageDataLoader {
     }
     
     func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) -> FindYourOnlysClone.PetImageDataLoaderTask {
-        _ = decoratee.loadImageData(from: url, completion: completion)
-        return PetImageDataLoaderWithCacheTask()
+        let decoratorTask = PetImageDataLoaderWithCacheTask()
+        decoratorTask.decorateeTask = decoratee.loadImageData(from: url, completion: completion)
+        return decoratorTask
     }
-    
-    
 }
 
 class PetImageDataLoaderWithCacheDecoratorTests: XCTestCase {
@@ -44,6 +45,17 @@ class PetImageDataLoaderWithCacheDecoratorTests: XCTestCase {
         _ = sut.loadImageData(from: url) { _ in }
         
         XCTAssertEqual(loader.receivedURLs, [url])
+    }
+    
+    func test_cancelsLoadImageData_cancelsDecorateeLoadImageDataTask() {
+        let url = anyURL()
+        let (sut, loader) = makeSUT()
+        
+        let task = sut.loadImageData(from: url) { _ in }
+        
+        task.cancel()
+        
+        XCTAssertEqual(loader.cancelledURLs, [url])
     }
     
     // MARK: - Helpers
