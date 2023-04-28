@@ -21,10 +21,12 @@ class PetImageDataLoaderSpy: PetImageDataLoader {
         }
     }
     
+    private(set) var receivedURLs = [URL]()
     private(set) var cancelledURLs = [URL]()
     private var receivedCompletions = [(PetImageDataLoader.Result) -> Void]()
     
     func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) -> PetImageDataLoaderTask {
+        receivedURLs.append(url)
         receivedCompletions.append(completion)
         return TaskStub { [weak self] in
             self?.cancelledURLs.append(url)

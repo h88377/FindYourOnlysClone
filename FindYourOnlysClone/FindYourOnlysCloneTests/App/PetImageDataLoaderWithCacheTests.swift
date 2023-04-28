@@ -6,7 +6,34 @@
 //
 
 import XCTest
+@testable import FindYourOnlysClone
+
+final class PetImageDataLoaderWithCacheDecorator: PetImageDataLoader {
+    private struct PetImageDataLoaderWithCacheTask: PetImageDataLoaderTask {
+        func cancel() {
+            
+        }
+    }
+    
+    private let decoratee: PetImageDataLoader
+    
+    init(decoratee: PetImageDataLoader) {
+        self.decoratee = decoratee
+    }
+    
+    func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) -> FindYourOnlysClone.PetImageDataLoaderTask {
+        return PetImageDataLoaderWithCacheTask()
+    }
+    
+    
+}
 
 class PetImageDataLoaderWithCacheDecoratorTests: XCTestCase {
     
+    func test_init_doesNotMessageDecorateeCreation() {
+        let loader = PetImageDataLoaderSpy()
+        _ = PetImageDataLoaderWithCacheDecorator(decoratee: loader)
+        
+        XCTAssertEqual(loader.receivedURLs, [])
+    }
 }
