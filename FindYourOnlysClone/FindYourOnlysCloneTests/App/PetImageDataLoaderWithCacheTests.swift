@@ -67,6 +67,15 @@ class PetImageDataLoaderWithCacheDecoratorTests: XCTestCase, PetImageDataLoaderT
         })
     }
     
+    func test_loadImageData_deliversFailureOnDecorateeError() {
+        let decorateeError = anyNSError()
+        let (sut, loader) = makeSUT()
+        
+        expect(sut, toCompleteWith: .failure(decorateeError), when: {
+            loader.completeLoadWithError(decorateeError)
+        })
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (PetImageDataLoaderWithCacheDecorator, PetImageDataLoaderSpy) {
