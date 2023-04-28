@@ -8,7 +8,10 @@
 import Foundation
 @testable import FindYourOnlysClone
 
-class PetImageDataLoaderSpy: PetImageDataLoader {
+class PetImageDataLoaderSpy: PetImageDataLoader, PetImageDataCache {
+    
+    // MARK: - PetImageDataLoader
+    
     private struct TaskStub: PetImageDataLoaderTask {
         let callback: () -> Void
         
@@ -39,5 +42,17 @@ class PetImageDataLoaderSpy: PetImageDataLoader {
     
     func completeLoadWithError(_ error: Error, at index: Int = 0) {
         receivedCompletions[index](.failure(error))
+    }
+    
+    // MARK: - PetImageDataCache
+    
+    enum SavedMessage: Equatable {
+        case saved(data: Data, url: URL)
+    }
+    
+    private(set) var savedMessages = [SavedMessage]()
+    
+    func save(data: Data, for url: URL, completion: @escaping (PetImageDataCache.Result) -> Void) {
+        savedMessages.append(.saved(data: data, url: url))
     }
 }

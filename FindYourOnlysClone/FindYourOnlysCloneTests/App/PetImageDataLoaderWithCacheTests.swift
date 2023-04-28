@@ -18,14 +18,23 @@ final class PetImageDataLoaderWithCacheDecorator: PetImageDataLoader {
     }
     
     private let decoratee: PetImageDataLoader
+    private let cache: PetImageDataCache
     
-    init(decoratee: PetImageDataLoader) {
+    init(decoratee: PetImageDataLoader, cache: PetImageDataCache) {
         self.decoratee = decoratee
+        self.cache = cache
     }
     
     func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) -> FindYourOnlysClone.PetImageDataLoaderTask {
         let decoratorTask = PetImageDataLoaderWithCacheTask()
-        decoratorTask.decorateeTask = decoratee.loadImageData(from: url, completion: completion)
+        decoratorTask.decorateeTask = decoratee.loadImageData(from: url) { [weak self] result in
+            switch result {
+            case let .success(data):
+                self?.cache.save(data: data, for: url) { _ in }
+            default: break
+            }
+            completion(result)
+        }
         return decoratorTask
     }
 }
@@ -76,11 +85,22 @@ class PetImageDataLoaderWithCacheDecoratorTests: XCTestCase, PetImageDataLoaderT
         })
     }
     
+    func test_loadImageData_requestsCacheOnSuccessfulyLoad() {
+        let imageURL = anyURL()
+        let imageData = anyData()
+        let (sut, loader) = makeSUT()
+        
+        _ = sut.loadImageData(from: imageURL) { _ in }
+        loader.completeLoadSucessfully(with: imageData)
+        
+        XCTAssertEqual(loader.savedMessages, [.saved(data: imageData, url: imageURL)])
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (PetImageDataLoaderWithCacheDecorator, PetImageDataLoaderSpy) {
         let loader = PetImageDataLoaderSpy()
-        let sut = PetImageDataLoaderWithCacheDecorator(decoratee: loader)
+        let sut = PetImageDataLoaderWithCacheDecorator(decoratee: loader, cache: loader)
         trackForMemoryLeak(sut, file: file, line: line)
         trackForMemoryLeak(loader, file: file, line: line)
         return (sut, loader)
