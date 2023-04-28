@@ -7,7 +7,7 @@
 
 import Foundation
 
-class PetImageDataLoaderWithFallbackComposite: PetImageDataLoader {
+final class PetImageDataLoaderWithFallbackComposite: PetImageDataLoader {
     private class PetImageDataLoaderWithFallbackTask: PetImageDataLoaderTask {
         var compositeeTask: PetImageDataLoaderTask?
         
