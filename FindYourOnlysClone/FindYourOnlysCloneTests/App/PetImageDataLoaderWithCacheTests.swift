@@ -32,19 +32,27 @@ final class PetImageDataLoaderWithCacheDecorator: PetImageDataLoader {
 class PetImageDataLoaderWithCacheDecoratorTests: XCTestCase {
     
     func test_init_doesNotMessageDecorateeCreation() {
-        let loader = PetImageDataLoaderSpy()
-        _ = PetImageDataLoaderWithCacheDecorator(decoratee: loader)
+        let (_, loader) = makeSUT()
         
         XCTAssertEqual(loader.receivedURLs, [])
     }
     
     func test_loadImageData_requestsImageDataFromURL() {
         let url = anyURL()
-        let loader = PetImageDataLoaderSpy()
-        let sut = PetImageDataLoaderWithCacheDecorator(decoratee: loader)
+        let (sut, loader) = makeSUT()
         
         _ = sut.loadImageData(from: url) { _ in }
         
         XCTAssertEqual(loader.receivedURLs, [url])
+    }
+    
+    // MARK: - Helpers
+    
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (PetImageDataLoaderWithCacheDecorator, PetImageDataLoaderSpy) {
+        let loader = PetImageDataLoaderSpy()
+        let sut = PetImageDataLoaderWithCacheDecorator(decoratee: loader)
+        trackForMemoryLeak(sut, file: file, line: line)
+        trackForMemoryLeak(loader, file: file, line: line)
+        return (sut, loader)
     }
 }
