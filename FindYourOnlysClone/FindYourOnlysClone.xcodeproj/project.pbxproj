@@ -41,7 +41,7 @@
 		9891766A29E99C13000002A4 /* AdoptListUIComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891766929E99C13000002A4 /* AdoptListUIComposer.swift */; };
 		9891766C29EC0A60000002A4 /* UICollectionView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891766B29EC0A60000002A4 /* UICollectionView+Extension.swift */; };
 		9891766E29EC0AB0000002A4 /* UICollectionViewCell+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891766D29EC0AB0000002A4 /* UICollectionViewCell+Extension.swift */; };
-		9891767F29EC8566000002A4 /* RemotePetLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891767E29EC8566000002A4 /* RemotePetLoaderTests.swift */; };
+		9891767F29EC8566000002A4 /* LoadPetsFromRemoteUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891767E29EC8566000002A4 /* LoadPetsFromRemoteUseCaseTests.swift */; };
 		9891768229EC945F000002A4 /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891768129EC945F000002A4 /* XCTestCase+MemoryLeakTracking.swift */; };
 		9891768729ECBAE1000002A4 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891768629ECBAE1000002A4 /* HTTPClient.swift */; };
 		9891768929ECBB01000002A4 /* RemotePetLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891768829ECBB01000002A4 /* RemotePetLoader.swift */; };
@@ -50,7 +50,7 @@
 		9891769129ED42A9000002A4 /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891769029ED42A9000002A4 /* URLSessionHTTPClientTests.swift */; };
 		9891769329EE84B4000002A4 /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891769229EE84B4000002A4 /* URLSessionHTTPClient.swift */; };
 		989176A829EE9E94000002A4 /* AdoptListAPIEndToEndTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176A729EE9E94000002A4 /* AdoptListAPIEndToEndTests.swift */; };
-		989176AF29EFCBFE000002A4 /* RemotePetImageDataLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176AE29EFCBFE000002A4 /* RemotePetImageDataLoaderTests.swift */; };
+		989176AF29EFCBFE000002A4 /* LoadPetImageDataFromRemoteUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176AE29EFCBFE000002A4 /* LoadPetImageDataFromRemoteUseCaseTests.swift */; };
 		989176B129EFEC95000002A4 /* SharedTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176B029EFEC95000002A4 /* SharedTestHelpers.swift */; };
 		989176B329F092F2000002A4 /* HTTPClientSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176B229F092F2000002A4 /* HTTPClientSpy.swift */; };
 		989176B529F10505000002A4 /* RemotePetImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176B429F10505000002A4 /* RemotePetImageDataLoader.swift */; };
@@ -129,7 +129,7 @@
 		9891766929E99C13000002A4 /* AdoptListUIComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptListUIComposer.swift; sourceTree = "<group>"; };
 		9891766B29EC0A60000002A4 /* UICollectionView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extension.swift"; sourceTree = "<group>"; };
 		9891766D29EC0AB0000002A4 /* UICollectionViewCell+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell+Extension.swift"; sourceTree = "<group>"; };
-		9891767E29EC8566000002A4 /* RemotePetLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePetLoaderTests.swift; sourceTree = "<group>"; };
+		9891767E29EC8566000002A4 /* LoadPetsFromRemoteUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadPetsFromRemoteUseCaseTests.swift; sourceTree = "<group>"; };
 		9891768129EC945F000002A4 /* XCTestCase+MemoryLeakTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeakTracking.swift"; sourceTree = "<group>"; };
 		9891768629ECBAE1000002A4 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		9891768829ECBB01000002A4 /* RemotePetLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePetLoader.swift; sourceTree = "<group>"; };
@@ -139,7 +139,7 @@
 		9891769229EE84B4000002A4 /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
 		989176A529EE9E94000002A4 /* FindYourOnlysCloneAPIEndToEndTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FindYourOnlysCloneAPIEndToEndTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		989176A729EE9E94000002A4 /* AdoptListAPIEndToEndTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptListAPIEndToEndTests.swift; sourceTree = "<group>"; };
-		989176AE29EFCBFE000002A4 /* RemotePetImageDataLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePetImageDataLoaderTests.swift; sourceTree = "<group>"; };
+		989176AE29EFCBFE000002A4 /* LoadPetImageDataFromRemoteUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadPetImageDataFromRemoteUseCaseTests.swift; sourceTree = "<group>"; };
 		989176B029EFEC95000002A4 /* SharedTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedTestHelpers.swift; sourceTree = "<group>"; };
 		989176B229F092F2000002A4 /* HTTPClientSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClientSpy.swift; sourceTree = "<group>"; };
 		989176B429F10505000002A4 /* RemotePetImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePetImageDataLoader.swift; sourceTree = "<group>"; };
@@ -368,8 +368,8 @@
 			isa = PBXGroup;
 			children = (
 				989176B729F12126000002A4 /* Helpers */,
-				9891767E29EC8566000002A4 /* RemotePetLoaderTests.swift */,
-				989176AE29EFCBFE000002A4 /* RemotePetImageDataLoaderTests.swift */,
+				9891767E29EC8566000002A4 /* LoadPetsFromRemoteUseCaseTests.swift */,
+				989176AE29EFCBFE000002A4 /* LoadPetImageDataFromRemoteUseCaseTests.swift */,
 				9891769029ED42A9000002A4 /* URLSessionHTTPClientTests.swift */,
 			);
 			path = API;
@@ -651,10 +651,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9891767F29EC8566000002A4 /* RemotePetLoaderTests.swift in Sources */,
+				9891767F29EC8566000002A4 /* LoadPetsFromRemoteUseCaseTests.swift in Sources */,
 				989176C229F122C1000002A4 /* UIRefreshControl+TestHelpers.swift in Sources */,
 				9814F17029F7DEEF0094A25D /* CachePetImageDataUseCaseTests.swift in Sources */,
-				989176AF29EFCBFE000002A4 /* RemotePetImageDataLoaderTests.swift in Sources */,
+				989176AF29EFCBFE000002A4 /* LoadPetImageDataFromRemoteUseCaseTests.swift in Sources */,
 				989176C629F122E8000002A4 /* UIImage+TestHelpers.swift in Sources */,
 				9814F17329F7E06B0094A25D /* PetStoreSpy.swift in Sources */,
 				9814F16829F7ADA30094A25D /* LoadPetImageDataFromCacheUseCaseTests.swift in Sources */,

@@ -1,5 +1,5 @@
 //
-//  RemotePetImageDataLoaderTests.swift
+//  LoadPetImageDataFromRemoteUseCaseTests.swift
 //  FindYourOnlysCloneTests
 //
 //  Created by 鄭昭韋 on 2023/4/19.
@@ -8,7 +8,7 @@
 import XCTest
 @testable import FindYourOnlysClone
 
-class RemotePetImageDataLoaderTests: XCTestCase {
+class LoadPetImageDataFromRemoteUseCaseTests: XCTestCase {
     
     func test_init_doesNotRequestImageDataFromURL() {
         let (_, client) = makeSUT()
