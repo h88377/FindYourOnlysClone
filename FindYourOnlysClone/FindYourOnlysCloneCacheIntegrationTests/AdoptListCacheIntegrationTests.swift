@@ -8,7 +8,7 @@
 import XCTest
 @testable import FindYourOnlysClone
 
-final class FindYourOnlysCloneCacheIntegrationTests: XCTestCase {
+final class AdoptListCacheIntegrationTests: XCTestCase {
     
     override func setUp() {
         super.setUp()

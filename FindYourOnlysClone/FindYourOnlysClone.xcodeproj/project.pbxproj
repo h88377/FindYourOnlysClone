@@ -19,7 +19,7 @@
 		9814F18129FA491C0094A25D /* PetStore.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9814F17F29FA491C0094A25D /* PetStore.xcdatamodeld */; };
 		9814F18329FA4BE10094A25D /* ManagedPetImageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F18229FA4BE10094A25D /* ManagedPetImageData.swift */; };
 		9814F18629FA7E570094A25D /* CoreDataHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F18529FA7E570094A25D /* CoreDataHelpers.swift */; };
-		9814F18E29FA81800094A25D /* FindYourOnlysCloneCacheIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F18D29FA81800094A25D /* FindYourOnlysCloneCacheIntegrationTests.swift */; };
+		9814F18E29FA81800094A25D /* AdoptListCacheIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F18D29FA81800094A25D /* AdoptListCacheIntegrationTests.swift */; };
 		9814F19429FA82C30094A25D /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891768129EC945F000002A4 /* XCTestCase+MemoryLeakTracking.swift */; };
 		9814F19529FA84A80094A25D /* SharedTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989176B029EFEC95000002A4 /* SharedTestHelpers.swift */; };
 		9891761D29E80211000002A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761C29E80211000002A4 /* AppDelegate.swift */; };
@@ -106,7 +106,7 @@
 		9814F18229FA4BE10094A25D /* ManagedPetImageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedPetImageData.swift; sourceTree = "<group>"; };
 		9814F18529FA7E570094A25D /* CoreDataHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelpers.swift; sourceTree = "<group>"; };
 		9814F18B29FA81800094A25D /* FindYourOnlysCloneCacheIntegrationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FindYourOnlysCloneCacheIntegrationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9814F18D29FA81800094A25D /* FindYourOnlysCloneCacheIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindYourOnlysCloneCacheIntegrationTests.swift; sourceTree = "<group>"; };
+		9814F18D29FA81800094A25D /* AdoptListCacheIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptListCacheIntegrationTests.swift; sourceTree = "<group>"; };
 		9891761929E80211000002A4 /* FindYourOnlysClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FindYourOnlysClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9891761C29E80211000002A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9891761E29E80211000002A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -233,7 +233,7 @@
 		9814F18C29FA81800094A25D /* FindYourOnlysCloneCacheIntegrationTests */ = {
 			isa = PBXGroup;
 			children = (
-				9814F18D29FA81800094A25D /* FindYourOnlysCloneCacheIntegrationTests.swift */,
+				9814F18D29FA81800094A25D /* AdoptListCacheIntegrationTests.swift */,
 			);
 			path = FindYourOnlysCloneCacheIntegrationTests;
 			sourceTree = "<group>";
@@ -600,7 +600,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9814F18E29FA81800094A25D /* FindYourOnlysCloneCacheIntegrationTests.swift in Sources */,
+				9814F18E29FA81800094A25D /* AdoptListCacheIntegrationTests.swift in Sources */,
 				9814F19429FA82C30094A25D /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 				9814F19529FA84A80094A25D /* SharedTestHelpers.swift in Sources */,
 			);
