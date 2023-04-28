@@ -31,6 +31,7 @@ final class PetImageDataLoaderWithCacheDecorator: PetImageDataLoader {
             switch result {
             case let .success(data):
                 self?.cache.save(data: data, for: url) { _ in }
+                
             default: break
             }
             completion(result)
@@ -94,6 +95,16 @@ class PetImageDataLoaderWithCacheDecoratorTests: XCTestCase, PetImageDataLoaderT
         loader.completeLoadSucessfully(with: imageData)
         
         XCTAssertEqual(loader.savedMessages, [.saved(data: imageData, url: imageURL)])
+    }
+    
+    func test_loadImageData_doesNotRequestCacheOnDecorateeFailure() {
+        let decorateeError = anyNSError()
+        let (sut, loader) = makeSUT()
+        
+        _ = sut.loadImageData(from: anyURL()) { _ in }
+        loader.completeLoadWithError(decorateeError)
+        
+        XCTAssertEqual(loader.savedMessages, [])
     }
     
     // MARK: - Helpers
