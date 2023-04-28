@@ -8,14 +8,6 @@
 import Foundation
 
 final class PetImageDataLoaderWithCacheDecorator: PetImageDataLoader {
-    private class PetImageDataLoaderWithCacheTask: PetImageDataLoaderTask {
-        var decorateeTask: PetImageDataLoaderTask?
-        
-        func cancel() {
-            decorateeTask?.cancel()
-        }
-    }
-    
     private let decoratee: PetImageDataLoader
     private let cache: PetImageDataCache
     
@@ -25,8 +17,7 @@ final class PetImageDataLoaderWithCacheDecorator: PetImageDataLoader {
     }
     
     func loadImageData(from url: URL, completion: @escaping (PetImageDataLoader.Result) -> Void) -> FindYourOnlysClone.PetImageDataLoaderTask {
-        let decoratorTask = PetImageDataLoaderWithCacheTask()
-        decoratorTask.decorateeTask = decoratee.loadImageData(from: url) { [weak self] result in
+        return decoratee.loadImageData(from: url) { [weak self] result in
             switch result {
             case let .success(data):
                 self?.cache.save(data: data, for: url) { _ in }
@@ -35,6 +26,5 @@ final class PetImageDataLoaderWithCacheDecorator: PetImageDataLoader {
             }
             completion(result)
         }
-        return decoratorTask
     }
 }
