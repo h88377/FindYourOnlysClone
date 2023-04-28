@@ -250,6 +250,15 @@
 			path = App;
 			sourceTree = "<group>";
 		};
+		9814F19B29FBC36D0094A25D /* App */ = {
+			isa = PBXGroup;
+			children = (
+				9891766929E99C13000002A4 /* AdoptListUIComposer.swift */,
+				9814F19929FBC3310094A25D /* PetImageDataLoaderWithFallbackComposite.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
 		9891761029E80211000002A4 = {
 			isa = PBXGroup;
 			children = (
@@ -277,8 +286,7 @@
 			children = (
 				9891761C29E80211000002A4 /* AppDelegate.swift */,
 				9891761E29E80211000002A4 /* SceneDelegate.swift */,
-				9891766929E99C13000002A4 /* AdoptListUIComposer.swift */,
-				9814F19929FBC3310094A25D /* PetImageDataLoaderWithFallbackComposite.swift */,
+				9814F19B29FBC36D0094A25D /* App */,
 				9891767A29EC8412000002A4 /* Adopt List */,
 				9891762529E80212000002A4 /* Assets.xcassets */,
 				9891762729E80212000002A4 /* LaunchScreen.storyboard */,
