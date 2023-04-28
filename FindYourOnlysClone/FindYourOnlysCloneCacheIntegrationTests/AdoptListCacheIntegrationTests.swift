@@ -22,6 +22,12 @@ final class AdoptListCacheIntegrationTests: XCTestCase {
         cleanStoreSideEffects()
     }
     
+    func test_loadImageData_deliversNotFoundErrorOnEmptyCache() {
+        let sut = makeSUT()
+        
+        expect(sut, toCompleteWith: failure(.notFound), from: anyURL())
+    }
+    
     func test_loadImageData_deliversSavedDataOnASeparatedInstance() {
         let imageData = anyData()
         let imageURL = anyURL()
@@ -30,7 +36,7 @@ final class AdoptListCacheIntegrationTests: XCTestCase {
 
         save(data: imageData, for: imageURL, with: loaderToSave)
         
-        expect(loaderToLoad, toLoad: imageData, from: imageURL)
+        expect(loaderToLoad, toCompleteWith: .success(imageData), from: imageURL)
     }
     
     // MARK: - Helpers
@@ -57,17 +63,26 @@ final class AdoptListCacheIntegrationTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
-    private func expect(_ sut: LocalPetImageDataLoader, toLoad expectedData: Data, from url: URL) {
+    private func expect(_ sut: LocalPetImageDataLoader, toCompleteWith expectedResult: LocalPetImageDataLoader.LoadResult, from url: URL, file: StaticString = #filePath, line: UInt = #line) {
         let exp = expectation(description: "Wait for completion")
-        _ = sut.loadImageData(from: url) { result in
-            switch result {
-            case let .success(receivedData):
-                XCTAssertEqual(expectedData, receivedData)
-            default: XCTFail("Expected succeed with data \(expectedData), got \(result) instead")
+        _ = sut.loadImageData(from: url) { receivedResult in
+            switch (receivedResult, expectedResult) {
+            case let (.success(receivedData), .success(expectedData)):
+                XCTAssertEqual(receivedData, expectedData, "Expected \(expectedData), got \(receivedData) instead", file: file, line: line)
+                
+            case let (.failure(receivedError as LocalPetImageDataLoader.LoadError), .failure(expectedError as LocalPetImageDataLoader.LoadError)):
+                XCTAssertEqual(receivedError, expectedError, "Expected \(expectedError), got \(receivedError) instead", file: file, line: line)
+                
+            default:
+                XCTFail("Expected \(expectedResult), got \(receivedResult) instead", file: file, line: line)
             }
             exp.fulfill()
         }
         wait(for: [exp], timeout: 1.0)
+    }
+    
+    private func failure(_ error: LocalPetImageDataLoader.LoadError) -> LocalPetImageDataLoader.LoadResult {
+        return .failure(error)
     }
     
     private func testSpecificStoreURL() -> URL {
