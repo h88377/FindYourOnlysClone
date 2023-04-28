@@ -20,11 +20,15 @@ final class PetImageDataLoaderWithCacheDecorator: PetImageDataLoader {
         return decoratee.loadImageData(from: url) { [weak self] result in
             switch result {
             case let .success(data):
-                self?.cache.save(data: data, for: url) { _ in }
+                self?.saveIgnoringResult(data: data, for: url)
                 
             default: break
             }
             completion(result)
         }
+    }
+    
+    private func saveIgnoringResult(data: Data, for url: URL) {
+        cache.save(data: data, for: url) { _ in }
     }
 }
