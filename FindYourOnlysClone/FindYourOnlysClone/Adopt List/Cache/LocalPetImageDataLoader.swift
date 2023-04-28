@@ -17,12 +17,6 @@ final class LocalPetImageDataLoader {
     }
 }
 
-protocol PetImageDataCache {
-    typealias Result = Swift.Result<Void, Error>
-    
-    func save(data: Data, for url: URL, completion: @escaping (Result) -> Void)
-}
-
 extension LocalPetImageDataLoader: PetImageDataCache {
     typealias SaveResult = PetImageDataCache.Result
     

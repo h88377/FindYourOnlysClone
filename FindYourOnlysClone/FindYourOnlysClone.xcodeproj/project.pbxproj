@@ -28,6 +28,7 @@
 		9814F19F29FBC6DC0094A25D /* PetImageDataLoaderWithCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F19E29FBC6DC0094A25D /* PetImageDataLoaderWithCacheTests.swift */; };
 		9814F1A229FBC9BB0094A25D /* PetImageDataLoaderSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1A129FBC9BB0094A25D /* PetImageDataLoaderSpy.swift */; };
 		9814F1A429FBCF150094A25D /* PetImageDataLoaderTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1A329FBCF150094A25D /* PetImageDataLoaderTestCase.swift */; };
+		9814F1A629FBD2C20094A25D /* PetImageDataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1A529FBD2C20094A25D /* PetImageDataCache.swift */; };
 		9891761D29E80211000002A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761C29E80211000002A4 /* AppDelegate.swift */; };
 		9891761F29E80211000002A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761E29E80211000002A4 /* SceneDelegate.swift */; };
 		9891762629E80212000002A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9891762529E80212000002A4 /* Assets.xcassets */; };
@@ -119,6 +120,7 @@
 		9814F19E29FBC6DC0094A25D /* PetImageDataLoaderWithCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetImageDataLoaderWithCacheTests.swift; sourceTree = "<group>"; };
 		9814F1A129FBC9BB0094A25D /* PetImageDataLoaderSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetImageDataLoaderSpy.swift; sourceTree = "<group>"; };
 		9814F1A329FBCF150094A25D /* PetImageDataLoaderTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetImageDataLoaderTestCase.swift; sourceTree = "<group>"; };
+		9814F1A529FBD2C20094A25D /* PetImageDataCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetImageDataCache.swift; sourceTree = "<group>"; };
 		9891761929E80211000002A4 /* FindYourOnlysClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FindYourOnlysClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9891761C29E80211000002A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9891761E29E80211000002A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -329,6 +331,7 @@
 			isa = PBXGroup;
 			children = (
 				9891765129E89B55000002A4 /* PetLoader.swift */,
+				9814F1A529FBD2C20094A25D /* PetImageDataCache.swift */,
 				9891764D29E89B08000002A4 /* Pet.swift */,
 				9891764F29E89B35000002A4 /* AdoptListRequest.swift */,
 				9891765D29E91C9D000002A4 /* PetImageDataLoader.swift */,
@@ -684,6 +687,7 @@
 				9891769329EE84B4000002A4 /* URLSessionHTTPClient.swift in Sources */,
 				9891768729ECBAE1000002A4 /* HTTPClient.swift in Sources */,
 				9891761F29E80211000002A4 /* SceneDelegate.swift in Sources */,
+				9814F1A629FBD2C20094A25D /* PetImageDataCache.swift in Sources */,
 				9814F19D29FBC5200094A25D /* MainThreadDispatchDecorator.swift in Sources */,
 				9891766A29E99C13000002A4 /* AdoptListUIComposer.swift in Sources */,
 				9891766029E98563000002A4 /* AdoptListViewModel.swift in Sources */,
