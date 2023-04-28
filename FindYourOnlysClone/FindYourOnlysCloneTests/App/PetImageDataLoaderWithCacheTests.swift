@@ -30,7 +30,7 @@ final class PetImageDataLoaderWithCacheDecorator: PetImageDataLoader {
     }
 }
 
-class PetImageDataLoaderWithCacheDecoratorTests: XCTestCase {
+class PetImageDataLoaderWithCacheDecoratorTests: XCTestCase, PetImageDataLoaderTestCase {
     
     func test_init_doesNotMessageDecorateeCreation() {
         let (_, loader) = makeSUT()
