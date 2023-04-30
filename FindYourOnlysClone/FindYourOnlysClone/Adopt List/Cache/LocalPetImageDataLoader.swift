@@ -17,8 +17,8 @@ final class LocalPetImageDataLoader {
     }
 }
 
-extension LocalPetImageDataLoader {
-    typealias SaveResult = Swift.Result<Void, Error>
+extension LocalPetImageDataLoader: PetImageDataCache {
+    typealias SaveResult = PetImageDataCache.Result
     
     enum SaveError: Swift.Error {
         case failed

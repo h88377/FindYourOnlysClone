@@ -82,7 +82,7 @@ class LoadPetImageDataFromCacheUseCaseTests: XCTestCase {
     func test_loadImageData_doesNotDeliverResultAfterTaskHasBeenCancelled() {
         let (sut, store) = makeSUT()
         
-        var receivedResult: LocalPetImageDataLoader.Result?
+        var receivedResult: LocalPetImageDataLoader.LoadResult?
         let task = sut.loadImageData(from: anyURL()) { result in receivedResult = result }
         task.cancel()
         
@@ -96,7 +96,7 @@ class LoadPetImageDataFromCacheUseCaseTests: XCTestCase {
     func test_loadImageData_doesNotDeliverResultAfterSUTInstanceHasBeenDeallocated() {
         let store = PetStoreSpy()
         var sut: LocalPetImageDataLoader? = LocalPetImageDataLoader(store: store, currentDate: Date.init)
-        var receivedResult: LocalPetImageDataLoader.Result?
+        var receivedResult: LocalPetImageDataLoader.LoadResult?
         _ = sut?.loadImageData(from: anyURL()) { result in receivedResult = result }
         
         sut = nil
@@ -137,7 +137,7 @@ class LoadPetImageDataFromCacheUseCaseTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
      
-    private func failure(_ error: LocalPetImageDataLoader.LoadError) -> LocalPetImageDataLoader.Result {
+    private func failure(_ error: LocalPetImageDataLoader.LoadError) -> LocalPetImageDataLoader.LoadResult {
         return .failure(error)
     }
 }

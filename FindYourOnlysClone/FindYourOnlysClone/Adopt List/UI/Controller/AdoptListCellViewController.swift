@@ -41,6 +41,10 @@ final class AdoptListCellViewController {
         viewModel.loadPetImageData()
     }
     
+    func preloadPetImageData() {
+        viewModel.preloadPetImageData()
+    }
+    
     func cancelTask() {
         viewModel.cancelTask()
         releaseBindings()
@@ -48,7 +52,7 @@ final class AdoptListCellViewController {
     
     private func setUpBindings() {
         viewModel.isPetImageLoadingStateOnChange = { [weak cell] isLoading in
-            cell?.petImageContainer.isShimmering = isLoading
+            cell?.petImageContainer.isShowingActivityIndicator = isLoading
         }
         
         viewModel.isPetImageRetryStateOnChange = { [weak cell] shouldRetry in
