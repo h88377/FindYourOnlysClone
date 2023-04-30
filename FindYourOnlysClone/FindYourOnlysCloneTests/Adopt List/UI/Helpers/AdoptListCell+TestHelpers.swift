@@ -26,7 +26,7 @@ extension AdoptListCell {
     }
     
     var isShowingImageLoadingIndicator: Bool {
-        return petImageContainer.isShimmering
+        return petImageContainer.isShowingActivityIndicator
     }
     
     var isShowingImageRetryAction: Bool {
