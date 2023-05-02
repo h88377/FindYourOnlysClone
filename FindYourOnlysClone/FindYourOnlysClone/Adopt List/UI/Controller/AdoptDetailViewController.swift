@@ -23,9 +23,6 @@ final class AdoptDetailViewController: UIViewController {
         return collectionView
     }()
     
-    private let sections = AdoptDetailSection.allCases
-    private let viewModel: AdoptDetailViewModel<UIImage>
-    
     private lazy var dataSource: UICollectionViewDiffableDataSource<AdoptDetailSection, AdoptDetailModel> = {
         .init(collectionView: collectionView) { [weak self] collectionView, indexPath, model in
             let section = self?.sections[indexPath.section]
@@ -33,6 +30,9 @@ final class AdoptDetailViewController: UIViewController {
             return cell
         }
     }()
+    
+    private let sections = AdoptDetailSection.allCases
+    private let viewModel: AdoptDetailViewModel<UIImage>
     
     // MARK: - Life cycle
     
@@ -48,17 +48,21 @@ final class AdoptDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView.dataSource = self.dataSource
-        dataSource.supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) in
+       configureCollectionView()
+    }
+    
+    // MARK: - Method
+    
+    private func configureCollectionView() {
+        dataSource.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: AdoptDetailHeaderView.identifier, for: indexPath) as! AdoptDetailHeaderView
             header.imageView.image = self?.viewModel.petImage
             
             return header
         }
+        collectionView.dataSource = self.dataSource
         configureSnapshot()
     }
-    
-    // MARK: - Method
     
     private func configureSnapshot() {
         var snapshot = dataSource.snapshot()
@@ -186,7 +190,7 @@ extension AdoptDetailViewController {
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 
                 let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(30))
-                let group = NSCollectionLayoutGroup(layoutSize: groupSize)
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
                 
                 let section = NSCollectionLayoutSection(group: group)
                 return section
