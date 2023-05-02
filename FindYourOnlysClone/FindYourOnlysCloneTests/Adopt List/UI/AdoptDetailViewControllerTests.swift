@@ -19,11 +19,11 @@ class AdoptDetailViewControllerTests: XCTestCase {
     }
     
     func test_cellIsVisible_rendersPetInformation() {
-        let (sut, viewModel) = makeSUT()
+        let (sut, viewModels) = makeSUT()
 
         sut.loadViewIfNeeded()
         
-        expect(sut, isRenderingWhenCellIsVisible: viewModel)
+        expect(sut, isRenderingWhenCellIsVisible: viewModels)
     }
     
     func test_headerIsVisible_rendersPetImage() {
@@ -38,107 +38,68 @@ class AdoptDetailViewControllerTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT(image: UIImage? = nil, file: StaticString = #filePath, line: UInt = #line) -> (AdoptDetailViewController, AdoptDetailViewModel<UIImage>) {
-        let viewModel = AdoptDetailViewModel(pet: makePet(), image: image)
-        let sut = AdoptDetailViewController(viewModel: viewModel)
+    private func makeSUT(image: UIImage? = nil, file: StaticString = #filePath, line: UInt = #line) -> (AdoptDetailViewController, [AdoptDetailCellViewModel]) {
+        let pet = makePet()
+        let detailSections: [AdoptDetailInfoSection] = StatusSection.allCases + MainInfoSection.allCases + SubInfoSection.allCases
+        let cellViewModels = detailSections.map { AdoptDetailCellViewModel(pet: pet, detailSection: $0) }
+        let cellControllers = cellViewModels.map { AdoptDetailCellViewController(viewModel: $0) }
+        let sut = AdoptDetailViewController(image: image, sections: AdoptDetailSection.allCases, cellControllers: cellControllers)
+        
         trackForMemoryLeak(sut, file: file, line: line)
-        trackForMemoryLeak(viewModel, file: file, line: line)
-        return (sut, viewModel)
+        cellViewModels.forEach { trackForMemoryLeak($0, file: file, line: line) }
+        cellControllers.forEach { trackForMemoryLeak($0, file: file, line: line) }
+        return (sut, cellViewModels)
     }
     
-    private func expect(_ sut: AdoptDetailViewController, isRenderingWhenCellIsVisible viewModel: AdoptDetailViewModel<UIImage>, file: StaticString = #filePath, line: UInt = #line) {
-        let view = sut.simulatePetInfoIsVisibleAt(indexPath: IndexPath(item: 0, section: sut.statusSection))
-        guard let statusCell = view as? AdoptDetailStatusCell else {
+    private func expect(_ sut: AdoptDetailViewController, isRenderingWhenCellIsVisible viewModels: [AdoptDetailCellViewModel], file: StaticString = #filePath, line: UInt = #line) {
+        let statusInfoCaseCount = StatusSection.allCases.count
+        let mainInfoCaseCount = MainInfoSection.allCases.count
+        
+        for (index, viewModel) in viewModels.enumerated() {
+            switch viewModel.detailSection {
+            case is StatusSection:
+                expect(sut, hasStatusInfoViewConfiuredFor: viewModel, at: index, file: file, line: line)
+                
+            case is MainInfoSection:
+                let mainInfoIndex = index - statusInfoCaseCount
+                expect(sut, hasMainInfoViewConfiuredFor: viewModel, at: mainInfoIndex, file: file, line: line)
+                
+            case is SubInfoSection:
+                let subInfoIndex = index - statusInfoCaseCount - mainInfoCaseCount
+                expect(sut, hasSubInfoViewConfiuredFor: viewModel, at: subInfoIndex, file: file, line: line)
+                
+            default: XCTFail("Unexpected infoSection", file: file, line: line)
+            }
+        }
+    }
+    
+    private func expect(_ sut: AdoptDetailViewController, hasStatusInfoViewConfiuredFor viewModel: AdoptDetailCellViewModel, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
+        let view = sut.simulatePetInfoIsVisibleAt(indexPath: IndexPath(item: index, section: sut.statusSection))
+        guard let cell = view as? AdoptDetailStatusCell else {
             return XCTFail("Expected cell instance \(AdoptDetailStatusCell.self), got \(String(describing: view.self)) instance instead", file: file, line: line)
         }
-        XCTAssertEqual(statusCell.statusLabel.text, viewModel.statusText, "Expected status should be \(viewModel.statusText)", file: file, line: line)
         
-        for (index, mainInfo) in AdoptDetailViewController.MainInfoSection.allCases.enumerated() {
-            expect(sut, hasMainInfoViewConfiuredFor: viewModel, mainInfo: mainInfo, at: index, file: file, line: line)
-        }
-        
-        for (index, info) in AdoptDetailViewController.InfoSection.allCases.enumerated() {
-            expect(sut, hasInfoViewConfiuredFor: viewModel, info: info, at: index, file: file, line: line)
-        }
+        XCTAssertEqual(cell.statusLabel.text, viewModel.descriptionText, "Expected description text should be  \(viewModel.descriptionText)", file: file, line: line)
     }
     
-    private func expect(_ sut: AdoptDetailViewController, hasMainInfoViewConfiuredFor viewModel: AdoptDetailViewModel<UIImage>, mainInfo: AdoptDetailViewController.MainInfoSection, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(_ sut: AdoptDetailViewController, hasMainInfoViewConfiuredFor viewModel: AdoptDetailCellViewModel, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
         let view = sut.simulatePetInfoIsVisibleAt(indexPath: IndexPath(item: index, section: sut.mainInfoSection))
         guard let cell = view as? AdoptDetailMainInfoCell else {
             return XCTFail("Expected cell instance \(AdoptDetailMainInfoCell.self), got \(String(describing: view.self)) instance instead", file: file, line: line)
         }
         
-        let viewModelText: String
-        switch mainInfo {
-        case .kind:
-            viewModelText = viewModel.kindText
-            
-        case .gender:
-            viewModelText = viewModel.genderText
-            
-        case .variety:
-            viewModelText = viewModel.varietyText
-        }
-        
-        XCTAssertEqual(cell.infoTitleLabel.text, mainInfo.rawValue, "Expected \(mainInfo) title text should be  \(mainInfo.rawValue)", file: file, line: line)
-        XCTAssertEqual(cell.infoLabel.text, viewModelText, "Expected \(mainInfo) info text should be  \(viewModelText)", file: file, line: line)
+        XCTAssertEqual(cell.infoTitleLabel.text, viewModel.titleText, "Expected title text should be  \(String(describing: viewModel.titleText))", file: file, line: line)
+        XCTAssertEqual(cell.infoLabel.text, viewModel.descriptionText, "Expected description text should be  \(viewModel.descriptionText)", file: file, line: line)
     }
     
-    private func expect(_ sut: AdoptDetailViewController, hasInfoViewConfiuredFor viewModel: AdoptDetailViewModel<UIImage>, info: AdoptDetailViewController.InfoSection, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(_ sut: AdoptDetailViewController, hasSubInfoViewConfiuredFor viewModel: AdoptDetailCellViewModel, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
         let view = sut.simulatePetInfoIsVisibleAt(indexPath: IndexPath(item: index, section: sut.infoSection))
         guard let cell = view as? AdoptDetailInfoCell else {
             return XCTFail("Expected cell instance \(AdoptDetailInfoCell.self), got \(String(describing: view.self)) instance instead", file: file, line: line)
         }
         
-        let viewModelText: String
-        switch info {
-        case .id:
-            viewModelText = viewModel.idText
-            
-        case .age:
-            viewModelText = viewModel.ageText
-            
-        case .color:
-            viewModelText = viewModel.colorText
-            
-        case .bodyType:
-            viewModelText = viewModel.bodyTypeText
-            
-        case .foundPlace:
-            viewModelText = viewModel.foundPlaceText
-            
-        case .sterilization:
-            viewModelText = viewModel.sterilizationText
-            
-        case .bacterin:
-            viewModelText = viewModel.bacterinText
-            
-        case .openDate:
-            viewModelText = viewModel.openForAdoptionDateText
-            
-        case .closedDate:
-            viewModelText = viewModel.closeForAdoptionDateText
-            
-        case .updatedDate:
-            viewModelText = viewModel.updatedDateText
-            
-        case .createdDate:
-            viewModelText = viewModel.createdDateText
-        case .shelterName:
-            viewModelText = viewModel.shelterNameText
-            
-        case .address:
-            viewModelText = viewModel.addressText
-            
-        case .telephone:
-            viewModelText = viewModel.telephoneText
-            
-        case .remark:
-            viewModelText = viewModel.remarkText
-        }
-        
-        XCTAssertEqual(cell.infoTitleLabel.text, info.rawValue, "Expected \(info) title text should be  \(info.rawValue)", file: file, line: line)
-        XCTAssertEqual(cell.infoLabel.text, viewModelText, "Expected \(info) info text should be  \(viewModelText)", file: file, line: line)
+        XCTAssertEqual(cell.infoTitleLabel.text, viewModel.titleText, "Expected title text should be  \(String(describing: viewModel.titleText))", file: file, line: line)
+        XCTAssertEqual(cell.infoLabel.text, viewModel.descriptionText, "Expected description text should be  \(viewModel.descriptionText)", file: file, line: line)
     }
     
     private func makePet(id: Int = 0, location: String = "新北市XX", kind: String = "貓", gender: String = "F", bodyType: String = "SMALL", color: String = "黑", age: String = "CHILD", sterilization: String = "T", bacterin: String = "F", foundPlace: String = "新北市FoundPlace", status: String = "OPEN", remark: String = "", openDate: String = "2023-04-22", closedDate: String = "2023-04-22", updatedDate: String = "2023-04-22", createdDate: String = "2023-04-22", photoURL: URL? = nil, address: String = "新北市XXX", telephone: String = "02-XXXXXXXX", variety: String = "混種", shelterName: String = "新北市收容所") -> Pet {
