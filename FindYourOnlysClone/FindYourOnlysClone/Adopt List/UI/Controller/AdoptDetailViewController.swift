@@ -81,7 +81,7 @@ final class AdoptDetailViewController: UIViewController {
     }
 }
 
-extension AdoptDetailSection {
+private extension AdoptDetailSection {
     private var identifier: String {
         switch self {
         case .status:
