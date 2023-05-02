@@ -15,17 +15,17 @@ enum AdoptDetailSection: Int, Hashable, CaseIterable {
 
 protocol AdoptDetailInfoSection {}
 
-enum StatusSection: CaseIterable, AdoptDetailInfoSection {
+enum AdoptDetailStatusInfoSection: CaseIterable, AdoptDetailInfoSection {
     case status
 }
 
-enum MainInfoSection: String, CaseIterable, AdoptDetailInfoSection {
+enum AdoptDetailMainInfoSection: String, CaseIterable, AdoptDetailInfoSection {
     case kind = "種類"
     case gender = "性別"
     case variety = "品種"
 }
 
-enum SubInfoSection: String, CaseIterable, AdoptDetailInfoSection {
+enum AdoptDetailSubInfoSection: String, CaseIterable, AdoptDetailInfoSection {
     case id = "動物流水編號"
     case age = "動物年齡"
     case color = "動物毛色"

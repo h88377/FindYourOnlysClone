@@ -17,18 +17,18 @@ final class AdoptDetailCellViewController {
     
     func view(in collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell? {
         switch viewModel.detailSection {
-        case is StatusSection:
+        case is AdoptDetailStatusInfoSection:
             let cell: AdoptDetailStatusCell = collectionView.dequeueReusableCell(for: indexPath)
             cell.statusLabel.text = viewModel.descriptionText
             return cell
             
-        case is MainInfoSection:
+        case is AdoptDetailMainInfoSection:
             let cell: AdoptDetailMainInfoCell = collectionView.dequeueReusableCell(for: indexPath)
             cell.infoTitleLabel.text = viewModel.titleText
             cell.infoLabel.text = viewModel.descriptionText
             return cell
             
-        case is SubInfoSection:
+        case is AdoptDetailSubInfoSection:
             let cell: AdoptDetailInfoCell = collectionView.dequeueReusableCell(for: indexPath)
             cell.infoTitleLabel.text = viewModel.titleText
             cell.infoLabel.text = viewModel.descriptionText
@@ -40,13 +40,13 @@ final class AdoptDetailCellViewController {
     
     func append(in snapshot: inout NSDiffableDataSourceSnapshot<AdoptDetailSection, AdoptDetailCellViewController>) {
         switch viewModel.detailSection {
-        case is StatusSection:
+        case is AdoptDetailStatusInfoSection:
             snapshot.appendItems([self], toSection: .status)
             
-        case is MainInfoSection:
+        case is AdoptDetailMainInfoSection:
             snapshot.appendItems([self], toSection: .mainInfo)
             
-        case is SubInfoSection:
+        case is AdoptDetailSubInfoSection:
             snapshot.appendItems([self], toSection: .info)
             
         default: break

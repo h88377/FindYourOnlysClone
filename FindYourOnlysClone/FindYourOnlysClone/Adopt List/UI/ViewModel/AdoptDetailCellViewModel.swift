@@ -18,13 +18,13 @@ final class AdoptDetailCellViewModel {
     
     var titleText: String? {
         switch detailSection {
-        case let mainInfoSection as MainInfoSection:
+        case let mainInfoSection as AdoptDetailMainInfoSection:
             return mainInfoSection.rawValue
             
-        case let subInfoSection as SubInfoSection:
+        case let subInfoSection as AdoptDetailSubInfoSection:
             return subInfoSection.rawValue
             
-        case is StatusSection:
+        case is AdoptDetailStatusInfoSection:
             return nil
             
         default:
@@ -34,7 +34,7 @@ final class AdoptDetailCellViewModel {
     
     var descriptionText: String {
         switch detailSection {
-        case let mainInfoSection as MainInfoSection:
+        case let mainInfoSection as AdoptDetailMainInfoSection:
             switch mainInfoSection {
             case .kind:
                 return kindText
@@ -46,7 +46,7 @@ final class AdoptDetailCellViewModel {
                 return varietyText
             }
             
-        case let subInfoSection as SubInfoSection:
+        case let subInfoSection as AdoptDetailSubInfoSection:
             switch subInfoSection {
             case .id:
                 return idText
@@ -93,7 +93,7 @@ final class AdoptDetailCellViewModel {
                 return remarkText
             }
             
-        case is StatusSection:
+        case is AdoptDetailStatusInfoSection:
             return statusText
             
         default:

@@ -40,7 +40,7 @@ class AdoptDetailViewControllerTests: XCTestCase {
     
     private func makeSUT(image: UIImage? = nil, file: StaticString = #filePath, line: UInt = #line) -> (AdoptDetailViewController, [AdoptDetailCellViewModel]) {
         let pet = makePet()
-        let detailSections: [AdoptDetailInfoSection] = StatusSection.allCases + MainInfoSection.allCases + SubInfoSection.allCases
+        let detailSections: [AdoptDetailInfoSection] = AdoptDetailStatusInfoSection.allCases + AdoptDetailMainInfoSection.allCases + AdoptDetailSubInfoSection.allCases
         let cellViewModels = detailSections.map { AdoptDetailCellViewModel(pet: pet, detailSection: $0) }
         let cellControllers = cellViewModels.map { AdoptDetailCellViewController(viewModel: $0) }
         let sut = AdoptDetailViewController(image: image, sections: AdoptDetailSection.allCases, cellControllers: cellControllers)
@@ -52,19 +52,19 @@ class AdoptDetailViewControllerTests: XCTestCase {
     }
     
     private func expect(_ sut: AdoptDetailViewController, isRenderingWhenCellIsVisible viewModels: [AdoptDetailCellViewModel], file: StaticString = #filePath, line: UInt = #line) {
-        let statusInfoCaseCount = StatusSection.allCases.count
-        let mainInfoCaseCount = MainInfoSection.allCases.count
+        let statusInfoCaseCount = AdoptDetailStatusInfoSection.allCases.count
+        let mainInfoCaseCount = AdoptDetailMainInfoSection.allCases.count
         
         for (index, viewModel) in viewModels.enumerated() {
             switch viewModel.detailSection {
-            case is StatusSection:
+            case is AdoptDetailStatusInfoSection:
                 expect(sut, hasStatusInfoViewConfiuredFor: viewModel, at: index, file: file, line: line)
                 
-            case is MainInfoSection:
+            case is AdoptDetailMainInfoSection:
                 let mainInfoIndex = index - statusInfoCaseCount
                 expect(sut, hasMainInfoViewConfiuredFor: viewModel, at: mainInfoIndex, file: file, line: line)
                 
-            case is SubInfoSection:
+            case is AdoptDetailSubInfoSection:
                 let subInfoIndex = index - statusInfoCaseCount - mainInfoCaseCount
                 expect(sut, hasSubInfoViewConfiuredFor: viewModel, at: subInfoIndex, file: file, line: line)
                 
