@@ -8,10 +8,6 @@
 import XCTest
 @testable import FindYourOnlysClone
 
-final class AdoptDetailStatusCell: UICollectionViewCell {
-    let statusLabel = UILabel()
-}
-
 final class AdoptDetailMainInfoCell: UICollectionViewCell {
     let infoTitleLabel = UILabel()
     let infoLabel = UILabel()
