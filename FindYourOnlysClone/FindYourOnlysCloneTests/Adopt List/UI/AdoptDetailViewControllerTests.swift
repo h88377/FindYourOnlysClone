@@ -26,17 +26,27 @@ class AdoptDetailViewControllerTests: XCTestCase {
         expect(sut, isRenderingWhenCellIsVisible: viewModel)
     }
     
+    func test_headerIsVisible_rendersPetImage() {
+        let image = UIImage.make(withColor: .red)
+        let (sut, _) = makeSUT(image: image)
+
+        sut.loadViewIfNeeded()
+        sut.simulateHeaderIsVisible()
+        
+        XCTAssertEqual(sut.headerImage, image)
+    }
+    
     // MARK: - Helpers
     
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (AdoptDetailViewController, AdoptDetailViewModel) {
-        let viewModel = AdoptDetailViewModel(pet: makePet())
+    private func makeSUT(image: UIImage? = nil, file: StaticString = #filePath, line: UInt = #line) -> (AdoptDetailViewController, AdoptDetailViewModel<UIImage>) {
+        let viewModel = AdoptDetailViewModel(pet: makePet(), image: image)
         let sut = AdoptDetailViewController(viewModel: viewModel)
         trackForMemoryLeak(sut, file: file, line: line)
         trackForMemoryLeak(viewModel, file: file, line: line)
         return (sut, viewModel)
     }
     
-    private func expect(_ sut: AdoptDetailViewController, isRenderingWhenCellIsVisible viewModel: AdoptDetailViewModel, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(_ sut: AdoptDetailViewController, isRenderingWhenCellIsVisible viewModel: AdoptDetailViewModel<UIImage>, file: StaticString = #filePath, line: UInt = #line) {
         let view = sut.simulatePetInfoIsVisibleAt(indexPath: IndexPath(item: 0, section: sut.statusSection))
         guard let statusCell = view as? AdoptDetailStatusCell else {
             return XCTFail("Expected cell instance \(AdoptDetailStatusCell.self), got \(String(describing: view.self)) instance instead", file: file, line: line)
@@ -52,7 +62,7 @@ class AdoptDetailViewControllerTests: XCTestCase {
         }
     }
     
-    private func expect(_ sut: AdoptDetailViewController, hasMainInfoViewConfiuredFor viewModel: AdoptDetailViewModel, mainInfo: AdoptDetailViewController.MainInfoSection, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(_ sut: AdoptDetailViewController, hasMainInfoViewConfiuredFor viewModel: AdoptDetailViewModel<UIImage>, mainInfo: AdoptDetailViewController.MainInfoSection, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
         let view = sut.simulatePetInfoIsVisibleAt(indexPath: IndexPath(item: index, section: sut.mainInfoSection))
         guard let cell = view as? AdoptDetailMainInfoCell else {
             return XCTFail("Expected cell instance \(AdoptDetailMainInfoCell.self), got \(String(describing: view.self)) instance instead", file: file, line: line)
@@ -74,7 +84,7 @@ class AdoptDetailViewControllerTests: XCTestCase {
         XCTAssertEqual(cell.infoLabel.text, viewModelText, "Expected \(mainInfo) info text should be  \(viewModelText)", file: file, line: line)
     }
     
-    private func expect(_ sut: AdoptDetailViewController, hasInfoViewConfiuredFor viewModel: AdoptDetailViewModel, info: AdoptDetailViewController.InfoSection, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
+    private func expect(_ sut: AdoptDetailViewController, hasInfoViewConfiuredFor viewModel: AdoptDetailViewModel<UIImage>, info: AdoptDetailViewController.InfoSection, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
         let view = sut.simulatePetInfoIsVisibleAt(indexPath: IndexPath(item: index, section: sut.infoSection))
         guard let cell = view as? AdoptDetailInfoCell else {
             return XCTFail("Expected cell instance \(AdoptDetailInfoCell.self), got \(String(describing: view.self)) instance instead", file: file, line: line)
@@ -167,8 +177,18 @@ extension AdoptDetailViewController {
         return collectionView.dataSource != nil
     }
     
+    var headerImage: UIImage? {
+        let header = collectionView.dataSource?.collectionView?(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: IndexPath(item: 0, section: 0)) as? AdoptDetailHeaderView
+        return header?.imageView.image
+    }
+    
+    @discardableResult
     func simulatePetInfoIsVisibleAt(indexPath: IndexPath) -> UICollectionViewCell? {
         let dataSource = collectionView.dataSource
         return dataSource?.collectionView(collectionView, cellForItemAt: indexPath)
+    }
+    
+    func simulateHeaderIsVisible() {
+        simulatePetInfoIsVisibleAt(indexPath: IndexPath(item: 0, section: statusSection))
     }
 }

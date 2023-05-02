@@ -7,11 +7,17 @@
 
 import Foundation
 
-final class AdoptDetailViewModel {
+final class AdoptDetailViewModel<Image> {
     private let pet: Pet
+    private let image: Image?
     
-    init(pet: Pet) {
+    init(pet: Pet, image: Image?) {
         self.pet = pet
+        self.image = image
+    }
+    
+    var petImage: Image? {
+        return image
     }
     
     var statusText: String {

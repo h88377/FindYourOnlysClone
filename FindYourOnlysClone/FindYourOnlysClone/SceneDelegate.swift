@@ -19,6 +19,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let adoptListVC = makeAdoptListViewController()
         adoptListVC.title = "領養列表"
         
+//        let viewModel = AdoptDetailViewModel<UIImage>(pet: <#T##Pet#>, image: <#T##UIImage?#>)
+//        let adoptDetailVC = AdoptDetailViewController(viewModel: <#T##AdoptDetailViewModel<UIImage>#>)
+        
         let window = UIWindow(windowScene: windowScene)
         window.rootViewController = UINavigationController(rootViewController: adoptListVC)
         
