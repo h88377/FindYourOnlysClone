@@ -23,10 +23,10 @@ final class AdoptDetailViewController: UIViewController {
         return collectionView
     }()
     
-    private lazy var dataSource: UICollectionViewDiffableDataSource<AdoptDetailSection, AdoptDetailModel> = {
-        .init(collectionView: collectionView) { [weak self] collectionView, indexPath, model in
+    private lazy var dataSource: UICollectionViewDiffableDataSource<AdoptDetailSection, AdoptDetailCellViewModel> = {
+        .init(collectionView: collectionView) { [weak self] collectionView, indexPath, viewModel in
             let section = self?.sections[indexPath.section]
-            let cell = section?.cellForItemAt(collectionView, indexPath: indexPath, model: model)
+            let cell = section?.cellForItemAt(collectionView, indexPath: indexPath, viewModel: viewModel)
             return cell
         }
     }()
@@ -68,36 +68,36 @@ final class AdoptDetailViewController: UIViewController {
         var snapshot = dataSource.snapshot()
         snapshot.appendSections(sections)
         
-        let statusModel = [
-            AdoptDetailModel(description: viewModel.statusText)
+        let statusCellViewModel = [
+            AdoptDetailCellViewModel(description: viewModel.statusText)
         ]
-        snapshot.appendItems(statusModel, toSection: .status)
+        snapshot.appendItems(statusCellViewModel, toSection: .status)
         
-        let mainModels = [
-            AdoptDetailModel(title: MainInfoSection.kind.rawValue, description: viewModel.kindText),
-            AdoptDetailModel(title: MainInfoSection.gender.rawValue, description: viewModel.genderText),
-            AdoptDetailModel(title: MainInfoSection.variety.rawValue, description: viewModel.varietyText)
+        let mainCellViewModels = [
+            AdoptDetailCellViewModel(title: MainInfoSection.kind.rawValue, description: viewModel.kindText),
+            AdoptDetailCellViewModel(title: MainInfoSection.gender.rawValue, description: viewModel.genderText),
+            AdoptDetailCellViewModel(title: MainInfoSection.variety.rawValue, description: viewModel.varietyText)
         ]
-        snapshot.appendItems(mainModels, toSection: .mainInfo)
+        snapshot.appendItems(mainCellViewModels, toSection: .mainInfo)
         
-        let infoModels = [
-            AdoptDetailModel(title: InfoSection.id.rawValue, description: viewModel.idText),
-            AdoptDetailModel(title: InfoSection.age.rawValue, description: viewModel.ageText),
-            AdoptDetailModel(title: InfoSection.color.rawValue, description: viewModel.colorText),
-            AdoptDetailModel(title: InfoSection.bodyType.rawValue, description: viewModel.bodyTypeText),
-            AdoptDetailModel(title: InfoSection.foundPlace.rawValue, description: viewModel.foundPlaceText),
-            AdoptDetailModel(title: InfoSection.sterilization.rawValue, description: viewModel.sterilizationText),
-            AdoptDetailModel(title: InfoSection.bacterin.rawValue, description: viewModel.bacterinText),
-            AdoptDetailModel(title: InfoSection.openDate.rawValue, description: viewModel.openForAdoptionDateText),
-            AdoptDetailModel(title: InfoSection.closedDate.rawValue, description: viewModel.closeForAdoptionDateText),
-            AdoptDetailModel(title: InfoSection.updatedDate.rawValue, description: viewModel.updatedDateText),
-            AdoptDetailModel(title: InfoSection.createdDate.rawValue, description: viewModel.createdDateText),
-            AdoptDetailModel(title: InfoSection.shelterName.rawValue, description: viewModel.shelterNameText),
-            AdoptDetailModel(title: InfoSection.address.rawValue, description: viewModel.addressText),
-            AdoptDetailModel(title: InfoSection.telephone.rawValue, description: viewModel.telephoneText),
-            AdoptDetailModel(title: InfoSection.remark.rawValue, description: viewModel.remarkText),
+        let infoCellViewModels = [
+            AdoptDetailCellViewModel(title: InfoSection.id.rawValue, description: viewModel.idText),
+            AdoptDetailCellViewModel(title: InfoSection.age.rawValue, description: viewModel.ageText),
+            AdoptDetailCellViewModel(title: InfoSection.color.rawValue, description: viewModel.colorText),
+            AdoptDetailCellViewModel(title: InfoSection.bodyType.rawValue, description: viewModel.bodyTypeText),
+            AdoptDetailCellViewModel(title: InfoSection.foundPlace.rawValue, description: viewModel.foundPlaceText),
+            AdoptDetailCellViewModel(title: InfoSection.sterilization.rawValue, description: viewModel.sterilizationText),
+            AdoptDetailCellViewModel(title: InfoSection.bacterin.rawValue, description: viewModel.bacterinText),
+            AdoptDetailCellViewModel(title: InfoSection.openDate.rawValue, description: viewModel.openForAdoptionDateText),
+            AdoptDetailCellViewModel(title: InfoSection.closedDate.rawValue, description: viewModel.closeForAdoptionDateText),
+            AdoptDetailCellViewModel(title: InfoSection.updatedDate.rawValue, description: viewModel.updatedDateText),
+            AdoptDetailCellViewModel(title: InfoSection.createdDate.rawValue, description: viewModel.createdDateText),
+            AdoptDetailCellViewModel(title: InfoSection.shelterName.rawValue, description: viewModel.shelterNameText),
+            AdoptDetailCellViewModel(title: InfoSection.address.rawValue, description: viewModel.addressText),
+            AdoptDetailCellViewModel(title: InfoSection.telephone.rawValue, description: viewModel.telephoneText),
+            AdoptDetailCellViewModel(title: InfoSection.remark.rawValue, description: viewModel.remarkText),
         ]
-        snapshot.appendItems(infoModels, toSection: .info)
+        snapshot.appendItems(infoCellViewModels, toSection: .info)
         
         dataSource.apply(snapshot, animatingDifferences: false)
     }
@@ -110,7 +110,7 @@ final class AdoptDetailViewController: UIViewController {
 }
 
 extension AdoptDetailViewController {
-    struct AdoptDetailModel: Hashable {
+    struct AdoptDetailCellViewModel: Hashable {
         let title: String?
         let description: String
         
@@ -138,23 +138,23 @@ extension AdoptDetailViewController {
             }
         }
         
-        func cellForItemAt(_ collectionView: UICollectionView, indexPath: IndexPath, model: AdoptDetailModel) -> UICollectionViewCell {
+        func cellForItemAt(_ collectionView: UICollectionView, indexPath: IndexPath, viewModel: AdoptDetailCellViewModel) -> UICollectionViewCell {
             switch self {
             case .status:
                 let cell: AdoptDetailStatusCell = collectionView.dequeueReusableCell(for: indexPath)
-                cell.statusLabel.text = model.description
+                cell.statusLabel.text = viewModel.description
                 return cell
                 
             case .mainInfo:
                 let cell: AdoptDetailMainInfoCell = collectionView.dequeueReusableCell(for: indexPath)
-                cell.infoTitleLabel.text = model.title
-                cell.infoLabel.text = model.description
+                cell.infoTitleLabel.text = viewModel.title
+                cell.infoLabel.text = viewModel.description
                 return cell
                 
             case .info:
                 let cell: AdoptDetailInfoCell = collectionView.dequeueReusableCell(for: indexPath)
-                cell.infoTitleLabel.text = model.title
-                cell.infoLabel.text = model.description
+                cell.infoTitleLabel.text = viewModel.title
+                cell.infoLabel.text = viewModel.description
                 return cell
             }
         }
