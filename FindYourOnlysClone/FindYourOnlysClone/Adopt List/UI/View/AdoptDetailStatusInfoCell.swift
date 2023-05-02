@@ -7,6 +7,6 @@
 
 import UIKit
 
-final class AdoptDetailStatusCell: UICollectionViewCell {
+final class AdoptDetailStatusInfoCell: UICollectionViewCell {
     let statusLabel = UILabel()
 }

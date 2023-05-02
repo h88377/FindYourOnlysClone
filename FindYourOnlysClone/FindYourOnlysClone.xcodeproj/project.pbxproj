@@ -31,7 +31,7 @@
 		9814F1A629FBD2C20094A25D /* PetImageDataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1A529FBD2C20094A25D /* PetImageDataCache.swift */; };
 		9814F1A829FBD80F0094A25D /* PetImageDataLoaderWithCacheDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1A729FBD80F0094A25D /* PetImageDataLoaderWithCacheDecorator.swift */; };
 		9814F1AA29FEB6E00094A25D /* AdoptDetailViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1A929FEB6DF0094A25D /* AdoptDetailViewControllerTests.swift */; };
-		9814F1AE2A00E6420094A25D /* AdoptDetailStatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1AD2A00E6420094A25D /* AdoptDetailStatusCell.swift */; };
+		9814F1AE2A00E6420094A25D /* AdoptDetailStatusInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1AD2A00E6420094A25D /* AdoptDetailStatusInfoCell.swift */; };
 		9814F1B02A00E68F0094A25D /* AdoptDetailMainInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1AF2A00E68F0094A25D /* AdoptDetailMainInfoCell.swift */; };
 		9814F1B22A00E6C50094A25D /* AdoptDetailInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1B12A00E6C50094A25D /* AdoptDetailInfoCell.swift */; };
 		9814F1B42A00E6E40094A25D /* AdoptDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1B32A00E6E40094A25D /* AdoptDetailViewController.swift */; };
@@ -133,7 +133,7 @@
 		9814F1A529FBD2C20094A25D /* PetImageDataCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetImageDataCache.swift; sourceTree = "<group>"; };
 		9814F1A729FBD80F0094A25D /* PetImageDataLoaderWithCacheDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetImageDataLoaderWithCacheDecorator.swift; sourceTree = "<group>"; };
 		9814F1A929FEB6DF0094A25D /* AdoptDetailViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptDetailViewControllerTests.swift; sourceTree = "<group>"; };
-		9814F1AD2A00E6420094A25D /* AdoptDetailStatusCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptDetailStatusCell.swift; sourceTree = "<group>"; };
+		9814F1AD2A00E6420094A25D /* AdoptDetailStatusInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptDetailStatusInfoCell.swift; sourceTree = "<group>"; };
 		9814F1AF2A00E68F0094A25D /* AdoptDetailMainInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptDetailMainInfoCell.swift; sourceTree = "<group>"; };
 		9814F1B12A00E6C50094A25D /* AdoptDetailInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptDetailInfoCell.swift; sourceTree = "<group>"; };
 		9814F1B32A00E6E40094A25D /* AdoptDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptDetailViewController.swift; sourceTree = "<group>"; };
@@ -397,7 +397,7 @@
 			children = (
 				9891765429E89BA5000002A4 /* AdoptListCell.swift */,
 				98F23B2129F6742400E7FCB0 /* ErrorView.swift */,
-				9814F1AD2A00E6420094A25D /* AdoptDetailStatusCell.swift */,
+				9814F1AD2A00E6420094A25D /* AdoptDetailStatusInfoCell.swift */,
 				9814F1AF2A00E68F0094A25D /* AdoptDetailMainInfoCell.swift */,
 				9814F1B12A00E6C50094A25D /* AdoptDetailInfoCell.swift */,
 				9814F1B52A00FAC50094A25D /* AdoptDetailHeaderView.swift */,
@@ -719,7 +719,7 @@
 				9814F17729F8D86F0094A25D /* CoreDataPetImageDataStore.swift in Sources */,
 				98F23B1C29F5A81C00E7FCB0 /* AdoptListPaginationViewController.swift in Sources */,
 				9814F1A829FBD80F0094A25D /* PetImageDataLoaderWithCacheDecorator.swift in Sources */,
-				9814F1AE2A00E6420094A25D /* AdoptDetailStatusCell.swift in Sources */,
+				9814F1AE2A00E6420094A25D /* AdoptDetailStatusInfoCell.swift in Sources */,
 				9814F1BD2A0140BC0094A25D /* AdoptDetailInfoSection.swift in Sources */,
 				9891765229E89B55000002A4 /* PetLoader.swift in Sources */,
 				9814F17C29FA40580094A25D /* CachePolicy.swift in Sources */,

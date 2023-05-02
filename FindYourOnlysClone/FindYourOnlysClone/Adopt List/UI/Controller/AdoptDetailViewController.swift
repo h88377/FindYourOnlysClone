@@ -14,7 +14,7 @@ final class AdoptDetailViewController: UIViewController {
     private(set) lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: configureCollectionViewLayout())
         
-        collectionView.register(AdoptDetailStatusCell.self, forCellWithReuseIdentifier: AdoptDetailStatusCell.identifier)
+        collectionView.register(AdoptDetailStatusInfoCell.self, forCellWithReuseIdentifier: AdoptDetailStatusInfoCell.identifier)
         collectionView.register(AdoptDetailMainInfoCell.self, forCellWithReuseIdentifier: AdoptDetailMainInfoCell.identifier)
         collectionView.register(AdoptDetailInfoCell.self, forCellWithReuseIdentifier: AdoptDetailInfoCell.identifier)
         collectionView.register(AdoptDetailHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: AdoptDetailHeaderView.identifier)
@@ -85,7 +85,7 @@ extension AdoptDetailSection {
     private var identifier: String {
         switch self {
         case .status:
-            return AdoptDetailStatusCell.identifier
+            return AdoptDetailStatusInfoCell.identifier
             
         case .mainInfo:
             return AdoptDetailMainInfoCell.identifier

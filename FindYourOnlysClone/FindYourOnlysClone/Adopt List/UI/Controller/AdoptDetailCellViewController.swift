@@ -18,7 +18,7 @@ final class AdoptDetailCellViewController {
     func view(in collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell? {
         switch viewModel.detailSection {
         case is AdoptDetailStatusInfoSection:
-            let cell: AdoptDetailStatusCell = collectionView.dequeueReusableCell(for: indexPath)
+            let cell: AdoptDetailStatusInfoCell = collectionView.dequeueReusableCell(for: indexPath)
             cell.statusLabel.text = viewModel.descriptionText
             return cell
             

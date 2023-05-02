@@ -75,8 +75,8 @@ class AdoptDetailViewControllerTests: XCTestCase {
     
     private func expect(_ sut: AdoptDetailViewController, hasStatusInfoViewConfiuredFor viewModel: AdoptDetailCellViewModel, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
         let view = sut.simulatePetInfoIsVisibleAt(indexPath: IndexPath(item: index, section: sut.statusSection))
-        guard let cell = view as? AdoptDetailStatusCell else {
-            return XCTFail("Expected cell instance \(AdoptDetailStatusCell.self), got \(String(describing: view.self)) instance instead", file: file, line: line)
+        guard let cell = view as? AdoptDetailStatusInfoCell else {
+            return XCTFail("Expected cell instance \(AdoptDetailStatusInfoCell.self), got \(String(describing: view.self)) instance instead", file: file, line: line)
         }
         
         XCTAssertEqual(cell.statusLabel.text, viewModel.descriptionText, "Expected description text should be  \(viewModel.descriptionText)", file: file, line: line)
