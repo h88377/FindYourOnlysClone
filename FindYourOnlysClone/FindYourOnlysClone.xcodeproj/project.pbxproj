@@ -35,6 +35,7 @@
 		9814F1AE2A00E6420094A25D /* AdoptDetailStatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1AD2A00E6420094A25D /* AdoptDetailStatusCell.swift */; };
 		9814F1B02A00E68F0094A25D /* AdoptDetailMainInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1AF2A00E68F0094A25D /* AdoptDetailMainInfoCell.swift */; };
 		9814F1B22A00E6C50094A25D /* AdoptDetailInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1B12A00E6C50094A25D /* AdoptDetailInfoCell.swift */; };
+		9814F1B42A00E6E40094A25D /* AdoptDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1B32A00E6E40094A25D /* AdoptDetailViewController.swift */; };
 		9891761D29E80211000002A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761C29E80211000002A4 /* AppDelegate.swift */; };
 		9891761F29E80211000002A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761E29E80211000002A4 /* SceneDelegate.swift */; };
 		9891762629E80212000002A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9891762529E80212000002A4 /* Assets.xcassets */; };
@@ -133,6 +134,7 @@
 		9814F1AD2A00E6420094A25D /* AdoptDetailStatusCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptDetailStatusCell.swift; sourceTree = "<group>"; };
 		9814F1AF2A00E68F0094A25D /* AdoptDetailMainInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptDetailMainInfoCell.swift; sourceTree = "<group>"; };
 		9814F1B12A00E6C50094A25D /* AdoptDetailInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptDetailInfoCell.swift; sourceTree = "<group>"; };
+		9814F1B32A00E6E40094A25D /* AdoptDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptDetailViewController.swift; sourceTree = "<group>"; };
 		9891761929E80211000002A4 /* FindYourOnlysClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FindYourOnlysClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9891761C29E80211000002A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9891761E29E80211000002A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -369,6 +371,7 @@
 				9891765629E89BC6000002A4 /* AdoptListViewController.swift */,
 				98F23B1B29F5A81C00E7FCB0 /* AdoptListPaginationViewController.swift */,
 				9891766329E99A44000002A4 /* AdoptListCellViewController.swift */,
+				9814F1B32A00E6E40094A25D /* AdoptDetailViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -714,6 +717,7 @@
 				9814F19D29FBC5200094A25D /* MainThreadDispatchDecorator.swift in Sources */,
 				9891766A29E99C13000002A4 /* AdoptListUIComposer.swift in Sources */,
 				9891766029E98563000002A4 /* AdoptListViewModel.swift in Sources */,
+				9814F1B42A00E6E40094A25D /* AdoptDetailViewController.swift in Sources */,
 				98F23B2529F6863D00E7FCB0 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
