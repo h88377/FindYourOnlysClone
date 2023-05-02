@@ -39,6 +39,7 @@
 		9814F1B82A01015D0094A25D /* AdoptDetailCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1B72A01015D0094A25D /* AdoptDetailCellViewModel.swift */; };
 		9814F1BA2A01402E0094A25D /* AdoptDetailCellViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1B92A01402E0094A25D /* AdoptDetailCellViewController.swift */; };
 		9814F1BD2A0140BC0094A25D /* AdoptDetailInfoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1BC2A0140BC0094A25D /* AdoptDetailInfoSection.swift */; };
+		9814F1BF2A0143EB0094A25D /* AdoptDetailViewController+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1BE2A0143EB0094A25D /* AdoptDetailViewController+TestHelpers.swift */; };
 		9891761D29E80211000002A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761C29E80211000002A4 /* AppDelegate.swift */; };
 		9891761F29E80211000002A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761E29E80211000002A4 /* SceneDelegate.swift */; };
 		9891762629E80212000002A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9891762529E80212000002A4 /* Assets.xcassets */; };
@@ -141,6 +142,7 @@
 		9814F1B72A01015D0094A25D /* AdoptDetailCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptDetailCellViewModel.swift; sourceTree = "<group>"; };
 		9814F1B92A01402E0094A25D /* AdoptDetailCellViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptDetailCellViewController.swift; sourceTree = "<group>"; };
 		9814F1BC2A0140BC0094A25D /* AdoptDetailInfoSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptDetailInfoSection.swift; sourceTree = "<group>"; };
+		9814F1BE2A0143EB0094A25D /* AdoptDetailViewController+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AdoptDetailViewController+TestHelpers.swift"; sourceTree = "<group>"; };
 		9891761929E80211000002A4 /* FindYourOnlysClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FindYourOnlysClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9891761C29E80211000002A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9891761E29E80211000002A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -502,6 +504,7 @@
 			isa = PBXGroup;
 			children = (
 				989176BD29F1220B000002A4 /* AdoptListViewController+TestHelpers.swift */,
+				9814F1BE2A0143EB0094A25D /* AdoptDetailViewController+TestHelpers.swift */,
 				989176BF29F1228A000002A4 /* AdoptListCell+TestHelpers.swift */,
 				989176C129F122C1000002A4 /* UIRefreshControl+TestHelpers.swift */,
 				989176C329F122D3000002A4 /* UIButton+TestHelpers.swift */,
@@ -760,6 +763,7 @@
 				989176BC29F121B4000002A4 /* PetLoaderSpy.swift in Sources */,
 				9814F19829FBA8E50094A25D /* PetImageDataLoaderWithFallbackCompositeTests.swift in Sources */,
 				989176B929F1214C000002A4 /* URLProtocolStub.swift in Sources */,
+				9814F1BF2A0143EB0094A25D /* AdoptDetailViewController+TestHelpers.swift in Sources */,
 				9891763429E80212000002A4 /* AdoptListUIIntegrationTests.swift in Sources */,
 				989176C029F1228A000002A4 /* AdoptListCell+TestHelpers.swift in Sources */,
 				9814F17529F7F2D20094A25D /* CoreDataPetImageDataStoreTests.swift in Sources */,
