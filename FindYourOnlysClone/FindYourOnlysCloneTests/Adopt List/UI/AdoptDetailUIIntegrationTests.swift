@@ -8,7 +8,7 @@
 import XCTest
 @testable import FindYourOnlysClone
 
-class AdoptDetailViewControllerTests: XCTestCase {
+class AdoptDetailUIIntegrationTests: XCTestCase {
     
     func test_viewDidLoad_didConfigureDataSource() {
         let (sut, _) = makeSUT()
