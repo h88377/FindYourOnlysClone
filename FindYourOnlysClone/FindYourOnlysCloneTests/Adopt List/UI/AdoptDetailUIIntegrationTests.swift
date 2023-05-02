@@ -40,8 +40,8 @@ class AdoptDetailUIIntegrationTests: XCTestCase {
     
     private func makeSUT(image: UIImage? = nil, file: StaticString = #filePath, line: UInt = #line) -> (AdoptDetailViewController, [AdoptDetailCellViewModel]) {
         let pet = makePet()
-        let detailSections: [AdoptDetailInfoSection] = AdoptDetailStatusInfoSection.allCases + AdoptDetailMainInfoSection.allCases + AdoptDetailSubInfoSection.allCases
-        let cellViewModels = detailSections.map { AdoptDetailCellViewModel(pet: pet, detailSection: $0) }
+        let infoSections: [AdoptDetailInfoSection] = AdoptDetailStatusInfoSection.allCases + AdoptDetailMainInfoSection.allCases + AdoptDetailSubInfoSection.allCases
+        let cellViewModels = infoSections.map { AdoptDetailCellViewModel(pet: pet, detailSection: $0) }
         let cellControllers = cellViewModels.map { AdoptDetailCellViewController(viewModel: $0) }
         let sut = AdoptDetailViewController(image: image, sections: AdoptDetailSection.allCases, cellControllers: cellControllers)
         
