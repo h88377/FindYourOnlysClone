@@ -11,16 +11,15 @@ import XCTest
 class AdoptDetailViewControllerTests: XCTestCase {
     
     func test_viewDidLoad_didConfigureDataSource() {
-        let sut = makeSUT()
+        let (sut, _) = makeSUT()
+        
         sut.loadViewIfNeeded()
         
         XCTAssertTrue(sut.dataSourceIsConfigured)
     }
     
     func test_cellIsVisible_rendersPetInformation() {
-        let pet = makePet()
-        let viewModel = AdoptDetailViewModel(pet: pet)
-        let sut = AdoptDetailViewController(viewModel: viewModel)
+        let (sut, viewModel) = makeSUT()
 
         sut.loadViewIfNeeded()
         
@@ -29,12 +28,12 @@ class AdoptDetailViewControllerTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT(pet: Pet = Pet(id: 0, location: "新北市XX", kind: "貓", gender: "F", bodyType: "SMALL", color: "黑", age: "CHILD", sterilization: "T", bacterin: "F", foundPlace: "新北市FoundPlace", status: "OPEN", remark: "", openDate: "2023-04-22", closedDate: "2023-04-22", updatedDate: "2023-04-22", createdDate: "2023-04-22", photoURL: nil, address: "新北市XXX", telephone: "02-XXXXXXXX", variety: "混種", shelterName: "新北市收容所"), image: UIImage? = nil, file: StaticString = #filePath, line: UInt = #line) -> AdoptDetailViewController {
-        let viewModel = AdoptDetailViewModel(pet: pet)
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (AdoptDetailViewController, AdoptDetailViewModel) {
+        let viewModel = AdoptDetailViewModel(pet: makePet())
         let sut = AdoptDetailViewController(viewModel: viewModel)
         trackForMemoryLeak(sut, file: file, line: line)
         trackForMemoryLeak(viewModel, file: file, line: line)
-        return sut
+        return (sut, viewModel)
     }
     
     private func expect(_ sut: AdoptDetailViewController, isRenderingWhenCellIsVisible viewModel: AdoptDetailViewModel, file: StaticString = #filePath, line: UInt = #line) {
