@@ -8,6 +8,9 @@
 import UIKit
 
 final class AdoptDetailViewController: UIViewController {
+    
+    // MARK: - Property
+    
     private(set) lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: configureCollectionViewLayout())
         
@@ -31,6 +34,8 @@ final class AdoptDetailViewController: UIViewController {
         }
     }()
     
+    // MARK: - Life cycle
+    
     init(viewModel: AdoptDetailViewModel<UIImage>) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -52,6 +57,8 @@ final class AdoptDetailViewController: UIViewController {
         }
         configureSnapshot()
     }
+    
+    // MARK: - Method
     
     private func configureSnapshot() {
         var snapshot = dataSource.snapshot()
