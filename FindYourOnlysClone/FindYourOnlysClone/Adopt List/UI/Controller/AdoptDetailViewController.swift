@@ -110,16 +110,6 @@ final class AdoptDetailViewController: UIViewController {
 }
 
 extension AdoptDetailViewController {
-    struct AdoptDetailCellViewModel: Hashable {
-        let title: String?
-        let description: String
-        
-        init(title: String? = nil, description: String) {
-            self.title = title
-            self.description = description
-        }
-    }
-    
     enum AdoptDetailSection: Int, Hashable, CaseIterable {
         case status
         case mainInfo
