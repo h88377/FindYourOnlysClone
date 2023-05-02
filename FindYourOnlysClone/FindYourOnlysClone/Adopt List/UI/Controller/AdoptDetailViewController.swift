@@ -64,9 +64,11 @@ final class AdoptDetailViewController: UIViewController {
     
     private func configureCollectionView() {
         dataSource.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: AdoptDetailHeaderView.identifier, for: indexPath) as! AdoptDetailHeaderView
-            header.imageView.image = self?.image
+            guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: AdoptDetailHeaderView.identifier, for: indexPath) as? AdoptDetailHeaderView else {
+                return nil
+            }
             
+            header.imageView.image = self?.image
             return header
         }
         collectionView.dataSource = self.dataSource
