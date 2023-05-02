@@ -7,11 +7,6 @@
 
 import UIKit
 
-final class AdoptDetailHeaderView: UICollectionReusableView {
-    static let identifier = "AdoptDetailHeaderView"
-    let imageView = UIImageView()
-}
-
 final class AdoptDetailViewController: UIViewController {
     private(set) lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: configureCollectionViewLayout())
