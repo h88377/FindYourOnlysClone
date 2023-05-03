@@ -26,6 +26,11 @@ final class AdoptDetailCellViewController {
             let cell: AdoptDetailMainInfoCell = collectionView.dequeueReusableCell(for: indexPath)
             cell.infoTitleLabel.text = viewModel.titleText
             cell.infoLabel.text = viewModel.descriptionText
+            
+            if viewModel.titleText == AdoptDetailMainInfoSection.gender.rawValue {
+                cell.infoLabel.font = UIFont.systemFont(ofSize: 28, weight: .heavy)
+                cell.infoLabel.textColor = viewModel.descriptionText == "♂" ? .maleColor : .femaleColor
+            }
             return cell
             
         case is AdoptDetailSubInfoSection:
