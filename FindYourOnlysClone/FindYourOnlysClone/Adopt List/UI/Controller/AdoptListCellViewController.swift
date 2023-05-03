@@ -51,7 +51,7 @@ final class AdoptListCellViewController {
     }
     
     func didSelect() {
-        viewModel.didSelect(image: cell?.petImageView.image)
+        viewModel.didSelect(image: cell?.petImageView.image ?? UIImage(named: "adoptListCellImagePlaceholder"))
     }
     
     private func setUpBindings() {
