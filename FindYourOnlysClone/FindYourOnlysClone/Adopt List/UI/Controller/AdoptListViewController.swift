@@ -177,6 +177,10 @@ extension AdoptListViewController {
         cancelTask(forItemAt: indexPath)
     }
     
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        cellController(at: indexPath)?.didSelect()
+    }
+    
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         let snapshot = dataSource.snapshot()
         guard collectionView.refreshControl?.isRefreshing != true, !snapshot.itemIdentifiers.isEmpty else { return }

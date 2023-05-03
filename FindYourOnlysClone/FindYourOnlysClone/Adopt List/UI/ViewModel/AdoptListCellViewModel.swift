@@ -10,6 +10,8 @@ import Foundation
 final class AdoptListCellViewModel<Image> {
     typealias Observer<T> = ((T) -> Void)
     
+    var selectHandler: ((Pet, Image?) -> Void)?
+    
     private let pet: Pet
     private let imageLoader: PetImageDataLoader
     private let imageTransformer: (Data) -> Image?
@@ -49,6 +51,10 @@ final class AdoptListCellViewModel<Image> {
     func cancelTask() {
         task?.cancel()
         task = nil
+    }
+    
+    func didSelect(image: Image?) {
+        selectHandler?(pet, image)
     }
     
     var genderText: String {

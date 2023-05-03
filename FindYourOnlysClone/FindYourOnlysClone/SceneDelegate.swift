@@ -12,15 +12,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
+    private lazy var navigationController = UINavigationController()
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let adoptListVC = makeAdoptListViewController()
         adoptListVC.title = "領養列表"
-        
+
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = UINavigationController(rootViewController: adoptListVC)
+        navigationController.setViewControllers([adoptListVC], animated: false)
+        window.rootViewController = navigationController
         
         self.window = window
         self.window?.makeKeyAndVisible()
@@ -34,8 +36,14 @@ private extension SceneDelegate {
         let petLoader = RemotePetLoader(baseURL: baseURL, client: client)
         let imageLoader = makeLocalImageDataLoaderWithRemoteFallback(with: client)
         
-        let vc = AdoptListUIComposer.adoptListComposedWith(petLoader: petLoader, imageLoader: imageLoader)
-        
+        let vc = AdoptListUIComposer.adoptListComposedWith(petLoader: petLoader, imageLoader: imageLoader, select: { [weak self] (pet, image) in
+            let infoSections: [AdoptDetailInfoSection] = AdoptDetailStatusInfoSection.allCases + AdoptDetailMainInfoSection.allCases + AdoptDetailSubInfoSection.allCases
+            let cellViewModels = infoSections.map { AdoptDetailCellViewModel(pet: pet, detailSection: $0) }
+            let cellControllers = cellViewModels.map { AdoptDetailCellViewController(viewModel: $0) }
+            let adoptDetailVC = AdoptDetailViewController(image: image, sections: AdoptDetailSection.allCases, cellControllers: cellControllers)
+            
+            self?.navigationController.pushViewController(adoptDetailVC, animated: true)
+        })
         return vc
     }
     
