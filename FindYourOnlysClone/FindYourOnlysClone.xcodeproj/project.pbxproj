@@ -41,6 +41,7 @@
 		9814F1BD2A0140BC0094A25D /* AdoptDetailInfoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1BC2A0140BC0094A25D /* AdoptDetailInfoSection.swift */; };
 		9814F1BF2A0143EB0094A25D /* AdoptDetailViewController+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1BE2A0143EB0094A25D /* AdoptDetailViewController+TestHelpers.swift */; };
 		9814F1C12A0210F80094A25D /* UIStackView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1C02A0210F80094A25D /* UIStackView+Extension.swift */; };
+		9814F1C32A0243670094A25D /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814F1C22A0243670094A25D /* UIImage+Extension.swift */; };
 		9891761D29E80211000002A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761C29E80211000002A4 /* AppDelegate.swift */; };
 		9891761F29E80211000002A4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9891761E29E80211000002A4 /* SceneDelegate.swift */; };
 		9891762629E80212000002A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9891762529E80212000002A4 /* Assets.xcassets */; };
@@ -145,6 +146,7 @@
 		9814F1BC2A0140BC0094A25D /* AdoptDetailInfoSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdoptDetailInfoSection.swift; sourceTree = "<group>"; };
 		9814F1BE2A0143EB0094A25D /* AdoptDetailViewController+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AdoptDetailViewController+TestHelpers.swift"; sourceTree = "<group>"; };
 		9814F1C02A0210F80094A25D /* UIStackView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extension.swift"; sourceTree = "<group>"; };
+		9814F1C22A0243670094A25D /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		9891761929E80211000002A4 /* FindYourOnlysClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FindYourOnlysClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9891761C29E80211000002A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9891761E29E80211000002A4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -525,6 +527,7 @@
 				9891766D29EC0AB0000002A4 /* UICollectionViewCell+Extension.swift */,
 				98F23B1F29F64A5D00E7FCB0 /* UIColor+Extension.swift */,
 				9814F1C02A0210F80094A25D /* UIStackView+Extension.swift */,
+				9814F1C22A0243670094A25D /* UIImage+Extension.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -726,6 +729,7 @@
 				9814F17729F8D86F0094A25D /* CoreDataPetImageDataStore.swift in Sources */,
 				98F23B1C29F5A81C00E7FCB0 /* AdoptListPaginationViewController.swift in Sources */,
 				9814F1A829FBD80F0094A25D /* PetImageDataLoaderWithCacheDecorator.swift in Sources */,
+				9814F1C32A0243670094A25D /* UIImage+Extension.swift in Sources */,
 				9814F1AE2A00E6420094A25D /* AdoptDetailStatusInfoCell.swift in Sources */,
 				9814F1BD2A0140BC0094A25D /* AdoptDetailInfoSection.swift in Sources */,
 				9891765229E89B55000002A4 /* PetLoader.swift in Sources */,

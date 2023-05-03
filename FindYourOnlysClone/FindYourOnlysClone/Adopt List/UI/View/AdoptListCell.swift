@@ -56,7 +56,7 @@ final class AdoptListCell: UICollectionViewCell {
     private let locationIconView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(systemName: "mappin.and.ellipse")
+        imageView.image = UIImage.make(bySystem: .mappinAndEllipse)
         imageView.tintColor = .projectIconColor
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -68,7 +68,7 @@ final class AdoptListCell: UICollectionViewCell {
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
         imageView.isUserInteractionEnabled = true
-        imageView.image = UIImage(named: "adoptListCellImagePlaceholder")
+        imageView.image = UIImage.make(byAsset: .adoptListCellImagePlaceholder)
 
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
