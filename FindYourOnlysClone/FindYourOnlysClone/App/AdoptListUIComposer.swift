@@ -10,7 +10,7 @@ import UIKit
 final class AdoptListUIComposer {
     private init() {}
     
-    static func adoptListComposedWith(petLoader: PetLoader, imageLoader: PetImageDataLoader) -> AdoptListViewController {
+    static func adoptListComposedWith(petLoader: PetLoader, imageLoader: PetImageDataLoader, select: @escaping (Pet, UIImage?) -> Void) -> AdoptListViewController {
         let decoratedPetLoader = MainThreadDispatchDecorator(decoratee: petLoader)
         let decoratedImageLoader = MainThreadDispatchDecorator(decoratee: imageLoader)
         
@@ -21,13 +21,13 @@ final class AdoptListUIComposer {
         let adoptListController = AdoptListViewController(viewModel: adoptListViewModel, paginationController: paginationController)
         
         adoptListViewModel.isPetsRefreshingStateOnChange = { [weak adoptListController] pets in
-            let cellControllers = adaptPetsToCellControllersWith(pets, imageLoader: decoratedImageLoader)
+            let cellControllers = adaptPetsToCellControllersWith(pets, imageLoader: decoratedImageLoader, select: select)
             adoptListController?.set(cellControllers)
             adoptListController?.noResultReminder.isHidden = !pets.isEmpty
         }
         
         paginationViewModel.isPetsPaginationStateOnChange = { [weak adoptListController] pets in
-            let cellControllers = adaptPetsToCellControllersWith(pets, imageLoader: decoratedImageLoader)
+            let cellControllers = adaptPetsToCellControllersWith(pets, imageLoader: decoratedImageLoader, select: select)
             adoptListController?.append(cellControllers)
         }
         
@@ -40,9 +40,10 @@ final class AdoptListUIComposer {
         return adoptListController
     }
     
-    private static func adaptPetsToCellControllersWith(_ pets: [Pet], imageLoader: PetImageDataLoader) -> [AdoptListCellViewController] {
+    private static func adaptPetsToCellControllersWith(_ pets: [Pet], imageLoader: PetImageDataLoader, select: @escaping (Pet, UIImage?) -> Void) -> [AdoptListCellViewController] {
         return pets.map { pet in
             let cellViewModel = AdoptListCellViewModel(pet: pet, imageLoader: imageLoader, imageTransformer: UIImage.init)
+            cellViewModel.selectHandler = select
             let cellController = AdoptListCellViewController(viewModel: cellViewModel)
             return cellController
         }

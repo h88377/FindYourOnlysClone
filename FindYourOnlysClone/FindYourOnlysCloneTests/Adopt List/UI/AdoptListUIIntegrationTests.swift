@@ -487,11 +487,28 @@ class AdoptListUIIntegrationTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    func test_didSelectItem_notifiesObserver() {
+        var output: (pet: Pet, imageData: Data?)? = nil
+        let pet = makePet()
+        let (sut, loader) = makeSUT(select: { pet, image in output = (pet, image?.pngData()) })
+        
+        sut.loadViewIfNeeded()
+        loader.completesPetsLoading(with: [pet], at: 0)
+        
+        sut.simulatePetImageViewIsVisible(at: 0)
+        let imageData = UIImage.make(withColor: .red).pngData()!
+        loader.completesImageLoading(with: imageData, at: 0)
+        
+        sut.simulateSelectItem(at: 0)
+        XCTAssertEqual(output?.pet, pet)
+        XCTAssertEqual(output?.imageData, imageData)
+    }
+    
     // MARK: - Helpers
     
-    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (AdoptListViewController, PetLoaderSpy) {
+    private func makeSUT(select: @escaping (Pet, UIImage?) -> Void = { _,_  in }, file: StaticString = #filePath, line: UInt = #line) -> (AdoptListViewController, PetLoaderSpy) {
         let loader = PetLoaderSpy()
-        let sut = AdoptListUIComposer.adoptListComposedWith(petLoader: loader, imageLoader: loader)
+        let sut = AdoptListUIComposer.adoptListComposedWith(petLoader: loader, imageLoader: loader, select: select)
         trackForMemoryLeak(loader, file: file, line: line)
         trackForMemoryLeak(sut, file: file, line: line)
         return (sut, loader)

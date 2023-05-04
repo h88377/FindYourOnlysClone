@@ -50,6 +50,10 @@ final class AdoptListCellViewController {
         releaseBindings()
     }
     
+    func didSelect() {
+        viewModel.didSelect(image: cell?.petImageView.image ?? UIImage.make(byAsset: .adoptListCellImagePlaceholder))
+    }
+    
     private func setUpBindings() {
         viewModel.isPetImageLoadingStateOnChange = { [weak cell] isLoading in
             cell?.petImageContainer.isShowingActivityIndicator = isLoading

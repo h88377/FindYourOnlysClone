@@ -10,7 +10,7 @@ import Foundation
 final class AdoptListViewModel {
     typealias Observer<T> = ((T) -> Void)
 
-    private var petLoader: PetLoader
+    private let petLoader: PetLoader
 
     init(petLoader: PetLoader) {
         self.petLoader = petLoader

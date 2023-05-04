@@ -52,6 +52,11 @@ extension AdoptListViewController {
         scrollViewDidEndDragging(collectionView, willDecelerate: true)
     }
     
+    func simulateSelectItem(at index: Int) {
+        let delegate = collectionView.delegate
+        delegate?.collectionView?(collectionView, didSelectItemAt: IndexPath(item: index, section: petsSection))
+    }
+    
     func itemAt(index: Int) -> UICollectionViewCell? {
         let dataSource = collectionView.dataSource
         let cell = dataSource?.collectionView(collectionView, cellForItemAt: IndexPath(item: index, section: petsSection))
