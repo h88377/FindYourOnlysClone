@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -243,12 +243,9 @@
 		9814F16A29F7DC3E0094A25D /* Cache */ = {
 			isa = PBXGroup;
 			children = (
-				9814F16B29F7DC480094A25D /* LocalPetImageDataLoader.swift */,
 				9814F17B29FA40580094A25D /* CachePolicy.swift */,
-				9814F16D29F7DC980094A25D /* PetImageDataStore.swift */,
-				9814F18429FA7E0D0094A25D /* Infrastructure */,
-				9814F17F29FA491C0094A25D /* PetStore.xcdatamodeld */,
-				9814F18229FA4BE10094A25D /* ManagedPetImageData.swift */,
+				9814F16B29F7DC480094A25D /* LocalPetImageDataLoader.swift */,
+				98F988892A03A179001B757E /* PetImageDataStore */,
 			);
 			path = Cache;
 			sourceTree = "<group>";
@@ -259,15 +256,6 @@
 				9814F17229F7E06B0094A25D /* PetStoreSpy.swift */,
 			);
 			path = Helpers;
-			sourceTree = "<group>";
-		};
-		9814F18429FA7E0D0094A25D /* Infrastructure */ = {
-			isa = PBXGroup;
-			children = (
-				9814F17629F8D86F0094A25D /* CoreDataPetImageDataStore.swift */,
-				9814F18529FA7E570094A25D /* CoreDataHelpers.swift */,
-			);
-			path = Infrastructure;
 			sourceTree = "<group>";
 		};
 		9814F18C29FA81800094A25D /* FindYourOnlysCloneCacheIntegrationTests */ = {
@@ -291,6 +279,8 @@
 		9814F19B29FBC36D0094A25D /* App */ = {
 			isa = PBXGroup;
 			children = (
+				9891761C29E80211000002A4 /* AppDelegate.swift */,
+				9891761E29E80211000002A4 /* SceneDelegate.swift */,
 				9891766929E99C13000002A4 /* AdoptListUIComposer.swift */,
 				9814F19C29FBC5200094A25D /* MainThreadDispatchDecorator.swift */,
 				9814F19929FBC3310094A25D /* PetImageDataLoaderWithFallbackComposite.swift */,
@@ -341,8 +331,6 @@
 		9891761B29E80211000002A4 /* FindYourOnlysClone */ = {
 			isa = PBXGroup;
 			children = (
-				9891761C29E80211000002A4 /* AppDelegate.swift */,
-				9891761E29E80211000002A4 /* SceneDelegate.swift */,
 				9814F19B29FBC36D0094A25D /* App */,
 				9891767A29EC8412000002A4 /* Adopt List */,
 				9891762529E80212000002A4 /* Assets.xcassets */,
@@ -367,9 +355,9 @@
 			children = (
 				9891765129E89B55000002A4 /* PetLoader.swift */,
 				9814F1A529FBD2C20094A25D /* PetImageDataCache.swift */,
+				9891765D29E91C9D000002A4 /* PetImageDataLoader.swift */,
 				9891764D29E89B08000002A4 /* Pet.swift */,
 				9891764F29E89B35000002A4 /* AdoptListRequest.swift */,
-				9891765D29E91C9D000002A4 /* PetImageDataLoader.swift */,
 			);
 			path = Feature;
 			sourceTree = "<group>";
@@ -476,12 +464,11 @@
 		9891768529ECBAD6000002A4 /* API */ = {
 			isa = PBXGroup;
 			children = (
-				9891768629ECBAE1000002A4 /* HTTPClient.swift */,
-				9891769229EE84B4000002A4 /* URLSessionHTTPClient.swift */,
 				9891768829ECBB01000002A4 /* RemotePetLoader.swift */,
 				9891768C29ED3BED000002A4 /* PetsMapper.swift */,
 				9891768A29ECBB4C000002A4 /* RemotePet.swift */,
 				989176B429F10505000002A4 /* RemotePetImageDataLoader.swift */,
+				98F988882A03A14E001B757E /* HTTPClient */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -530,6 +517,27 @@
 				9814F1C22A0243670094A25D /* UIImage+Extension.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		98F988882A03A14E001B757E /* HTTPClient */ = {
+			isa = PBXGroup;
+			children = (
+				9891768629ECBAE1000002A4 /* HTTPClient.swift */,
+				9891769229EE84B4000002A4 /* URLSessionHTTPClient.swift */,
+			);
+			path = HTTPClient;
+			sourceTree = "<group>";
+		};
+		98F988892A03A179001B757E /* PetImageDataStore */ = {
+			isa = PBXGroup;
+			children = (
+				9814F16D29F7DC980094A25D /* PetImageDataStore.swift */,
+				9814F17629F8D86F0094A25D /* CoreDataPetImageDataStore.swift */,
+				9814F18229FA4BE10094A25D /* ManagedPetImageData.swift */,
+				9814F18529FA7E570094A25D /* CoreDataHelpers.swift */,
+				9814F17F29FA491C0094A25D /* PetStore.xcdatamodeld */,
+			);
+			path = PetImageDataStore;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -634,7 +642,7 @@
 				};
 			};
 			buildConfigurationList = 9891761429E80211000002A4 /* Build configuration list for PBXProject "FindYourOnlysClone" */;
-			compatibilityVersion = "Xcode 14.0";
+			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (

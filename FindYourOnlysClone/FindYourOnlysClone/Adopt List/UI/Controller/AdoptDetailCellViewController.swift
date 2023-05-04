@@ -27,10 +27,16 @@ final class AdoptDetailCellViewController {
             cell.infoTitleLabel.text = viewModel.titleText
             cell.infoLabel.text = viewModel.descriptionText
             
-            if viewModel.titleText == AdoptDetailMainInfoSection.gender.rawValue {
+            guard viewModel.titleText == AdoptDetailMainInfoSection.gender.rawValue else { return cell }
+           
+            if viewModel.descriptionText == "♂" {
+                cell.infoLabel.textColor = .maleColor
                 cell.infoLabel.font = UIFont.systemFont(ofSize: 28, weight: .heavy)
-                cell.infoLabel.textColor = viewModel.descriptionText == "♂" ? .maleColor : .femaleColor
+            } else if viewModel.descriptionText == "♀" {
+                cell.infoLabel.textColor = .femaleColor
+                cell.infoLabel.font = UIFont.systemFont(ofSize: 28, weight: .heavy)
             }
+            
             return cell
             
         case is AdoptDetailSubInfoSection:
