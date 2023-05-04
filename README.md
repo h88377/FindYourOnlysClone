@@ -35,3 +35,14 @@ This is a clone version of my project `FindYourOnlys`. The purpose of this clone
 **App layer (Composition)**
 * Acted as all layers' clients to initialize all components this application needs.
 * Also composited, decorated components differently based on the requirements.
+
+## Requirements
+> Xcode 13 or later  
+> iOS 13.0 or later  
+> Swift 4 or later
+
+## Contact
+Wayne Cheng｜h88377@gmail.com   
+
+## Licence
+FindYourOnlysClone is released under the MIT license.
