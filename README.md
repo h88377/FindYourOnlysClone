@@ -11,7 +11,7 @@ This is a cloned version of my project, `FindYourOnlys`. The purpose of this clo
 
 ## Design decision
 ### Test suite
-* Implemented test-driven-development to ensure that all behaviors worked as intended. This includes unit tests and integration tests to cover components' behavior in isolation and collaboration between components.
+Implemented test-driven-development to ensure that all behaviors worked as intended. This includes unit tests and integration tests to cover components' behavior in isolation and collaboration between components.
 * Moved infrastructure integration tests (network/database) into separate targets and only run them in continueous delivery pipeline (`CI` scheme) to keep the feedback of the test suite as fast as possible. 
  
 ### System design
