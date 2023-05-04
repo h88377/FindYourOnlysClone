@@ -291,6 +291,8 @@
 		9814F19B29FBC36D0094A25D /* App */ = {
 			isa = PBXGroup;
 			children = (
+				9891761C29E80211000002A4 /* AppDelegate.swift */,
+				9891761E29E80211000002A4 /* SceneDelegate.swift */,
 				9891766929E99C13000002A4 /* AdoptListUIComposer.swift */,
 				9814F19C29FBC5200094A25D /* MainThreadDispatchDecorator.swift */,
 				9814F19929FBC3310094A25D /* PetImageDataLoaderWithFallbackComposite.swift */,
@@ -341,8 +343,6 @@
 		9891761B29E80211000002A4 /* FindYourOnlysClone */ = {
 			isa = PBXGroup;
 			children = (
-				9891761C29E80211000002A4 /* AppDelegate.swift */,
-				9891761E29E80211000002A4 /* SceneDelegate.swift */,
 				9814F19B29FBC36D0094A25D /* App */,
 				9891767A29EC8412000002A4 /* Adopt List */,
 				9891762529E80212000002A4 /* Assets.xcassets */,
