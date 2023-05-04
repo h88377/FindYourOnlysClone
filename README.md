@@ -1,5 +1,5 @@
 # FindYourOnlysClone
-
+[![CI](https://github.com/h88377/FindYourOnlysClone/actions/workflows/CI.yml/badge.svg)](https://github.com/h88377/FindYourOnlysClone/actions/workflows/CI.yml)
 ## About
 This is a cloned version of my project, `FindYourOnlys`. The purpose of this clone is to showcase what I have learned since I graduated from AppWorks School. Currently it only includes pets adoption lists and detail scenes. If you would like to see the original version, please refer to the link as below.
 <p align="left">
