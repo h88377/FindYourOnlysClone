@@ -14,7 +14,7 @@ Listed all stray pets in Taiwan and established prefetch, fetch cancelling, retr
 ### Test suite
 * Implemented test-driven-development to ensure that all behaviors worked as intended. This includes unit tests and integration tests to cover components' behavior in isolation and collaboration between components.
 
-* Moved infrastructure integration tests (network/database) into separate targets and only run them in continueous delivery pipeline (`CI` scheme) to keep the feedback of the test suite as fast as possible.
+* Moved infrastructure integration tests (network/database) into separate targets and only run them in continuous integration pipeline (`CI` scheme) to keep the feedback of the test suite as fast as possible.
  
 ### System design
 * Implemented modular system by respecting S.O.L.I.D. principle to create feature (business), UI, API and Cache layers and composing them in the app layer (composition). This way, they can be separated into different modules if needed.
