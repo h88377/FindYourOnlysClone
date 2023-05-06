@@ -40,6 +40,13 @@ final class AdoptListUIComposer {
         return adoptListController
     }
     
+    static func adoptDetailComposedWith(image: UIImage?, pet: Pet) -> AdoptDetailViewController {
+        let detailSections = AdoptDetailSection.allCases
+        let cellControllers = adaptAdoptDetailInfoSectionsToCellControllers(with: pet)
+        let adoptDetailVC = AdoptDetailViewController(image: image, sections: detailSections, cellControllers: cellControllers)
+        return adoptDetailVC
+    }
+    
     private static func adaptPetsToCellControllersWith(_ pets: [Pet], imageLoader: PetImageDataLoader, select: @escaping (Pet, UIImage?) -> Void) -> [AdoptListCellViewController] {
         return pets.map { pet in
             let cellViewModel = AdoptListCellViewModel(pet: pet, imageLoader: imageLoader, imageTransformer: UIImage.init)
@@ -47,5 +54,12 @@ final class AdoptListUIComposer {
             let cellController = AdoptListCellViewController(viewModel: cellViewModel)
             return cellController
         }
+    }
+    
+    private static func adaptAdoptDetailInfoSectionsToCellControllers(with pet: Pet) -> [AdoptDetailCellViewController] {
+        let infoSections: [AdoptDetailInfoSection] = AdoptDetailStatusInfoSection.allCases + AdoptDetailMainInfoSection.allCases + AdoptDetailSubInfoSection.allCases
+        let viewModels = infoSections.map { AdoptDetailCellViewModel(pet: pet, detailSection: $0) }
+        let controllers = viewModels.map { AdoptDetailCellViewController(viewModel: $0) }
+        return controllers
     }
 }
