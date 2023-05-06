@@ -8,7 +8,7 @@ This is a cloned version of my project, `FindYourOnlys`. The purpose of this clo
 </p>
 
 ## Feature
-Listed all stray pets in Taiwan and established prefetch, fetch cancelling, retry image loading and pagination feature to improve user experience when scrolling adoption list scene.
+Listed all stray pets in Taiwan and established prefetch, fetch cancelling, retry image loading, image caching and pagination feature to improve user experience when scrolling adoption list scene.
 
 ## Design decision
 ### Test suite
