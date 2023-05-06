@@ -36,13 +36,11 @@ private extension SceneDelegate {
         let petLoader = RemotePetLoader(baseURL: baseURL, client: client)
         let imageLoader = makeLocalImageDataLoaderWithRemoteFallback(with: client)
         
-        let vc = AdoptListUIComposer.adoptListComposedWith(petLoader: petLoader, imageLoader: imageLoader, select: { [weak self] (pet, image) in
-            guard let self = self else { return }
-            
-            let adoptDetailVC = AdoptDetailViewController(image: image, sections: AdoptDetailSection.allCases, cellControllers: self.adaptAdoptDetailInfoSectionsToCellControllers(with: pet))
-            self.navigationController.pushViewController(adoptDetailVC, animated: true)
+        let adoptListVC = AdoptListUIComposer.adoptListComposedWith(petLoader: petLoader, imageLoader: imageLoader, select: { [weak self] (pet, image) in
+            let adoptDetailVC = AdoptListUIComposer.adoptDetailComposedWith(image: image, pet: pet)
+            self?.navigationController.pushViewController(adoptDetailVC, animated: true)
         })
-        return vc
+        return adoptListVC
     }
     
     func makeLocalImageDataLoaderWithRemoteFallback(with client: HTTPClient) -> PetImageDataLoader {
@@ -55,12 +53,5 @@ private extension SceneDelegate {
         let local = LocalPetImageDataLoader(store: store, currentDate: Date.init)
         let docoratedRemote = PetImageDataLoaderWithCacheDecorator(decoratee: remote, cache: local)
         return PetImageDataLoaderWithFallbackComposite(primary: local, fallback: docoratedRemote)
-    }
-    
-    private func adaptAdoptDetailInfoSectionsToCellControllers(with pet: Pet) -> [AdoptDetailCellViewController] {
-        let infoSections: [AdoptDetailInfoSection] = AdoptDetailStatusInfoSection.allCases + AdoptDetailMainInfoSection.allCases + AdoptDetailSubInfoSection.allCases
-        let viewModels = infoSections.map { AdoptDetailCellViewModel(pet: pet, detailSection: $0) }
-        let controllers = viewModels.map { AdoptDetailCellViewController(viewModel: $0) }
-        return controllers
     }
 }
