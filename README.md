@@ -10,6 +10,10 @@ This is a cloned version of my project, `FindYourOnlys`. The purpose of this clo
 ## Feature
 Listed all stray pets in Taiwan and established prefetch, fetch cancelling, retry image loading, image caching and pagination feature to improve user experience when scrolling adoption list scene.
 
+## App architecture
+![App architecture](https://user-images.githubusercontent.com/66559497/236631384-9b1f71c9-31aa-4a5e-b927-43e234647cb7.png)
+
+
 ## Design decision
 ### Test suite
 * Implemented test-driven-development to ensure that all behaviors worked as intended. This includes unit tests and integration tests to cover components' behavior in isolation and collaboration between components.
