@@ -50,5 +50,7 @@ final class AdoptDetailInfoCell: UICollectionViewCell {
             infoLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             infoLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         ])
+        
+        infoLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }
 }
