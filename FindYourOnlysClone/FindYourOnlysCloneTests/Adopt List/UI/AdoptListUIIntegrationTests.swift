@@ -134,26 +134,6 @@ class AdoptListUIIntegrationTests: XCTestCase {
         XCTAssertEqual(loader.requestedImageURLs, [pet0.photoURL, pet2.photoURL], "Expected second requested image url when third cell become visible")
     }
 
-    func test_petImageView_cancelsImageURLWhenIsNotVisibleAnymore() {
-        let pet0 = makePet(photoURL: URL(string:"https://url-0.com")!)
-        let pet1 = makePet(photoURL: nil)
-        let pet2 = makePet(photoURL: URL(string:"https://url-1.com")!)
-        let (sut, loader) = makeSUT()
-
-        sut.loadViewIfNeeded()
-        XCTAssertEqual(loader.cancelledURLs, [], "Expected no cancelled URL request until cells become visible")
-        loader.completesPetsLoading(with: [pet0, pet1, pet2], at: 0)
-
-        sut.simulatePetImageViewIsNotVisible(at: 0)
-        XCTAssertEqual(loader.cancelledURLs, [pet0.photoURL], "Expected first cancelled URL request when first view is not visible anymore")
-
-        sut.simulatePetImageViewIsNotVisible(at: 1)
-        XCTAssertEqual(loader.cancelledURLs, [pet0.photoURL], "Expected no cancelled URL request state change when second view is not visible anymore")
-
-        sut.simulatePetImageViewIsNotVisible(at: 2)
-        XCTAssertEqual(loader.cancelledURLs, [pet0.photoURL, pet2.photoURL], "Expected first cancelled URL request when first view is not visible anymore")
-    }
-
     func test_petImageViewLoadingIndicator_isVisibleWhenLoadingPet() {
         let (sut, loader) = makeSUT()
 
@@ -395,7 +375,21 @@ class AdoptListUIIntegrationTests: XCTestCase {
         loader.completesPetsLoading(with: firstPage, at: 2)
         assertThat(sut, isRendering: firstPage)
     }
+    
+    func test_petImageView_cancelsImageURLWhenCellIsReused() {
+        let pet0 = makePet(photoURL: URL(string:"https://url-0.com")!)
+        let (sut, loader) = makeSUT()
 
+        sut.loadViewIfNeeded()
+        loader.completesPetsLoading(with: [pet0])
+
+        XCTAssertEqual(loader.cancelledURLs, [], "Expected no cancelled URL request until view become visible")
+        let view0 = sut.simulatePetImageViewIsVisible(at: 0)
+        
+        view0?.prepareForReuse()
+        XCTAssertEqual(loader.cancelledURLs, [pet0.photoURL], "Expected a cancelled URL request after view is being reused")
+    }
+    
     func test_petImageView_doesNotDeliverImageFromPreviousRequestWhenCellIsReused() {
         let (sut, loader) = makeSUT()
 
@@ -436,27 +430,6 @@ class AdoptListUIIntegrationTests: XCTestCase {
 
         sut.simulateIsNotVisibleAndVisibleAgain(with: view0)
         XCTAssertNil(view0.renderedImageData)
-    }
-
-    func test_petImageView_doesNotAlterStatesAfterNotVisible() {
-        let (sut, loader) = makeSUT()
-        sut.loadViewIfNeeded()
-        loader.completesPetsLoading(with: [makePet(), makePet(), makePet(photoURL: nil)])
-
-        let view0 = sut.simulatePetImageViewIsNotVisible(at: 0)
-        let view1 = sut.simulatePetImageViewIsNotVisible(at: 1)
-        let view2 = sut.simulatePetImageViewIsNotVisible(at: 2)
-
-        let image = UIImage.make(withColor: .red).pngData()!
-        loader.completesImageLoading(with: image, at: 0)
-        XCTAssertNil(view0.renderedImageData, "Expected not to alter first image state")
-
-        loader.completesImageLoadingWithError(at: 1)
-        XCTAssertFalse(view1.isShowingImageRetryAction, "Expected not to alter second retry button state")
-        XCTAssertTrue(view1.isShowingImageLoadingIndicator, "Expected not to alter second image loading state")
-
-        XCTAssertFalse(view2.isShowingImageRetryAction, "Expected not to alter third view's retry button state")
-        XCTAssertFalse(view2.isShowingImageLoadingIndicator, "Expected not to alter third image loading state")
     }
 
     func test_loadPetsCompletion_dispatchesFromBackgroundToMainThread() {

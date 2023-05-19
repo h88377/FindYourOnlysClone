@@ -21,14 +21,6 @@ extension AdoptListViewController {
         return cell as? AdoptListCell
     }
     
-    @discardableResult
-    func simulatePetImageViewIsNotVisible(at index: Int) -> AdoptListCell {
-        let cell = simulatePetImageViewIsVisible(at: index)!
-        let delegate = collectionView.delegate
-        delegate?.collectionView?(collectionView, didEndDisplaying: cell, forItemAt: IndexPath(item: index, section: petsSection))
-        return cell
-    }
-    
     func simulatePetImageViewIsNearVisible(at index: Int) {
         let dataSource = collectionView.prefetchDataSource
         dataSource?.collectionView(collectionView, prefetchItemsAt: [IndexPath(item: index, section: petsSection)])
