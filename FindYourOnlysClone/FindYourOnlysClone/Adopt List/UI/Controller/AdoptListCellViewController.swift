@@ -28,7 +28,7 @@ final class AdoptListCellViewController {
         cell?.retryImageLoadHandler = viewModel.loadPetImageData
         cell?.prepareForReuseHandler = { [weak self, weak cell] in
             cell?.petImageView.image = nil
-            self?.releaseBindings()
+            self?.cancelTask()
         }
         
         return cell!

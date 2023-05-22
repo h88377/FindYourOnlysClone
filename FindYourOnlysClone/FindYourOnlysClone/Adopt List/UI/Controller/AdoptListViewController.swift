@@ -173,10 +173,6 @@ extension AdoptListViewController {
         requestImageData(at: indexPath)
     }
     
-    override func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        cancelTask(forItemAt: indexPath)
-    }
-    
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         cellController(at: indexPath)?.didSelect()
     }
