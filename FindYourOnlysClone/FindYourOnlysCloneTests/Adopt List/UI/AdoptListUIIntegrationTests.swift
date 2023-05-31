@@ -419,19 +419,6 @@ class AdoptListUIIntegrationTests: XCTestCase {
         XCTAssertEqual(view0?.renderedImageData, .none, "Expected no image for reused view after image loading completes successfully")
     }
 
-    func test_petImageView_imageIsNilWhenViewIsVisibleAgain() throws {
-        let (sut, loader) = makeSUT()
-        sut.loadViewIfNeeded()
-        loader.completesPetsLoading(with: [makePet()])
-
-        let image0 = UIImage.make(withColor: .red).pngData()!
-        let view0 = try XCTUnwrap(sut.simulatePetImageViewIsVisible(at: 0))
-        loader.completesImageLoading(with: image0, at: 0)
-
-        sut.simulateIsNotVisibleAndVisibleAgain(with: view0)
-        XCTAssertNil(view0.renderedImageData)
-    }
-
     func test_loadPetsCompletion_dispatchesFromBackgroundToMainThread() {
         let (sut, loader) = makeSUT()
         sut.loadViewIfNeeded()

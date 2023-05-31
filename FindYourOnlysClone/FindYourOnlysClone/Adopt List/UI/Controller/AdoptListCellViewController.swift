@@ -35,8 +35,6 @@ final class AdoptListCellViewController {
     }
     
     func requestPetImageData() {
-        cell?.petImageView.image = nil
-        
         setUpBindings()
         viewModel.loadPetImageData()
     }
