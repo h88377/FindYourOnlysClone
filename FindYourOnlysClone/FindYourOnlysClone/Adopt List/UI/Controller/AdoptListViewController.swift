@@ -41,7 +41,7 @@ final class AdoptListViewController: UICollectionViewController {
     private var petsSection: Int { return 0 }
     
     private lazy var dataSource: UICollectionViewDiffableDataSource<Int, AdoptListCellViewController> = {
-        .init(collectionView: collectionView) { [weak self] collectionView, indexPath, controller in
+        .init(collectionView: collectionView) { collectionView, indexPath, controller in
             return controller.view(in: collectionView, at: indexPath)
         }
     }()
