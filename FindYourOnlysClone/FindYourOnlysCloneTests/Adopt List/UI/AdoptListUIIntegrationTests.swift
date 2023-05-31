@@ -498,7 +498,7 @@ class AdoptListUIIntegrationTests: XCTestCase {
     }
     
     private func assertThat(_ sut: AdoptListViewController, hasViewConfiguredFor pet: Pet, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
-        let view = sut.itemAt(index: 0)
+        let view = sut.itemAt(index: index)
         guard let cell = view as? AdoptListCell else {
             return XCTFail("Expected \(AdoptListCell.self) instance, got \(String(describing: view.self)) instead")
         }
