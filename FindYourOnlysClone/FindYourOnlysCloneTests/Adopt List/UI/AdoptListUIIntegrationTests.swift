@@ -85,11 +85,7 @@ class AdoptListUIIntegrationTests: XCTestCase {
         loader.completesPetsLoadingWithError()
         XCTAssertTrue(sut.isShowingErrorView, "Expected error view once pets loading completes with error")
         
-        let exp = expectation(description: "Wait for error view hiding completion")
-        DispatchQueue.main.async {
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 0.1)
+        sut.simulateCompletingErrorShowingAnimation()
         XCTAssertFalse(sut.isShowingErrorView, "Expected no error view once shows animation completes")
     }
     

@@ -49,6 +49,10 @@ extension AdoptListViewController {
         delegate?.collectionView?(collectionView, didSelectItemAt: IndexPath(item: index, section: petsSection))
     }
     
+    func simulateCompletingErrorShowingAnimation() {
+        errorView.alpha = 0
+    }
+    
     func itemAt(index: Int) -> UICollectionViewCell? {
         let dataSource = collectionView.dataSource
         let cell = dataSource?.collectionView(collectionView, cellForItemAt: IndexPath(item: index, section: petsSection))
