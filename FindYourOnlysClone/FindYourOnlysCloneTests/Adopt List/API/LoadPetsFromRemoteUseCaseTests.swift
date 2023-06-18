@@ -173,27 +173,27 @@ class LoadPetsFromRemoteUseCaseTests: XCTestCase {
             shelterName: shelterName)
         
         let json: [String : Any] = [
-            "animal_id": id,
-            "animal_place": location,
-            "animal_kind": kind,
-            "animal_sex": gender,
-            "animal_bodytype": bodyType,
-            "animal_colour": color,
-            "animal_age": age,
-            "animal_sterilization": sterilization,
-            "animal_bacterin": bacterin,
-            "animal_foundplace": foundPlace,
-            "animal_status": status,
-            "animal_remark": remark,
-            "animal_opendate": openDate,
-            "animal_closeddate": closedDate,
-            "animal_update": updatedDate,
-            "animal_createtime": createdDate,
-            "album_file": photoURLString,
-            "shelter_address": address,
-            "shelter_tel": telephone,
-            "animal_Variety": variety,
-            "shelter_name": shelterName
+            "動物的流水編號": id,
+            "動物的實際所在地": location,
+            "動物的類型": kind,
+            "動物性別": gender,
+            "動物體型": bodyType,
+            "動物毛色": color,
+            "動物年紀": age,
+            "是否絕育": sterilization,
+            "是否施打狂犬病疫苗": bacterin,
+            "動物尋獲地": foundPlace,
+            "動物狀態": status,
+            "資料備註": remark,
+            "開放認養時間(起)": openDate,
+            "開放認養時間(迄)": closedDate,
+            "動物資料異動時間": updatedDate,
+            "動物資料建立時間": createdDate,
+            "圖片名稱": photoURLString,
+            "地址": address,
+            "連絡電話": telephone,
+            "動物品種": variety,
+            "動物所屬收容所名稱": shelterName
         ]
         return (pet, json)
     }
